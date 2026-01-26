@@ -1,0 +1,10 @@
+# .tmp/ - Scratchpad Directory
+
+This directory is for temporary files and intermediates.
+All files here are safe to delete at any time.
+
+Common uses:
+- JSON dumps from API responses
+- Downloaded files for processing
+- Intermediate computation results
+- Debug logs

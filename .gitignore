@@ -1,0 +1,18 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment and Secrets
+.env
+.env.local
+*.json.bak
+auth.json
+
+# Temporary and Scratchpad
+.tmp/*
+!.tmp/.gitkeep
+*.log
+__pycache__/
+
+# Large folders (Optional - keeping skills as user wanted full backup)
+# skills/ 
