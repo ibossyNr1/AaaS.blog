@@ -1,0 +1,66 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Base surfaces */
+    --base: 223 84% 5%;
+    --surface: 223 40% 8%;
+    --surface-bright: 223 35% 15%;
+    --border: 223 30% 20%;
+
+    /* Text */
+    --text: 220 20% 95%;
+    --text-muted: 220 15% 60%;
+
+    /* Accents */
+    --blue: 205 100% 67%;
+    --purple: 236 100% 80%;
+    --green: 155 55% 62%;
+    --pink: 345 75% 77%;
+    --gold: 45 90% 72%;
+
+    /* Functional */
+    --ring: var(--blue);
+    --radius: 0.75rem;
+  }
+
+  * {
+    border-color: hsl(var(--border));
+  }
+
+  body {
+    background: hsl(var(--base));
+    color: hsl(var(--text));
+    font-family: var(--font-geist-sans), system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .glow-blue {
+    box-shadow: 0 0 40px hsl(var(--blue) / 0.15);
+  }
+
+  .glow-purple {
+    box-shadow: 0 0 40px hsl(var(--purple) / 0.15);
+  }
+
+  .glow-green {
+    box-shadow: 0 0 40px hsl(var(--green) / 0.15);
+  }
+
+  .glow-gold {
+    box-shadow: 0 0 40px hsl(var(--gold) / 0.15);
+  }
+
+  .glow-pink {
+    box-shadow: 0 0 40px hsl(var(--pink) / 0.15);
+  }
+}
