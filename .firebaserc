@@ -1,5 +1,18 @@
 {
   "projects": {
     "default": "aaas-platform"
-  }
+  },
+  "targets": {
+    "aaas-platform": {
+      "hosting": {
+        "platform": [
+          "aaas-platform-web"
+        ],
+        "blog": [
+          "aaas-blog"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }
