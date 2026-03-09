@@ -1,0 +1,1395 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PLAYGROUND — Page 2 | Agentic Powerhouse</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        /* ═══════════════════════════════════════════
+           DESIGN TOKENS — Carved Logic System
+           (shared across all playground pages)
+           ═══════════════════════════════════════════ */
+        :root {
+            --basalt-deep: #080809;
+            --basalt-surface: #1a1a1c;
+            --basalt-bright: #2a2a2e;
+            --circuit-glow: #00f3ff;
+            --circuit-dim: rgba(0, 243, 255, 0.15);
+            --accent-red: #f4224b;
+            --accent-red-dim: rgba(244, 34, 75, 0.15);
+            --accent-red-glow: rgba(244, 34, 75, 0.4);
+            --text-main: #e0e0e0;
+            --text-muted: rgba(224, 224, 224, 0.5);
+            --border: rgba(255, 255, 255, 0.05);
+            --radius: 0.75rem;
+            --liquid-ease: cubic-bezier(0.23, 1, 0.32, 1);
+            --grain: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* ═══════════════════════════════════════════
+           LIGHT MODE
+           ═══════════════════════════════════════════ */
+        [data-theme="light"] {
+            --basalt-deep: #f4f3f0;
+            --basalt-surface: #dddcd8;
+            --basalt-bright: #c8c7c3;
+            --circuit-glow: #0088a0;
+            --circuit-dim: rgba(0, 136, 160, 0.12);
+            --accent-red: #c91e42;
+            --accent-red-dim: rgba(201, 30, 66, 0.1);
+            --accent-red-glow: rgba(201, 30, 66, 0.3);
+            --text-main: #1a1a1c;
+            --text-muted: rgba(26, 26, 28, 0.5);
+            --border: rgba(0, 0, 0, 0.08);
+        }
+
+        [data-theme="light"] body::before {
+            opacity: 0.01;
+            mix-blend-mode: multiply;
+        }
+
+        [data-theme="light"] .monolith-title,
+        [data-theme="light"] .section-title {
+            background: linear-gradient(180deg, #1a1a1c 0%, #888 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+
+        [data-theme="light"] .navbar {
+            background: rgba(244, 243, 240, 0.85);
+        }
+
+        [data-theme="light"] .blob {
+            background: linear-gradient(135deg, #1a1a1c 0%, #888 50%, #ccc 100%);
+            opacity: 0.08;
+        }
+
+        [data-theme="light"] .metaball {
+            background: var(--text-main);
+            opacity: 0.06;
+        }
+
+        [data-theme="light"] .kinetic-bar {
+            background: linear-gradient(90deg, transparent, var(--basalt-bright), transparent);
+        }
+
+        [data-theme="light"] .kinetic-bar::after {
+            background: var(--text-main);
+        }
+
+        [data-theme="light"] .card {
+            background: rgba(255, 255, 255, 0.5);
+            border-color: rgba(0, 0, 0, 0.06);
+        }
+
+        [data-theme="light"] .card:hover {
+            background: rgba(255, 255, 255, 0.7);
+            border-color: rgba(0, 136, 160, 0.3);
+            box-shadow: 0 0 20px var(--circuit-dim), 0 8px 32px rgba(0, 0, 0, 0.08);
+        }
+
+        [data-theme="light"] .card::before {
+            background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(0, 136, 160, 0.06) 0%, transparent 50%);
+        }
+
+        [data-theme="light"] .btn-primary:hover {
+            background: var(--text-main);
+            color: var(--basalt-deep);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.15);
+        }
+
+        [data-theme="light"] .click-flash {
+            background: var(--accent-red);
+        }
+
+        [data-theme="light"] .click-flash.active {
+            opacity: 0.08;
+        }
+
+        [data-theme="light"] a::selection,
+        [data-theme="light"] button::selection,
+        [data-theme="light"] p::selection,
+        [data-theme="light"] h1::selection,
+        [data-theme="light"] h2::selection,
+        [data-theme="light"] h3::selection,
+        [data-theme="light"] span::selection {
+            background: var(--accent-red-dim);
+            color: var(--text-main);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--basalt-deep);
+            color: var(--text-main);
+            font-family: 'Inter', system-ui, sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        /* Grain texture overlay — subtle, stays behind glass */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: var(--grain);
+            opacity: 0.015;
+            pointer-events: none;
+            z-index: -2;
+        }
+
+        /* ═══════════════════════════════════════════
+           BACKGROUND — Grid + Circuit Traces
+           ═══════════════════════════════════════════ */
+        .bg-grid {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background:
+                linear-gradient(90deg, var(--basalt-surface) 1px, transparent 1px) 0 0 / 100px 100px,
+                linear-gradient(var(--basalt-surface) 1px, transparent 1px) 0 0 / 100px 100px;
+            mask-image: radial-gradient(circle at 50% 50%, black, transparent 70%);
+            z-index: -1;
+            opacity: 0.12;
+        }
+
+
+        /* ═══════════════════════════════════════════
+           VISCOUS BLOBS — from Agentic Powerhouse
+           ═══════════════════════════════════════════ */
+        /* ═══════════════════════════════════════════
+           CHROMIUM CANVAS — soft ambient radial glow
+           ═══════════════════════════════════════════ */
+        .chromium-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -3;
+            background: radial-gradient(circle at 50% 40%, #111 0%, var(--basalt-deep) 70%);
+            pointer-events: none;
+        }
+
+        [data-theme="light"] .chromium-canvas {
+            background: radial-gradient(circle at 50% 40%, #fff 0%, var(--basalt-deep) 70%);
+        }
+
+        /* ═══════════════════════════════════════════
+           MERGING METABALLS — fixed background layer
+           White balls with gooey filter for liquid merge
+           ═══════════════════════════════════════════ */
+        .merge-layer {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
+            filter: url('#gooey-bg');
+            opacity: 0.06;
+            contain: layout style;
+        }
+
+        [data-theme="light"] .merge-layer {
+            opacity: 0.04;
+        }
+
+        .merge-ball {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            will-change: transform;
+            transform: translateZ(0);
+        }
+
+        .merge-ball.orbit-a {
+            animation: merge-orbit-a var(--dur, 20s) infinite linear;
+        }
+
+        .merge-ball.orbit-b {
+            animation: merge-orbit-b var(--dur, 25s) infinite linear;
+        }
+
+        .merge-ball.orbit-c {
+            animation: merge-orbit-c var(--dur, 18s) infinite linear;
+        }
+
+        .merge-ball.drift {
+            animation: merge-drift var(--dur, 30s) infinite alternate var(--liquid-ease);
+        }
+
+        @keyframes merge-orbit-a {
+            from { transform: rotate(0deg) translateX(var(--radius, 150px)) rotate(0deg); }
+            to { transform: rotate(360deg) translateX(var(--radius, 150px)) rotate(-360deg); }
+        }
+
+        @keyframes merge-orbit-b {
+            from { transform: rotate(120deg) translateX(var(--radius, 120px)) rotate(-120deg); }
+            to { transform: rotate(480deg) translateX(var(--radius, 120px)) rotate(-480deg); }
+        }
+
+        @keyframes merge-orbit-c {
+            from { transform: rotate(240deg) translateY(var(--radius, 100px)) rotate(-240deg); }
+            to { transform: rotate(600deg) translateY(var(--radius, 100px)) rotate(-600deg); }
+        }
+
+        @keyframes merge-drift {
+            0% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(15vw, -10vh) scale(1.1); }
+            50% { transform: translate(-10vw, 15vh) scale(0.9); }
+            75% { transform: translate(5vw, 5vh) scale(1.15); }
+            100% { transform: translate(-5vw, -5vh) scale(1); }
+        }
+
+        [data-theme="light"] .merge-ball {
+            background: #1a1a1c;
+        }
+
+        .blob-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .blob {
+            position: absolute;
+            background: linear-gradient(135deg, var(--text-main) 0%, var(--basalt-bright) 50%, var(--basalt-surface) 100%);
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.12;
+            animation: blob-drift 20s infinite alternate var(--liquid-ease);
+            will-change: transform;
+            transform: translateZ(0);
+        }
+
+        .blob.accent-cyan {
+            background: radial-gradient(circle, var(--circuit-glow) 0%, transparent 70%);
+            opacity: 0.08;
+        }
+
+        .blob.accent-red {
+            background: radial-gradient(circle, var(--accent-red) 0%, transparent 70%);
+            opacity: 0.06;
+        }
+
+        @keyframes blob-drift {
+            0% { transform: translate(-10%, -10%) scale(1); }
+            33% { transform: translate(15%, 25%) scale(1.15) rotate(30deg); }
+            66% { transform: translate(-5%, 10%) scale(0.95) rotate(-15deg); }
+            100% { transform: translate(10%, -5%) scale(1.1) rotate(45deg); }
+        }
+
+        /* ═══════════════════════════════════════════
+           GOOEY METABALLS — SVG filter liquid merge
+           ═══════════════════════════════════════════ */
+        .goo-filter {
+            position: absolute;
+            visibility: hidden;
+        }
+
+        .metaball-field {
+            position: absolute;
+            right: 0;
+            top: 10%;
+            width: 55%;
+            height: 75%;
+            filter: url('#gooey');
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .metaball {
+            position: absolute;
+            background: var(--text-main);
+            border-radius: 50%;
+            opacity: 0.04;
+            will-change: transform;
+            transform: translateZ(0);
+            animation: orbit var(--orbit-duration, 15s) infinite linear;
+        }
+
+        .metaball.glow-cyan {
+            background: var(--circuit-glow);
+            opacity: 0.06;
+        }
+
+        .metaball.glow-red {
+            background: var(--accent-red);
+            opacity: 0.05;
+        }
+
+        @keyframes orbit {
+            from { transform: rotate(0deg) translateX(var(--orbit-radius, 100px)) rotate(0deg); }
+            to { transform: rotate(360deg) translateX(var(--orbit-radius, 100px)) rotate(-360deg); }
+        }
+
+        /* ═══════════════════════════════════════════
+           KINETIC BAR — sweeping light beam
+           ═══════════════════════════════════════════ */
+        .kinetic-bar {
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--basalt-bright), transparent);
+            position: relative;
+            margin: 1.5rem 0;
+        }
+
+        .kinetic-bar::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: 0;
+            width: 120px;
+            height: 5px;
+            background: var(--circuit-glow);
+            filter: blur(3px);
+            animation: sweep 4s infinite var(--liquid-ease);
+        }
+
+        .kinetic-bar.red::after {
+            background: var(--accent-red);
+        }
+
+        @keyframes sweep {
+            0% { left: -5%; opacity: 0; }
+            50% { opacity: 1; }
+            100% { left: 105%; opacity: 0; }
+        }
+
+        /* ═══════════════════════════════════════════
+           ANIMATIONS — shared
+           ═══════════════════════════════════════════ */
+        @keyframes fade-up {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .animate-fade-up {
+            animation: fade-up 0.6s var(--liquid-ease) both;
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        .delay-5 { animation-delay: 0.5s; }
+
+        /* ═══════════════════════════════════════════
+           LAYOUT
+           ═══════════════════════════════════════════ */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2.5rem;
+        }
+
+        section {
+            padding: 6rem 0;
+            position: relative;
+        }
+
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-red-dim), var(--circuit-dim), var(--accent-red-dim), transparent);
+            margin: 0 auto;
+            max-width: 1400px;
+        }
+
+        /* ═══════════════════════════════════════════
+           SECTION TOPIC LABELS
+           ═══════════════════════════════════════════ */
+        .section-topic {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            color: var(--accent-red);
+            text-transform: uppercase;
+            letter-spacing: 0.3rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-topic::before {
+            content: "";
+            width: 24px;
+            height: 2px;
+            background: var(--accent-red);
+            box-shadow: 0 0 8px var(--accent-red-glow);
+            flex-shrink: 0;
+        }
+
+        .section-topic::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, var(--accent-red-dim), transparent 60%);
+        }
+
+        /* ═══════════════════════════════════════════
+           CLICK FLASH
+           ═══════════════════════════════════════════ */
+        .click-flash {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--accent-red);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 9999;
+            transition: opacity 0.08s ease-out;
+        }
+
+        .click-flash.active {
+            opacity: 0.06;
+            transition: opacity 0.01s;
+        }
+
+        /* ═══════════════════════════════════════════
+           INTERACTIVE STATES — red click
+           ═══════════════════════════════════════════ */
+        .btn-primary:active,
+        .btn-circuit:active,
+        .btn-chromium:active,
+        .nav-cta:active {
+            border-color: var(--accent-red) !important;
+            box-shadow: 0 0 25px var(--accent-red-glow) !important;
+            color: var(--accent-red) !important;
+            background: transparent !important;
+        }
+
+        .nav-links a:active {
+            color: var(--accent-red) !important;
+            text-shadow: 0 0 10px var(--accent-red-glow) !important;
+        }
+
+        .card:active {
+            border-color: var(--accent-red) !important;
+            box-shadow: 0 0 15px var(--accent-red-dim) !important;
+        }
+
+        a, button, .card {
+            cursor: pointer;
+        }
+
+        a::selection, button::selection, p::selection, h1::selection, h2::selection, h3::selection, span::selection {
+            background: var(--accent-red-dim);
+            color: var(--text-main);
+        }
+
+        /* ═══════════════════════════════════════════
+           TYPOGRAPHY
+           ═══════════════════════════════════════════ */
+        .monolith-title {
+            font-size: clamp(3.5rem, 12vw, 9rem);
+            font-weight: 900;
+            line-height: 0.85;
+            letter-spacing: -0.04em;
+            text-transform: uppercase;
+            background: linear-gradient(180deg, #fff 30%, rgba(255,255,255,0.2) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 900;
+            line-height: 0.9;
+            letter-spacing: -0.03em;
+            text-transform: uppercase;
+            background: linear-gradient(180deg, #fff 0%, #555 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1.5rem;
+        }
+
+        .mono-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3rem;
+            display: block;
+            margin-bottom: 1rem;
+        }
+
+        .body-text {
+            font-size: 1.1rem;
+            font-weight: 300;
+            color: var(--text-muted);
+            max-width: 560px;
+            line-height: 1.7;
+        }
+
+        /* ═══════════════════════════════════════════
+           NAVBAR
+           ═══════════════════════════════════════════ */
+        .navbar {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 50;
+            padding: 1.5rem 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(12px);
+            background: rgba(8, 8, 9, 0.7);
+            border-bottom: 1px solid var(--border);
+            transition: background 0.4s ease;
+        }
+
+        .brand {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            letter-spacing: 0.4rem;
+            text-transform: uppercase;
+            border-left: 2px solid var(--circuit-glow);
+            padding-left: 1rem;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--circuit-glow);
+            border-radius: 50%;
+            box-shadow: 0 0 12px var(--circuit-glow);
+            animation: pulse-dot 2s infinite;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15rem;
+            color: var(--text-main);
+            text-decoration: none;
+            opacity: 0.5;
+            transition: all 0.3s;
+        }
+
+        .nav-links a:hover {
+            opacity: 1;
+            color: var(--circuit-glow);
+            text-shadow: 0 0 10px var(--circuit-glow);
+        }
+
+        .nav-cta {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15rem;
+            padding: 0.6rem 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: transparent;
+            color: var(--text-main);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .nav-cta:hover {
+            background: var(--text-main);
+            color: var(--basalt-deep);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
+        }
+
+        /* ═══════════════════════════════════════════
+           HERO — with metaball field
+           ═══════════════════════════════════════════ */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding-top: 6rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* ═══════════════════════════════════════════
+           AGENT CARDS — mouse-tracking spotlight
+           ═══════════════════════════════════════════ */
+        .agent-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            backdrop-filter: blur(20px);
+            padding: 2.5rem 2rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.6s var(--liquid-ease);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(0, 243, 255, 0.08) 0%, transparent 50%);
+            pointer-events: none;
+            transition: opacity 0.3s;
+            opacity: 0;
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: var(--circuit-glow);
+            box-shadow: 0 0 20px var(--circuit-glow);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .card:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(0, 243, 255, 0.25);
+            box-shadow: 0 0 20px var(--circuit-dim), 0 8px 32px rgba(0, 0, 0, 0.3);
+            transform: translateY(-8px);
+        }
+
+        .card:hover::after {
+            opacity: 1;
+        }
+
+        .card-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem;
+            color: var(--circuit-glow);
+            text-transform: uppercase;
+            letter-spacing: 0.15rem;
+            margin-bottom: 1.25rem;
+            display: block;
+        }
+
+        .card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .card.featured {
+            grid-column: span 2;
+        }
+
+        /* ═══════════════════════════════════════════
+           CAPABILITY SHOWCASE — large split section
+           ═══════════════════════════════════════════ */
+        .capability-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .capability-visual {
+            position: relative;
+            height: 450px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .capability-visual .kinetic-bar {
+            position: absolute;
+            bottom: 20%;
+            width: 80%;
+            left: 10%;
+        }
+
+        /* ═══════════════════════════════════════════
+           CHROMIUM CTA — liquid button
+           ═══════════════════════════════════════════ */
+        .btn-primary {
+            display: inline-block;
+            padding: 1.2rem 3.5rem;
+            background: transparent;
+            border: 1px solid var(--text-main);
+            color: var(--text-main);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3rem;
+            cursor: pointer;
+            transition: all 0.4s var(--liquid-ease);
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary:hover {
+            background: var(--text-main);
+            color: var(--basalt-deep);
+            box-shadow: 0 0 40px rgba(255, 255, 255, 0.15);
+            transform: scale(1.03);
+        }
+
+        .btn-circuit {
+            display: inline-block;
+            padding: 1.2rem 3.5rem;
+            background: transparent;
+            border: 1px solid var(--circuit-glow);
+            color: var(--circuit-glow);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3rem;
+            cursor: pointer;
+            transition: all 0.4s var(--liquid-ease);
+            text-decoration: none;
+        }
+
+        .btn-circuit:hover {
+            background: var(--circuit-glow);
+            color: var(--basalt-deep);
+            box-shadow: 0 0 40px var(--circuit-dim);
+            transform: scale(1.03);
+        }
+
+        /* ═══════════════════════════════════════════
+           STATS TICKER — animated counters
+           ═══════════════════════════════════════════ */
+        .stats-ticker {
+            display: flex;
+            justify-content: space-between;
+            padding: 3rem 0;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .stat {
+            text-align: center;
+            flex: 1;
+            position: relative;
+        }
+
+        .stat + .stat::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 20%;
+            height: 60%;
+            width: 1px;
+            background: var(--border);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(180deg, #fff 0%, #666 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.2rem;
+        }
+
+        /* ═══════════════════════════════════════════
+           DEPLOYMENT CTA
+           ═══════════════════════════════════════════ */
+        .deployment-zone {
+            text-align: center;
+            padding: 8rem 2rem;
+        }
+
+        .deployment-zone .mono-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.55rem;
+            color: var(--basalt-bright);
+            margin-top: 2rem;
+            letter-spacing: 0.3rem;
+        }
+
+        /* ═══════════════════════════════════════════
+           FOOTER
+           ═══════════════════════════════════════════ */
+        .footer {
+            border-top: 1px solid var(--border);
+            padding: 3rem 0;
+        }
+
+        .footer-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-brand {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3rem;
+            opacity: 0.4;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .footer-links a {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--circuit-glow);
+        }
+
+        /* ═══════════════════════════════════════════
+           PAGE NAV — link back to page 1
+           ═══════════════════════════════════════════ */
+        .page-nav {
+            position: fixed;
+            top: 50%;
+            left: 1.5rem;
+            transform: translateY(-50%);
+            z-index: 60;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .page-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            border: 1px solid var(--text-muted);
+            background: transparent;
+            transition: all 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .page-dot.active {
+            background: var(--accent-red);
+            border-color: var(--accent-red);
+            box-shadow: 0 0 8px var(--accent-red-glow);
+        }
+
+        .page-dot:hover:not(.active) {
+            border-color: var(--circuit-glow);
+            box-shadow: 0 0 6px var(--circuit-dim);
+        }
+
+        /* ═══════════════════════════════════════════
+           THEME TOGGLE
+           ═══════════════════════════════════════════ */
+        .theme-toggle {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .toggle-track {
+            width: 44px;
+            height: 22px;
+            border-radius: 11px;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.05);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        [data-theme="light"] .toggle-track {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .toggle-thumb {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--circuit-glow);
+            box-shadow: 0 0 8px var(--circuit-dim);
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            transition: all 0.3s var(--liquid-ease);
+        }
+
+        [data-theme="light"] .toggle-thumb {
+            left: 24px;
+            background: var(--accent-red);
+            box-shadow: 0 0 8px var(--accent-red-dim);
+        }
+
+        .toggle-label-light { opacity: 0.3; }
+        [data-theme="light"] .toggle-label-dark { opacity: 0.3; }
+        [data-theme="light"] .toggle-label-light { opacity: 1; }
+
+        /* Data stream */
+        .data-stream {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 2rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.55rem;
+            color: var(--circuit-glow);
+            text-align: right;
+            opacity: 0.4;
+            pointer-events: none;
+            z-index: 50;
+            white-space: pre-line;
+        }
+
+        /* Smooth transitions */
+        .navbar, .card, .section-divider, .footer, .toggle-track, .toggle-thumb,
+        .section-topic, .btn-primary, .btn-circuit, .mono-label,
+        .blob, .metaball, .brand, .kinetic-bar, .kinetic-bar::after {
+            transition: all 0.4s ease;
+        }
+
+        /* ═══════════════════════════════════════════
+           RESPONSIVE
+           ═══════════════════════════════════════════ */
+        @media (max-width: 1024px) {
+            .agent-grid { grid-template-columns: 1fr; }
+            .card.featured { grid-column: span 1; }
+            .capability-split { grid-template-columns: 1fr; }
+            .metaball-field { display: none; }
+            .merge-layer { opacity: 0.03; }
+            .nav-links { display: none; }
+            .page-nav { display: none; }
+        }
+
+        @media (max-width: 640px) {
+            .hero { padding-top: 5rem; }
+            .stats-ticker { flex-direction: column; gap: 2rem; }
+            .stat + .stat::before { display: none; }
+            .footer-inner { flex-direction: column; gap: 1.5rem; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Click flash -->
+    <div class="click-flash" id="clickFlash"></div>
+
+    <!-- Layer 1: Chromium canvas — soft ambient radial glow -->
+    <div class="chromium-canvas"></div>
+
+    <!-- Layer 2: Circuit grid -->
+    <div class="bg-grid"></div>
+
+    <!-- Layer 3: Merging white metaballs (3 balls, 1 cluster) -->
+    <div class="merge-layer">
+        <div class="merge-ball orbit-a" style="width: 200px; height: 200px; left: 45%; top: 35%; --dur: 20s; --radius: 130px;"></div>
+        <div class="merge-ball orbit-b" style="width: 150px; height: 150px; left: 50%; top: 40%; --dur: 26s; --radius: 90px; animation-delay: -5s;"></div>
+        <div class="merge-ball drift" style="width: 180px; height: 180px; left: 40%; top: 30%; --dur: 30s;"></div>
+    </div>
+
+    <!-- Layer 4: Colored accent blobs (2 blobs only) -->
+    <div class="blob-canvas">
+        <div class="blob accent-cyan" style="width: 450px; height: 450px; top: -5%; left: -10%;"></div>
+        <div class="blob accent-red" style="width: 350px; height: 350px; bottom: 10%; right: -5%; animation-delay: -8s;"></div>
+    </div>
+
+    <!-- SVG Filters for gooey effects -->
+    <svg class="goo-filter">
+        <defs>
+            <!-- Section metaballs (smaller, tighter merge) -->
+            <filter id="gooey">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+                <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7" result="goo" />
+                <feBlend in="SourceGraphic" in2="goo" />
+            </filter>
+            <!-- Background merge layer (larger, softer merge) -->
+            <filter id="gooey-bg">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="18" result="blur" />
+                <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -9" result="goo" />
+                <feBlend in="SourceGraphic" in2="goo" />
+            </filter>
+        </defs>
+    </svg>
+
+    <!-- Page navigation dots -->
+    <nav class="page-nav">
+        <a href="PLAYGROUND.html" class="page-dot" title="Page 1 — Landing"></a>
+        <a href="#" class="page-dot active" title="Page 2 — Agentic Powerhouse"></a>
+    </nav>
+
+    <!-- ═══════════════════════════════════════════
+         NAVBAR
+         ═══════════════════════════════════════════ -->
+    <nav class="navbar">
+        <div class="brand">
+            <span class="status-dot"></span>
+            SYSTEM://AAAS.V02
+        </div>
+        <ul class="nav-links">
+            <li><a href="PLAYGROUND.html">Home</a></li>
+            <li><a href="#agents">Agents</a></li>
+            <li><a href="#capability">Capability</a></li>
+            <li><a href="#deploy">Deploy</a></li>
+        </ul>
+        <button class="nav-cta">Initialize Swarm</button>
+    </nav>
+
+    <!-- ═══════════════════════════════════════════
+         HERO — with metaball field
+         ═══════════════════════════════════════════ -->
+    <section class="hero" id="hero">
+        <div class="container">
+            <!-- Gooey metaballs behind the title -->
+            <div class="metaball-field">
+                <div class="metaball glow-cyan" style="width: 160px; height: 160px; left: 20%; top: 20%; --orbit-duration: 14s; --orbit-radius: 90px;"></div>
+                <div class="metaball" style="width: 200px; height: 200px; left: 45%; top: 45%; --orbit-duration: 18s; --orbit-radius: 120px; animation-delay: -3s;"></div>
+                <div class="metaball glow-red" style="width: 130px; height: 130px; left: 60%; top: 25%; --orbit-duration: 22s; --orbit-radius: 70px; animation-delay: -6s;"></div>
+                <div class="metaball" style="width: 100px; height: 100px; left: 30%; top: 65%; --orbit-duration: 12s; --orbit-radius: 60px; animation-delay: -9s;"></div>
+                <div class="metaball glow-cyan" style="width: 80px; height: 80px; left: 70%; top: 60%; --orbit-duration: 16s; --orbit-radius: 50px; animation-delay: -4s;"></div>
+            </div>
+
+            <div class="section-topic animate-fade-up">Autonomous Collective</div>
+
+            <h1 class="monolith-title animate-fade-up delay-1">
+                AGENTIC<br>POWERHOUSE
+            </h1>
+
+            <div class="kinetic-bar animate-fade-up delay-2"></div>
+
+            <p class="body-text animate-fade-up delay-3" style="margin-top: 1.5rem;">
+                Synthesizing high-fidelity autonomous workflows through
+                liquid-state logic and basalt-grade neural infrastructure.
+            </p>
+
+            <a href="#agents" class="btn-primary animate-fade-up delay-4" style="margin-top: 2.5rem;">Explore Agents</a>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ═══════════════════════════════════════════
+         AGENT GRID — mouse-tracking cards
+         ═══════════════════════════════════════════ -->
+    <section id="agents">
+        <div class="container">
+            <div class="section-topic">Agent Architecture</div>
+            <h2 class="section-title" style="margin-bottom: 3rem;">Neural<br>Orchestration</h2>
+
+            <div class="agent-grid">
+                <div class="card featured">
+                    <span class="card-label">001 // Swarm Intelligence</span>
+                    <h3>Distributed Cognition</h3>
+                    <p>Intelligence that flows across multi-cloud environments with sub-millisecond synchronization. Each node thinks independently while acting as one.</p>
+                    <div class="kinetic-bar" style="margin-top: 1.5rem;"></div>
+                </div>
+                <div class="card">
+                    <span class="card-label">002 // Elastic Agency</span>
+                    <h3>Adaptive Architecture</h3>
+                    <p>Agents that reshape their own cognitive structure based on real-time task complexity.</p>
+                </div>
+                <div class="card">
+                    <span class="card-label">003 // Atomic Privacy</span>
+                    <h3>Zero-Knowledge Shell</h3>
+                    <p>Hardware-level encryption wrapped in viscous security layers. Your data never surfaces.</p>
+                </div>
+                <div class="card">
+                    <span class="card-label">004 // Kinetic Compute</span>
+                    <h3>Liquid Scaling</h3>
+                    <p>Resources flow like mercury — expanding and contracting with demand in real-time.</p>
+                </div>
+                <div class="card featured">
+                    <span class="card-label">005 // Neural Bridge</span>
+                    <h3>Cross-Agent Memory</h3>
+                    <p>Shared cognitive state across the swarm mesh. Agents learn from each other without exposing private context. Collective intelligence without collective risk.</p>
+                    <div class="kinetic-bar red" style="margin-top: 1.5rem;"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ═══════════════════════════════════════════
+         STATS TICKER
+         ═══════════════════════════════════════════ -->
+    <section id="stats">
+        <div class="container">
+            <div class="section-topic">Performance</div>
+
+            <div class="stats-ticker">
+                <div class="stat">
+                    <div class="stat-value">0.3ms</div>
+                    <div class="stat-label">Swarm Latency</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">∞</div>
+                    <div class="stat-label">Elastic Scale</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">256-bit</div>
+                    <div class="stat-label">Encryption Depth</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">99.999%</div>
+                    <div class="stat-label">Neural Uptime</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ═══════════════════════════════════════════
+         CAPABILITY — split layout with kinetic bar
+         ═══════════════════════════════════════════ -->
+    <section id="capability">
+        <div class="container">
+            <div class="section-topic">Deep Capability</div>
+
+            <div class="capability-split">
+                <div>
+                    <span class="mono-label" style="color: var(--circuit-glow);">Liquid-State Logic</span>
+                    <h2 class="section-title">Viscous<br>Intelligence</h2>
+                    <p class="body-text">
+                        Traditional agents break under load. Ours flow — adapting shape,
+                        redistributing weight, absorbing shock. Like mercury finding
+                        its level, our swarm mesh finds optimal configuration
+                        under any pressure.
+                    </p>
+                    <a href="#" class="btn-circuit" style="margin-top: 2rem;">See It In Action</a>
+                </div>
+                <div class="capability-visual">
+                    <!-- Metaball cluster as visual -->
+                    <div class="metaball-field" style="position: relative; width: 100%; height: 100%; right: auto; top: auto;">
+                        <div class="metaball glow-cyan" style="width: 120px; height: 120px; left: 30%; top: 30%; --orbit-duration: 10s; --orbit-radius: 80px;"></div>
+                        <div class="metaball glow-red" style="width: 90px; height: 90px; left: 50%; top: 50%; --orbit-duration: 14s; --orbit-radius: 60px; animation-delay: -3s;"></div>
+                        <div class="metaball" style="width: 150px; height: 150px; left: 40%; top: 40%; --orbit-duration: 18s; --orbit-radius: 100px; animation-delay: -7s;"></div>
+                    </div>
+                    <div class="kinetic-bar" style="position: absolute; bottom: 15%; width: 80%; left: 10%;"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ═══════════════════════════════════════════
+         DEPLOYMENT CTA
+         ═══════════════════════════════════════════ -->
+    <section id="deploy">
+        <div class="container">
+            <div class="section-topic">Initialize</div>
+
+            <div class="deployment-zone">
+                <h2 class="section-title">Ready for<br>the Shift?</h2>
+                <p class="body-text" style="margin: 0 auto;">
+                    Deploy your first autonomous swarm in minutes.
+                    No configuration debt. No vendor lock-in.
+                </p>
+                <div style="display: flex; gap: 1.5rem; justify-content: center; margin-top: 2.5rem; flex-wrap: wrap;">
+                    <a href="#" class="btn-primary">Initialize Swarm</a>
+                    <a href="#" class="btn-circuit">View Documentation</a>
+                </div>
+                <div class="mono-label" style="margin-top: 2.5rem; color: var(--basalt-bright); font-size: 0.55rem;">
+                    CORE_INIT_SEQUENCE // BYPASS_ENABLED
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         FOOTER
+         ═══════════════════════════════════════════ -->
+    <footer class="footer">
+        <div class="container">
+            <div class="section-topic">Connect</div>
+            <div class="footer-inner" style="margin-top: 1rem;">
+                <span class="footer-brand">Agents-as-a-Service &copy; 2026</span>
+                <ul class="footer-links">
+                    <li><a href="PLAYGROUND.html">Home</a></li>
+                    <li><a href="#">Platform</a></li>
+                    <li><a href="#">Documentation</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Theme toggle -->
+    <div class="theme-toggle" id="themeToggle">
+        <span class="toggle-label-dark">Dark</span>
+        <div class="toggle-track">
+            <div class="toggle-thumb"></div>
+        </div>
+        <span class="toggle-label-light">Light</span>
+    </div>
+
+    <!-- Data stream -->
+    <div class="data-stream">
+        SYS: CARVED_LOGIC_V02
+PAGE: AGENTIC_POWERHOUSE
+METABALLS: ACTIVE
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         SCRIPTS
+         ═══════════════════════════════════════════ -->
+    <script>
+        // Theme system
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        const streamEl = document.querySelector('.data-stream');
+
+        function setTheme(theme) {
+            if (html.getAttribute('data-theme') === theme) return;
+            html.setAttribute('data-theme', theme);
+            streamEl.textContent = theme === 'light'
+                ? 'SYS: CARVED_LOGIC_V02\nPAGE: AGENTIC_POWERHOUSE\nMODE: ETCHED_STONE'
+                : 'SYS: CARVED_LOGIC_V02\nPAGE: AGENTIC_POWERHOUSE\nMETABALLS: ACTIVE';
+        }
+
+        themeToggle.addEventListener('click', () => {
+            const next = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+            setTheme(next);
+        });
+
+        // Scroll-direction theme switching
+        let lastScrollY = window.scrollY;
+        let scrollAccumulator = 0;
+        const scrollThreshold = 80;
+
+        window.addEventListener('scroll', () => {
+            const currentY = window.scrollY;
+            const delta = currentY - lastScrollY;
+
+            if (currentY <= 10) {
+                scrollAccumulator = 0;
+                setTheme('dark');
+                lastScrollY = currentY;
+                return;
+            }
+
+            if ((delta > 0 && scrollAccumulator < 0) || (delta < 0 && scrollAccumulator > 0)) {
+                scrollAccumulator = 0;
+            }
+            scrollAccumulator += delta;
+
+            if (scrollAccumulator < -scrollThreshold) {
+                setTheme('light');
+                scrollAccumulator = 0;
+            } else if (scrollAccumulator > scrollThreshold) {
+                setTheme('dark');
+                scrollAccumulator = 0;
+            }
+
+            lastScrollY = currentY;
+        }, { passive: true });
+
+        // Click flash
+        const flash = document.getElementById('clickFlash');
+        document.addEventListener('mousedown', () => {
+            flash.classList.add('active');
+        });
+        document.addEventListener('mouseup', () => {
+            setTimeout(() => flash.classList.remove('active'), 80);
+        });
+
+        // Card mouse-tracking spotlight
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x = ((e.clientX - rect.left) / rect.width) * 100;
+                const y = ((e.clientY - rect.top) / rect.height) * 100;
+                card.style.setProperty('--x', x + '%');
+                card.style.setProperty('--y', y + '%');
+            });
+        });
+
+        // Scroll-triggered fade-in
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('section').forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(20px)';
+            section.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+            observer.observe(section);
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const target = document.querySelector(link.getAttribute('href'));
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+    </script>
+
+</body>
+</html>
