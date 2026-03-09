@@ -7,18 +7,9 @@ import { CTABlock } from "@/components/cta-block";
 
 const BOOKING_LINK = "https://calendar.app.google/X2MjiFt1vkksn2ga8";
 
-const checkColor: Record<string, string> = {
-  blue: "text-blue",
-  purple: "text-purple",
-  green: "text-green",
-  pink: "text-pink",
-  gold: "text-gold",
-};
-
 const plans = [
   {
     name: "Retainer",
-    accent: "blue" as const,
     badge: null,
     description:
       "Dedicated agent workforce with monthly context engineering. Best for businesses that need ongoing autonomous operations.",
@@ -32,7 +23,6 @@ const plans = [
   },
   {
     name: "Pay-per-Task",
-    accent: "gold" as const,
     badge: "Most Popular",
     description:
       "On-demand agent execution for specific projects. Pay only for what you use, scale as you grow.",
@@ -46,7 +36,6 @@ const plans = [
   },
   {
     name: "Build with AaaS",
-    accent: "purple" as const,
     badge: null,
     description:
       "Equity partnership model for startups and ventures. We deploy our full platform in exchange for growth alignment.",
@@ -92,10 +81,10 @@ export default function PricingPage() {
       <Section className="pt-32 pb-12">
         <Container className="text-center">
           <FadeUp>
-            <Badge color="gold" className="mb-4">
+            <Badge className="mb-4">
               Flexible Plans
             </Badge>
-            <h1 className="text-4xl md:text-6xl font-bold text-text mb-4">
+            <h1 className="monolith-title text-4xl md:text-6xl font-bold mb-4 uppercase tracking-tight">
               Investment in Intelligence
             </h1>
             <p className="text-lg text-text-muted max-w-2xl mx-auto">
@@ -113,16 +102,13 @@ export default function PricingPage() {
             {plans.map((plan, i) => (
               <FadeUp key={plan.name} delay={i * 0.1}>
                 <Card
-                  accent={plan.accent}
-                  hover={false}
                   className={cn(
                     "relative flex flex-col",
-                    plan.badge && "md:scale-105 md:z-10"
+                    plan.badge && "md:scale-105 md:z-10 glow-circuit"
                   )}
                 >
                   {plan.badge && (
                     <Badge
-                      color="gold"
                       className="absolute -top-3 left-1/2 -translate-x-1/2"
                     >
                       {plan.badge}
@@ -140,9 +126,7 @@ export default function PricingPage() {
                         key={f}
                         className="flex items-start gap-2 text-sm text-text-muted"
                       >
-                        <span className={`${checkColor[plan.accent]} mt-0.5`}>
-                          ✓
-                        </span>
+                        <span className="text-circuit mt-0.5">✓</span>
                         {f}
                       </li>
                     ))}
@@ -170,7 +154,7 @@ export default function PricingPage() {
       <Section variant="surface">
         <Container className="max-w-3xl">
           <FadeUp>
-            <h2 className="text-3xl font-bold text-text text-center mb-12">
+            <h2 className="monolith-title text-3xl font-bold text-center mb-12 uppercase tracking-tight">
               Frequently Asked Questions
             </h2>
           </FadeUp>
@@ -179,7 +163,7 @@ export default function PricingPage() {
               <FadeUp key={i} delay={i * 0.05}>
                 <button
                   onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                  className="w-full text-left bg-surface border border-border rounded-xl p-6 transition-all hover:border-surface-bright"
+                  className="w-full text-left bg-surface border border-[rgba(255,255,255,0.05)] p-6 transition-all hover:border-circuit/30"
                 >
                   <div className="flex items-center justify-between">
                     <h3 className="text-text font-medium pr-4">{faq.q}</h3>

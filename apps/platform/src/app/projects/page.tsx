@@ -15,21 +15,18 @@ const BOOKING_LINK = "https://calendar.app.google/X2MjiFt1vkksn2ga8";
 const otherProjects = [
   {
     title: "AaaS Vault",
-    accent: "purple" as const,
     status: "Live",
     description:
       "A living knowledge base of 4,200+ structured business assets — personas, frameworks, templates — all agent-ready.",
   },
   {
     title: "Global Skill Repository",
-    accent: "green" as const,
     status: "Live",
     description:
       "Community-driven library of reusable agent skills. From LinkedIn outreach to financial modeling — plug and play.",
   },
   {
     title: "Context Engine v2",
-    accent: "gold" as const,
     status: "In Development",
     description:
       "Next-gen context structuring with auto-discovery, real-time market data ingestion, and self-optimizing schemas.",
@@ -43,10 +40,10 @@ export default function ProjectsPage() {
       <Section className="pt-32 pb-12">
         <Container className="text-center">
           <FadeUp>
-            <Badge color="blue" className="mb-4">
+            <Badge className="mb-4">
               Projects
             </Badge>
-            <h1 className="text-4xl md:text-6xl font-bold text-text mb-4">
+            <h1 className="monolith-title text-4xl md:text-6xl font-bold mb-4 uppercase tracking-tight">
               What We&apos;re Building
             </h1>
             <p className="text-lg text-text-muted max-w-2xl mx-auto">
@@ -61,16 +58,12 @@ export default function ProjectsPage() {
       <Section className="py-12">
         <Container>
           <FadeUp>
-            <Card
-              accent="blue"
-              hover={false}
-              className="relative overflow-hidden glow-blue"
-            >
+            <Card className="relative overflow-hidden glow-circuit">
               <div className="flex flex-col lg:flex-row gap-8 items-start">
                 <div className="flex-grow">
                   <div className="flex items-center gap-3 mb-4">
-                    <Badge color="blue">Featured</Badge>
-                    <Badge color="green">Live</Badge>
+                    <Badge>Featured</Badge>
+                    <Badge>Live</Badge>
                   </div>
                   <h2 className="text-3xl md:text-4xl font-bold text-text mb-4">
                     Enora.ai
@@ -83,9 +76,9 @@ export default function ProjectsPage() {
                     workforce built on AaaS.
                   </p>
                   <div className="flex flex-wrap gap-3">
-                    <Badge color="blue">Manufacturing</Badge>
-                    <Badge color="purple">Compliance</Badge>
-                    <Badge color="green">Telemetry</Badge>
+                    <Badge>Manufacturing</Badge>
+                    <Badge>Compliance</Badge>
+                    <Badge>Telemetry</Badge>
                   </div>
                 </div>
                 <div className="lg:text-right shrink-0">
@@ -109,9 +102,9 @@ export default function ProjectsPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {otherProjects.map((project, i) => (
               <FadeUp key={project.title} delay={i * 0.1}>
-                <Card accent={project.accent} className="h-full flex flex-col">
+                <Card className="h-full flex flex-col">
                   <div className="flex items-center gap-2 mb-4">
-                    <Badge color={project.accent}>{project.status}</Badge>
+                    <Badge>{project.status}</Badge>
                   </div>
                   <h3 className="text-xl font-semibold text-text mb-2">
                     {project.title}
@@ -125,10 +118,7 @@ export default function ProjectsPage() {
 
             {/* Your Project CTA */}
             <FadeUp delay={0.3}>
-              <Card
-                accent="pink"
-                className="h-full flex flex-col items-center justify-center text-center"
-              >
+              <Card className="h-full flex flex-col items-center justify-center text-center">
                 <h3 className="text-xl font-semibold text-text mb-2">
                   Your Project?
                 </h3>

@@ -7,9 +7,9 @@ export function ValueStrip() {
       <Container className="text-center">
         <FadeUp>
           <div className="flex flex-wrap justify-center gap-3 mb-6">
-            <Badge color="blue">Context Engineering</Badge>
-            <Badge color="purple">Tool Connectivity</Badge>
-            <Badge color="green">Agentic Work</Badge>
+            <Badge>Context Engineering</Badge>
+            <Badge>Tool Connectivity</Badge>
+            <Badge>Agentic Work</Badge>
           </div>
           <p className="text-lg text-text-muted max-w-2xl mx-auto leading-relaxed">
             AaaS transforms your business strategy into structured context that

@@ -42,7 +42,7 @@ export function ProcessStepper() {
     <Section variant="surface">
       <Container>
         <FadeUp>
-          <h2 className="text-3xl md:text-4xl font-bold text-text text-center mb-16">
+          <h2 className="monolith-title text-3xl md:text-4xl font-bold text-center mb-16 uppercase tracking-tight">
             How It Works
           </h2>
         </FadeUp>
@@ -54,21 +54,14 @@ export function ProcessStepper() {
               <button
                 onClick={() => setActiveStep(i)}
                 className={cn(
-                  "flex items-center gap-2 px-4 py-2 rounded-lg transition-all",
+                  "flex items-center gap-2 px-4 py-2 transition-all font-mono",
                   i === activeStep
-                    ? "text-blue"
+                    ? "text-circuit text-glow"
                     : "text-text-muted hover:text-text"
                 )}
               >
-                <span
-                  className={cn(
-                    "font-mono text-sm font-bold",
-                    i === activeStep && "text-blue"
-                  )}
-                >
-                  {step.number}
-                </span>
-                <span className="hidden sm:inline text-sm font-medium">
+                <span className="text-sm font-bold">{step.number}</span>
+                <span className="hidden sm:inline text-xs uppercase tracking-wider">
                   {step.title}
                 </span>
               </button>
@@ -76,7 +69,7 @@ export function ProcessStepper() {
                 <div
                   className={cn(
                     "w-8 md:w-16 h-px mx-1",
-                    i < activeStep ? "bg-blue" : "bg-border"
+                    i < activeStep ? "bg-circuit" : "bg-[rgba(255,255,255,0.05)]"
                   )}
                 />
               )}

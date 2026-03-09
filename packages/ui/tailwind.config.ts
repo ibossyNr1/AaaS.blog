@@ -4,41 +4,21 @@ const sharedConfig: Partial<Config> = {
   theme: {
     extend: {
       colors: {
-        base: "hsl(var(--base))",
+        base: "var(--basalt-deep)",
         surface: {
-          DEFAULT: "hsl(var(--surface))",
-          bright: "hsl(var(--surface-bright))",
+          DEFAULT: "var(--basalt-surface)",
+          bright: "var(--basalt-bright)",
         },
-        border: "hsl(var(--border))",
+        border: "var(--border)",
         text: {
-          DEFAULT: "hsl(var(--text))",
-          muted: "hsl(var(--text-muted))",
+          DEFAULT: "var(--text)",
+          muted: "var(--text-muted)",
         },
-        blue: {
-          DEFAULT: "hsl(var(--blue))",
-          glow: "hsl(var(--blue) / 0.15)",
-          subtle: "hsl(var(--blue) / 0.08)",
+        circuit: {
+          DEFAULT: "var(--circuit-glow)",
+          dim: "var(--circuit-dim)",
         },
-        purple: {
-          DEFAULT: "hsl(var(--purple))",
-          glow: "hsl(var(--purple) / 0.15)",
-          subtle: "hsl(var(--purple) / 0.08)",
-        },
-        green: {
-          DEFAULT: "hsl(var(--green))",
-          glow: "hsl(var(--green) / 0.15)",
-          subtle: "hsl(var(--green) / 0.08)",
-        },
-        pink: {
-          DEFAULT: "hsl(var(--pink))",
-          glow: "hsl(var(--pink) / 0.15)",
-          subtle: "hsl(var(--pink) / 0.08)",
-        },
-        gold: {
-          DEFAULT: "hsl(var(--gold))",
-          glow: "hsl(var(--gold) / 0.15)",
-          subtle: "hsl(var(--gold) / 0.08)",
-        },
+        "accent-red": "var(--accent-red)",
       },
       fontFamily: {
         sans: ["var(--font-geist-sans)", "system-ui", "sans-serif"],
@@ -51,8 +31,10 @@ const sharedConfig: Partial<Config> = {
       },
       animation: {
         "pulse-slow": "pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-        "float": "float 6s ease-in-out infinite",
+        float: "float 6s ease-in-out infinite",
         "fade-up": "fadeUp 0.5s ease-out forwards",
+        "circuit-flow": "circuitFlow 10s linear infinite",
+        "orb-pulse": "orbPulse 4s ease-in-out infinite",
       },
       keyframes: {
         float: {
@@ -62,6 +44,20 @@ const sharedConfig: Partial<Config> = {
         fadeUp: {
           "0%": { opacity: "0", transform: "translateY(20px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        circuitFlow: {
+          "0%": { strokeDashoffset: "1000" },
+          "100%": { strokeDashoffset: "0" },
+        },
+        orbPulse: {
+          "0%, 100%": {
+            transform: "scale(1)",
+            boxShadow: "0 0 30px var(--circuit-dim)",
+          },
+          "50%": {
+            transform: "scale(1.1)",
+            boxShadow: "0 0 60px var(--circuit-glow)",
+          },
         },
       },
     },

@@ -20,29 +20,29 @@ export function Navbar() {
 
   return (
     <>
-      <header className="fixed top-0 w-full z-50 bg-base/60 backdrop-blur-xl border-b border-border">
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2">
+      <header className="fixed top-0 w-full z-50 bg-base/60 backdrop-blur-xl border-b border-[rgba(255,255,255,0.05)]">
+        <div className="max-w-[1600px] mx-auto px-6 lg:px-16 h-20 flex items-center justify-between">
+          {/* Brand — Monolith style */}
+          <Link href="/" className="flex items-center gap-3">
             <Image
               src="https://firebasestorage.googleapis.com/v0/b/studio-1743338608-800f1.firebasestorage.app/o/Logos%2FAaaS.Points.png?alt=media"
               alt="AaaS"
-              width={32}
-              height={32}
+              width={28}
+              height={28}
               className="rounded"
             />
-            <span className="font-semibold text-lg tracking-tight text-text">
-              AaaS
+            <span className="font-mono text-xs tracking-[0.5rem] uppercase text-text border-l-2 border-circuit pl-4">
+              SYSTEM://AGENTS
             </span>
           </Link>
 
-          {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-8">
+          {/* Desktop Nav — Monospace, dim-to-glow */}
+          <nav className="hidden md:flex items-center gap-10">
             {navItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="text-sm font-medium text-text-muted hover:text-text transition-colors"
+                className="font-mono text-xs uppercase tracking-wider text-text/50 hover:text-circuit hover:text-glow transition-all duration-300"
               >
                 {item.label}
               </Link>
@@ -52,7 +52,7 @@ export function Navbar() {
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-4">
             <a href={BOOKING_LINK} target="_blank" rel="noopener noreferrer">
-              <Button size="sm">Book a Call</Button>
+              <Button size="sm" variant="secondary">Book a Call</Button>
             </a>
           </div>
 
@@ -93,7 +93,7 @@ export function Navbar() {
                 key={item.href}
                 href={item.href}
                 onClick={() => setMobileOpen(false)}
-                className="text-2xl font-medium text-text animate-fade-up"
+                className="font-mono text-lg uppercase tracking-wider text-text animate-fade-up"
                 style={{ animationDelay: `${i * 0.05}s` }}
               >
                 {item.label}
@@ -105,7 +105,7 @@ export function Navbar() {
               rel="noopener noreferrer"
               className="mt-4"
             >
-              <Button className="w-full" size="lg">
+              <Button className="w-full" size="lg" variant="secondary">
                 Book a Call
               </Button>
             </a>

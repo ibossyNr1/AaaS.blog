@@ -41,22 +41,22 @@ export function UseCases() {
     <Section>
       <Container>
         <FadeUp>
-          <h2 className="text-3xl md:text-4xl font-bold text-text text-center mb-12">
+          <h2 className="monolith-title text-3xl md:text-4xl font-bold text-center mb-12 uppercase tracking-tight">
             Built For Your World
           </h2>
         </FadeUp>
 
-        {/* Tabs */}
+        {/* Tabs — monolith style */}
         <div className="flex flex-wrap justify-center gap-2 mb-12">
           {cases.map((c, i) => (
             <button
               key={c.label}
               onClick={() => setActive(i)}
               className={cn(
-                "px-4 py-2 rounded-full text-sm font-medium transition-all",
+                "px-4 py-2 text-sm font-mono uppercase tracking-wider transition-all duration-300 border",
                 i === active
-                  ? "bg-gold text-base"
-                  : "bg-surface text-text-muted hover:text-text border border-border"
+                  ? "border-circuit text-circuit bg-circuit/5 shadow-[0_0_15px_var(--circuit-dim)]"
+                  : "border-[rgba(255,255,255,0.05)] text-text-muted hover:text-text hover:border-text/20"
               )}
             >
               {c.label}

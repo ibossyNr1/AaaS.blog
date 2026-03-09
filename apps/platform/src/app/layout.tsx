@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
+import { CircuitBackground } from "@/components/circuit-background";
 import "./globals.css";
 
 const geistSans = localFont({
@@ -16,9 +17,9 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Agent-as-a-Service | Your Autonomous Digital Workforce",
+  title: "Agent-as-a-Service | Carved Logic",
   description:
-    "Context-engineered AI agents that adapt, learn, and scale your business operations. Turn business strategy into structured data to perfect any AI request.",
+    "High-fidelity autonomous agents forged in basalt-grade reliability. Deploy scalable intelligence across private circuitry.",
   openGraph: {
     title: "Agent-as-a-Service",
     description: "Your Autonomous Digital Workforce",
@@ -38,6 +39,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}
       >
+        <CircuitBackground />
         <Navbar />
         <main className="min-h-screen">{children}</main>
         <Footer />

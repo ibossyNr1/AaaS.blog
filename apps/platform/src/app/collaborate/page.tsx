@@ -39,14 +39,11 @@ export default function CollaboratePage() {
       <Section className="pt-32 pb-12">
         <Container className="text-center">
           <FadeUp>
-            <Badge color="green" className="mb-4">
+            <Badge className="mb-4">
               Collaborate
             </Badge>
-            <h1 className="text-4xl md:text-6xl font-bold text-text mb-4">
-              Build the Future{" "}
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-green to-gold">
-                With Us
-              </span>
+            <h1 className="monolith-title text-4xl md:text-6xl font-bold mb-4 uppercase tracking-tight">
+              Build the Future With Us
             </h1>
             <p className="text-lg text-text-muted max-w-2xl mx-auto">
               Two paths to partnership. Whether you&apos;re investing in AI
@@ -62,12 +59,8 @@ export default function CollaboratePage() {
         <Container>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <FadeUp>
-              <Card
-                accent="gold"
-                hover={false}
-                className="h-full flex flex-col glow-gold"
-              >
-                <Badge color="gold" className="mb-4 self-start">
+              <Card className="h-full flex flex-col glow-circuit">
+                <Badge className="mb-4 self-start">
                   For Investors
                 </Badge>
                 <h2 className="text-2xl font-bold text-text mb-4">Invest</h2>
@@ -88,7 +81,7 @@ export default function CollaboratePage() {
                       key={item}
                       className="flex items-start gap-2 text-sm text-text-muted"
                     >
-                      <span className="text-gold mt-0.5">✓</span>
+                      <span className="text-circuit mt-0.5">✓</span>
                       {item}
                     </li>
                   ))}
@@ -104,12 +97,8 @@ export default function CollaboratePage() {
             </FadeUp>
 
             <FadeUp delay={0.1}>
-              <Card
-                accent="green"
-                hover={false}
-                className="h-full flex flex-col glow-green"
-              >
-                <Badge color="green" className="mb-4 self-start">
+              <Card className="h-full flex flex-col glow-circuit">
+                <Badge className="mb-4 self-start">
                   For Ventures
                 </Badge>
                 <h2 className="text-2xl font-bold text-text mb-4">
@@ -131,7 +120,7 @@ export default function CollaboratePage() {
                       key={item}
                       className="flex items-start gap-2 text-sm text-text-muted"
                     >
-                      <span className="text-green mt-0.5">✓</span>
+                      <span className="text-circuit mt-0.5">✓</span>
                       {item}
                     </li>
                   ))}
@@ -155,7 +144,7 @@ export default function CollaboratePage() {
       <Section variant="surface">
         <Container>
           <FadeUp>
-            <h2 className="text-3xl md:text-4xl font-bold text-text text-center mb-16">
+            <h2 className="monolith-title text-3xl md:text-4xl font-bold text-center mb-16 uppercase tracking-tight">
               The Equity Model
             </h2>
           </FadeUp>
@@ -164,8 +153,8 @@ export default function CollaboratePage() {
             {equitySteps.map((step, i) => (
               <FadeUp key={step.number} delay={i * 0.1}>
                 <div className="text-center">
-                  <div className="w-16 h-16 rounded-2xl bg-green-subtle border border-green/20 flex items-center justify-center mx-auto mb-6">
-                    <span className="text-green font-mono font-bold text-lg">
+                  <div className="w-16 h-16 border border-circuit/20 bg-circuit/5 flex items-center justify-center mx-auto mb-6">
+                    <span className="text-circuit font-mono font-bold text-lg">
                       {step.number}
                     </span>
                   </div>

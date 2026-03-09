@@ -24,8 +24,8 @@ const footerLinks = {
 
 export function Footer() {
   return (
-    <footer className="border-t border-border bg-base py-16 px-6">
-      <div className="max-w-7xl mx-auto">
+    <footer className="border-t border-[rgba(255,255,255,0.05)] bg-base py-16 px-6">
+      <div className="max-w-[1600px] mx-auto">
         <div className="grid grid-cols-2 md:grid-cols-6 gap-8">
           {/* Logo column */}
           <div className="col-span-2 md:col-span-1">
@@ -37,17 +37,19 @@ export function Footer() {
                 height={24}
                 className="rounded"
               />
-              <span className="font-semibold text-sm text-text">AaaS</span>
+              <span className="font-mono text-xs uppercase tracking-widest text-text">
+                AaaS
+              </span>
             </Link>
-            <p className="text-xs text-text-muted">
-              Your Autonomous Digital Workforce
+            <p className="font-mono text-xs text-text-muted uppercase tracking-wider">
+              Autonomous Digital Workforce
             </p>
           </div>
 
           {/* Link columns */}
           {Object.entries(footerLinks).map(([category, links]) => (
             <div key={category}>
-              <h4 className="text-sm font-medium text-text mb-3">
+              <h4 className="font-mono text-xs font-medium text-circuit uppercase tracking-wider mb-3">
                 {category}
               </h4>
               <ul className="space-y-2">
@@ -55,7 +57,7 @@ export function Footer() {
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="text-xs text-text-muted hover:text-text transition-colors"
+                      className="font-mono text-xs text-text-muted hover:text-circuit hover:text-glow transition-all"
                     >
                       {link.label}
                     </Link>
@@ -67,13 +69,13 @@ export function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-12 pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-6 text-xs text-text-muted">
+        <div className="mt-12 pt-8 border-t border-[rgba(255,255,255,0.05)] flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-6 font-mono text-xs text-text-muted">
             <a
               href="https://aaas.blog"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-text transition-colors"
+              className="hover:text-circuit transition-colors"
             >
               Blog
             </a>
@@ -81,7 +83,7 @@ export function Footer() {
               href="https://linkedin.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-text transition-colors"
+              className="hover:text-circuit transition-colors"
             >
               LinkedIn
             </a>
@@ -89,13 +91,13 @@ export function Footer() {
               href="https://github.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-text transition-colors"
+              className="hover:text-circuit transition-colors"
             >
               GitHub
             </a>
           </div>
-          <p className="text-xs text-text-muted">
-            &copy; {new Date().getFullYear()} Agent-as-a-Service
+          <p className="font-mono text-xs text-text-muted">
+            SYS_LOG: &copy; {new Date().getFullYear()} Agent-as-a-Service // UPTIME: 99.9999992%
           </p>
         </div>
       </div>
