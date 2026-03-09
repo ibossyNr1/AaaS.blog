@@ -4,21 +4,21 @@ const sharedConfig: Partial<Config> = {
   theme: {
     extend: {
       colors: {
-        base: "var(--basalt-deep)",
+        base: "rgb(var(--basalt-deep) / <alpha-value>)",
         surface: {
-          DEFAULT: "var(--basalt-surface)",
-          bright: "var(--basalt-bright)",
+          DEFAULT: "rgb(var(--basalt-surface) / <alpha-value>)",
+          bright: "rgb(var(--basalt-bright) / <alpha-value>)",
         },
         border: "var(--border)",
         text: {
-          DEFAULT: "var(--text)",
+          DEFAULT: "rgb(var(--text) / <alpha-value>)",
           muted: "var(--text-muted)",
         },
         circuit: {
-          DEFAULT: "var(--circuit-glow)",
+          DEFAULT: "rgb(var(--circuit-glow) / <alpha-value>)",
           dim: "var(--circuit-dim)",
         },
-        "accent-red": "var(--accent-red)",
+        "accent-red": "rgb(var(--accent-red) / <alpha-value>)",
       },
       fontFamily: {
         sans: ["var(--font-geist-sans)", "system-ui", "sans-serif"],
@@ -56,7 +56,7 @@ const sharedConfig: Partial<Config> = {
           },
           "50%": {
             transform: "scale(1.1)",
-            boxShadow: "0 0 60px var(--circuit-glow)",
+            boxShadow: "0 0 60px rgb(var(--circuit-glow))",
           },
         },
       },

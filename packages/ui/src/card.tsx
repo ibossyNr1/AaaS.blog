@@ -19,7 +19,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
         {...props}
       >
         {/* Circuit accent bar */}
-        <div className="absolute top-0 left-0 w-10 h-0.5 bg-circuit shadow-[0_0_15px_var(--circuit-glow)]" />
+        <div className="absolute top-0 left-0 w-10 h-0.5 bg-circuit shadow-[0_0_15px_rgb(var(--circuit-glow))]" />
         {children}
       </div>
     );

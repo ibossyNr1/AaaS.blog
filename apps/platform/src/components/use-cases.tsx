@@ -55,7 +55,7 @@ export function UseCases() {
               className={cn(
                 "px-4 py-2 text-sm font-mono uppercase tracking-wider transition-all duration-300 border",
                 i === active
-                  ? "border-circuit text-circuit bg-circuit/5 shadow-[0_0_15px_var(--circuit-dim)]"
+                  ? "border-circuit text-circuit bg-circuit/5 shadow-[0_0_15px_rgba(0,243,255,0.15)]"
                   : "border-[rgba(255,255,255,0.05)] text-text-muted hover:text-text hover:border-text/20"
               )}
             >

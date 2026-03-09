@@ -104,7 +104,7 @@ export default function PlatformPage() {
                 className={cn(
                   "px-6 py-3 text-sm font-mono uppercase tracking-wider transition-all border",
                   i === activeEvolution
-                    ? "border-circuit text-circuit bg-circuit/5 shadow-[0_0_15px_var(--circuit-dim)]"
+                    ? "border-circuit text-circuit bg-circuit/5 shadow-[0_0_15px_rgba(0,243,255,0.15)]"
                     : "border-[rgba(255,255,255,0.05)] text-text-muted hover:text-text hover:border-text/20"
                 )}
               >

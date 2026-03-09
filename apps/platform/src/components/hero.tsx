@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useRef } from "react";
 import { Button, Card, Container, Section } from "@aaas/ui";
 
 const BOOKING_LINK = "https://calendar.app.google/X2MjiFt1vkksn2ga8";
@@ -9,6 +12,19 @@ const statusCards = [
 ];
 
 export function Hero() {
+  const orbRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!orbRef.current) return;
+      const x = (e.clientX - window.innerWidth / 2) / 50;
+      const y = (e.clientY - window.innerHeight / 2) / 50;
+      orbRef.current.style.transform = `translate(${x}px, ${y}px)`;
+    };
+    document.addEventListener("mousemove", handleMouseMove);
+    return () => document.removeEventListener("mousemove", handleMouseMove);
+  }, []);
+
   return (
     <Section className="relative pt-32 pb-24 overflow-hidden">
       {/* Background glow */}
@@ -50,6 +66,22 @@ export function Hero() {
                 Explore Platform
               </Button>
             </a>
+          </div>
+
+          {/* Node Map — Pulsing Orb */}
+          <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[400px] h-[600px] hidden lg:flex items-center justify-center pointer-events-none">
+            <div className="absolute inset-0 bg-[radial-gradient(circle,rgba(0,243,255,0.15)_0%,transparent_70%)]" />
+            <div
+              ref={orbRef}
+              className="relative w-20 h-20 rounded-full bg-base border border-circuit animate-orb-pulse flex items-center justify-center"
+              style={{ boxShadow: "0 0 30px rgba(0,243,255,0.15), inset 0 0 20px rgba(0,243,255,0.15)" }}
+            >
+              <div className="w-1 h-1 rounded-full bg-circuit" />
+            </div>
+            <svg className="absolute w-full h-full" aria-hidden="true">
+              <circle cx="50%" cy="50%" r="120" stroke="rgba(0,243,255,0.1)" fill="none" strokeDasharray="10 5" />
+              <circle cx="50%" cy="50%" r="180" stroke="rgba(255,255,255,0.05)" fill="none" />
+            </svg>
           </div>
         </div>
       </Container>

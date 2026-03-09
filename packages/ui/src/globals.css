@@ -4,19 +4,19 @@
 
 @layer base {
   :root {
-    /* Basalt surfaces */
-    --basalt-deep: #080809;
-    --basalt-surface: #1a1a1c;
-    --basalt-bright: #2a2a2e;
+    /* Basalt surfaces — RGB channels for Tailwind opacity modifier support */
+    --basalt-deep: 8 8 9;
+    --basalt-surface: 26 26 28;
+    --basalt-bright: 42 42 46;
     --border: rgba(255, 255, 255, 0.05);
 
     /* Circuit accent */
-    --circuit-glow: #00f3ff;
+    --circuit-glow: 0 243 255;
     --circuit-dim: rgba(0, 243, 255, 0.15);
-    --accent-red: #ff2a6d;
+    --accent-red: 255 42 109;
 
     /* Text */
-    --text: #e0e0e0;
+    --text: 224 224 224;
     --text-muted: rgba(224, 224, 224, 0.5);
 
     /* Grain texture */
@@ -30,8 +30,8 @@
   }
 
   body {
-    background: var(--basalt-deep);
-    color: var(--text);
+    background: rgb(var(--basalt-deep));
+    color: rgb(var(--text));
     font-family: var(--font-geist-sans), system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -66,7 +66,7 @@
   }
 
   .text-glow {
-    text-shadow: 0 0 10px var(--circuit-glow);
+    text-shadow: 0 0 10px rgb(var(--circuit-glow));
   }
 
   .monolith-title {

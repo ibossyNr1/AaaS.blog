@@ -13,7 +13,7 @@ export function CircuitBackground() {
       >
         <path
           d="M 0 100 H 200 V 300 H 400 V 100 H 600 V 500 H 1000"
-          stroke="var(--circuit-glow)"
+          stroke="rgb(var(--circuit-glow))"
           strokeWidth="1"
           fill="none"
           strokeDasharray="1000"
@@ -22,7 +22,7 @@ export function CircuitBackground() {
         />
         <path
           d="M 1000 900 H 800 V 700 H 600 V 900 H 400 V 500 H 0"
-          stroke="var(--circuit-glow)"
+          stroke="rgb(var(--circuit-glow))"
           strokeWidth="1"
           fill="none"
           strokeDasharray="1000"
@@ -32,7 +32,7 @@ export function CircuitBackground() {
         />
         <path
           d="M 200 0 V 400 H 400 V 600 H 200 V 1000"
-          stroke="var(--circuit-glow)"
+          stroke="rgb(var(--circuit-glow))"
           strokeWidth="1"
           fill="none"
           strokeDasharray="1000"
