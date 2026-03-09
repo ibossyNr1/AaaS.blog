@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { Button, cn } from "@aaas/ui";
 
@@ -24,15 +23,8 @@ export function Navbar() {
         <div className="max-w-[1600px] mx-auto px-6 lg:px-16 h-20 flex items-center justify-between">
           {/* Brand — Monolith style */}
           <Link href="/" className="flex items-center gap-3">
-            <Image
-              src="https://firebasestorage.googleapis.com/v0/b/studio-1743338608-800f1.firebasestorage.app/o/Logos%2FAaaS.Points.png?alt=media"
-              alt="AaaS"
-              width={28}
-              height={28}
-              className="rounded"
-            />
-            <span className="font-mono text-xs tracking-[0.5rem] uppercase text-text border-l-2 border-circuit pl-4">
-              SYSTEM://AGENTS
+            <span className="font-mono text-xs tracking-[0.3rem] uppercase text-text">
+              Agents as a Service
             </span>
           </Link>
 

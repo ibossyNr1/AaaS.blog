@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AGENTIC LEVERAGE | Outcome-Based Intelligence</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0A0A0B;
+            --surface: #141518;
+            --accent: #00F0FF;
+            --accent-muted: #004246;
+            --text-main: #E2E2E2;
+            --text-dim: #888888;
+            --border: #2A2C32;
+            --heavy-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            --ease-lever: cubic-bezier(0.8, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.4;
+        }
+
+        /* MATERIALITY: Blueprint Grid */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(var(--border) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border) 1px, transparent 1px);
+            background-size: 80px 80px;
+            opacity: 0.15;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        /* NAVIGATION: Minimal Structural Bar */
+        nav {
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 60px;
+        }
+
+        .logo {
+            font-family: 'Space Mono', monospace;
+            font-weight: 700;
+            letter-spacing: -1px;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-box {
+            width: 24px;
+            height: 24px;
+            background: var(--accent);
+            transform: rotate(45deg);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+        }
+
+        /* HERO: The Lever Concept */
+        .hero {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 60vh;
+            align-items: center;
+            gap: 80px;
+            padding-bottom: 100px;
+        }
+
+        .hero-content h1 {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 900;
+            line-height: 0.9;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+        }
+
+        .hero-content .highlight {
+            color: var(--accent);
+            display: block;
+        }
+
+        .hero-subtext {
+            font-family: 'Space Mono', monospace;
+            color: var(--text-dim);
+            max-width: 450px;
+            font-size: 0.9rem;
+            border-left: 2px solid var(--accent);
+            padding-left: 20px;
+        }
+
+        /* MASONRY GRID: Precision Blocks */
+        .masonry-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            grid-auto-rows: 200px;
+            gap: 20px;
+            margin-bottom: 100px;
+        }
+
+        .slab {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.6s var(--ease-lever), box-shadow 0.6s var(--ease-lever);
+            cursor: pointer;
+        }
+
+        .slab:hover {
+            transform: translateY(-10px) scale(1.01);
+            box-shadow: var(--heavy-shadow);
+            border-color: var(--accent-muted);
+        }
+
+        .slab::after {
+            content: '';
+            position: absolute;
+            bottom: 0; right: 0;
+            width: 40px; height: 40px;
+            background: linear-gradient(135deg, transparent 50%, var(--border) 50%);
+        }
+
+        .slab-large { grid-column: span 8; grid-row: span 2; }
+        .slab-medium { grid-column: span 4; grid-row: span 2; }
+        .slab-small { grid-column: span 4; grid-row: span 1; }
+        .slab-wide { grid-column: span 8; grid-row: span 1; }
+
+        .slab-label {
+            font-family: 'Space Mono', monospace;
+            color: var(--accent);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .slab h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .slab p {
+            color: var(--text-dim);
+            font-size: 1rem;
+            max-width: 80%;
+        }
+
+        /* DATA VIZ: Precision Elements */
+        .metric-container {
+            margin-top: 40px;
+            display: flex;
+            gap: 30px;
+        }
+
+        .metric {
+            border-top: 1px solid var(--border);
+            padding-top: 15px;
+        }
+
+        .metric-value {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .metric-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.6rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+        }
+
+        /* CTA SECTION: The Lever Pivot */
+        .cta-section {
+            background: var(--accent);
+            color: var(--bg);
+            padding: 100px 60px;
+            margin: 100px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            clip-path: polygon(0 15%, 100% 0, 100% 85%, 0 100%);
+        }
+
+        .cta-text h2 {
+            font-size: 4rem;
+            font-weight: 900;
+            line-height: 1;
+            text-transform: uppercase;
+        }
+
+        .cta-btn {
+            background: var(--bg);
+            color: var(--accent);
+            padding: 30px 60px;
+            font-family: 'Space Mono', monospace;
+            font-weight: 700;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .cta-btn:hover {
+            transform: scale(1.05);
+            background: white;
+            color: black;
+        }
+
+        /* MECHANICAL FOOTER */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 60px 0;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+        }
+
+        .footer-col h4 {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            color: var(--accent);
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            color: var(--text-dim);
+        }
+
+        /* ANIMATIONS */
+        @keyframes reveal {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .reveal {
+            animation: reveal 1s var(--ease-lever) forwards;
+        }
+
+        @media (max-width: 1024px) {
+            .hero { grid-template-columns: 1fr; }
+            .slab-large, .slab-medium, .slab-small, .slab-wide { grid-column: span 12; }
+            .masonry-grid { grid-auto-rows: auto; }
+            .cta-section { flex-direction: column; text-align: center; gap: 40px; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <nav>
+            <div class="logo">
+                <div class="logo-box"></div>
+                LEVERAGE_AI
+            </div>
+            <div class="nav-links">
+                <a href="#">Engine</a>
+                <a href="#">Architecture</a>
+                <a href="#">Pricing_Model</a>
+                <a href="#" style="color: var(--accent)">Secure_Access</a>
+            </div>
+        </nav>
+
+        <section class="hero reveal">
+            <div class="hero-content">
+                <h1>ZERO <span class="highlight">RETAINER.</span> TOTAL <span class="highlight">RESULTS.</span></h1>
+                <p class="hero-subtext">
+                    We deploy precision agentic clusters built on a masonry of logic. You don't pay for compute. You don't pay for hours. You pay for the solved outcome.
+                </p>
+            </div>
+            <div class="hero-visual">
+                <!-- SVG Lever Illustration -->
+                <svg viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <line x1="50" y1="250" x2="350" y2="150" stroke="#00F0FF" stroke-width="4"/>
+                    <rect x="300" y="80" width="60" height="60" fill="var(--surface)" stroke="#00F0FF" stroke-width="2"/>
+                    <circle cx="200" cy="210" r="10" fill="#00F0FF"/>
+                    <path d="M190 210 L210 210 L200 240 Z" fill="#00F0FF"/>
+                    <text x="310" y="115" fill="#00F0FF" font-family="Space Mono" font-size="10">GOAL</text>
+                    <text x="60" y="230" fill="white" font-family="Space Mono" font-size="10">EFFORT</text>
+                </svg>
+            </div>
+        </section>
+
+        <div class="masonry-grid">
+            <!-- SLAB 1: LARGE -->
+            <div class="slab slab-large reveal" style="animation-delay: 0.1s">
+                <span class="slab-label">Autonomous Architect</span>
+                <h3>Agentic Synthesis</h3>
+                <p>Multiple high-order models operating in a feedback loop to verify output quality before delivery. Our masonry structure ensures no single point of failure.</p>
+                <div class="metric-container">
+                    <div class="metric">
+                        <div class="metric-value">99.4%</div>
+                        <div class="metric-label">Accuracy Threshold</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">0.0ms</div>
+                        <div class="metric-label">Latent Lag</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLAB 2: MEDIUM -->
+            <div class="slab slab-medium reveal" style="animation-delay: 0.2s">
+                <span class="slab-label">Ledger Protocol</span>
+                <h3>Pay-Per-Outcome</h3>
+                <p>Traditional SaaS is broken. We bill only when the specific "Definition of Done" is triggered by our consensus layer.</p>
+                <div class="metric-container">
+                    <div class="metric">
+                        <div class="metric-value">$0.00</div>
+                        <div class="metric-label">Platform Fee</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLAB 3: SMALL -->
+            <div class="slab slab-small reveal" style="animation-delay: 0.3s">
+                <span class="slab-label">Data Security</span>
+                <h3>Hardened Silos</h3>
+                <p>Each agent runs in a sandboxed, ephemeral masonry block.</p>
+            </div>
+
+            <!-- SLAB 4: WIDE -->
+            <div class="slab slab-wide reveal" style="animation-delay: 0.4s">
+                <span class="slab-label">Scale Factor</span>
+                <h3>Precision Parallelism</h3>
+                <p>Whether it's one research task or ten thousand code audits, our levered infrastructure scales horizontally without increasing your management overhead.</p>
+            </div>
+        </div>
+
+        <section class="cta-section reveal">
+            <div class="cta-text">
+                <h2>Ready to leverage<br>real results?</h2>
+            </div>
+            <a href="#" class="cta-btn">
+                INITIATE PROTOCOL
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="3" stroke-linecap="square"/>
+                </svg>
+            </a>
+        </section>
+
+        <footer>
+            <div class="footer-col">
+                <div class="logo">LEVERAGE_AI</div>
+                <p style="font-size: 0.7rem; color: var(--text-dim); margin-top: 10px;">&copy; 2024 PRECISION MASONRY SYSTEMS.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Capabilities</h4>
+                <ul>
+                    <li>Strategic Analysis</li>
+                    <li>Code Engineering</li>
+                    <li>Market Synthesis</li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Infrastructure</h4>
+                <ul>
+                    <li>Leveraged Nodes</li>
+                    <li>Outcome Consensus</li>
+                    <li>Slab Security</li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Status</h4>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="width: 8px; height: 8px; background: var(--accent); border-radius: 50%;"></div>
+                    <span style="font-family: 'Space Mono', monospace; font-size: 0.7rem;">SYSTEMS_NOMINAL</span>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Simple scroll reveal interaction
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('reveal');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.slab, .cta-section').forEach(el => observer.observe(el));
+
+        // Interactive Masonry Tilt Effect
+        document.querySelectorAll('.slab').forEach(slab => {
+            slab.addEventListener('mousemove', e => {
+                const rect = slab.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const xc = rect.width / 2;
+                const yc = rect.height / 2;
+                
+                const dx = x - xc;
+                const dy = y - yc;
+                
+                slab.style.transform = `perspective(1000px) rotateY(${dx/20}deg) rotateX(${-dy/20}deg) translateY(-10px)`;
+            });
+
+            slab.addEventListener('mouseleave', () => {
+                slab.style.transform = `perspective(1000px) rotateY(0deg) rotateX(0deg) translateY(0)`;
+            });
+        });
+    </script>
+</body>
+</html>

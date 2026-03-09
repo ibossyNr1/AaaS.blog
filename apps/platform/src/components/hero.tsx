@@ -6,9 +6,9 @@ import { Button, Card, Container, Section } from "@aaas/ui";
 const BOOKING_LINK = "https://calendar.app.google/X2MjiFt1vkksn2ga8";
 
 const statusCards = [
-  { label: "Processing Latency", value: "0.002ms" },
-  { label: "Active Instances", value: "4,812 / \u221E" },
-  { label: "Neural Density", value: "98.4%" },
+  { label: "Extract", value: "Strategic Fundamentals" },
+  { label: "Map", value: "Context into AI Workflows" },
+  { label: "Deploy", value: "Proprietary Tools & Agents" },
 ];
 
 export function Hero() {
@@ -34,12 +34,12 @@ export function Hero() {
         <div className="relative">
           {/* Monolith Title */}
           <h1 className="monolith-title text-[clamp(4rem,12vw,10rem)] font-black leading-[0.85] tracking-[-0.04em] uppercase mb-8">
-            CARVED<br />LOGIC
+            CONTEXT<br />IS KING
           </h1>
 
           <p className="max-w-lg text-lg text-text/70 font-light leading-relaxed">
-            High-fidelity autonomous agents forged in basalt-grade reliability.
-            Deploy scalable intelligence across private circuitry.
+            Contextualize Strategy to Accelerate with AI.{" "}
+            <span className="text-text/50">Turn business context into structured data to perfect any AI request.</span>
           </p>
 
           {/* Status Cards */}

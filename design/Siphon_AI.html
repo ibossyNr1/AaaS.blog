@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Siphon.ai | Pay Per Result Agentic Intelligence</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;800&family=JetBrains+Mono:wght@300;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #030708;
+            --vitreous-glass: rgba(255, 255, 255, 0.03);
+            --liquid-primary: #00f2ff;
+            --liquid-secondary: #7000ff;
+            --border-glow: rgba(0, 242, 255, 0.15);
+            --mono: 'JetBrains Mono', monospace;
+            --sans: 'Inter', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: #fff;
+            font-family: var(--sans);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Vitreous Background Grid */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(112, 0, 255, 0.05) 0%, transparent 50%),
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 100% 100%, 80px 80px, 80px 80px;
+            z-index: -1;
+        }
+
+        /* Navigation */
+        nav {
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 5vw;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-family: var(--mono);
+            font-weight: 500;
+            letter-spacing: -1px;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-orb {
+            width: 20px;
+            height: 20px;
+            background: var(--liquid-primary);
+            border-radius: 50%;
+            box-shadow: 0 0 20px var(--liquid-primary);
+            position: relative;
+        }
+
+        .logo-orb::after {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border: 1px solid var(--liquid-primary);
+            border-radius: 50%;
+            opacity: 0.3;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 120px 5vw;
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 60px;
+            min-height: 80vh;
+            align-items: center;
+        }
+
+        .hero-content h1 {
+            font-size: clamp(3rem, 6vw, 5.5rem);
+            font-weight: 800;
+            line-height: 0.95;
+            letter-spacing: -0.04em;
+            margin-bottom: 40px;
+        }
+
+        .hero-content h1 span {
+            display: block;
+            background: linear-gradient(180deg, #fff 0%, rgba(255,255,255,0.4) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-content .highlight {
+            color: var(--liquid-primary);
+            -webkit-text-fill-color: var(--liquid-primary);
+            text-shadow: 0 0 40px rgba(0, 242, 255, 0.4);
+        }
+
+        /* Siphon Visual Component */
+        .siphon-container {
+            position: relative;
+            height: 600px;
+            background: var(--vitreous-glass);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            box-shadow: inset 0 0 50px rgba(255,255,255,0.02);
+        }
+
+        .glass-tube {
+            width: 120px;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent);
+            border-left: 1px solid rgba(255,255,255,0.05);
+            border-right: 1px solid rgba(255,255,255,0.05);
+            position: relative;
+        }
+
+        .liquid-flow {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background: linear-gradient(180deg, var(--liquid-primary), var(--liquid-secondary));
+            height: 60%;
+            filter: blur(8px);
+            opacity: 0.6;
+            animation: pulse-height 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulse-height {
+            from { height: 40%; }
+            to { height: 85%; }
+        }
+
+        .data-stream {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+        }
+
+        .data-bit {
+            position: absolute;
+            width: 4px;
+            height: 40px;
+            background: #fff;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: fall linear infinite;
+            filter: blur(1px);
+        }
+
+        @keyframes fall {
+            0% { top: -10%; opacity: 0; }
+            50% { opacity: 1; }
+            100% { top: 110%; opacity: 0; }
+        }
+
+        /* Stats & Value Props */
+        .stats-strip {
+            display: flex;
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        .stat-item {
+            font-family: var(--mono);
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.4);
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            color: #fff;
+        }
+
+        /* CTA */
+        .cta-button {
+            padding: 24px 48px;
+            background: #fff;
+            color: #000;
+            text-decoration: none;
+            font-weight: 500;
+            border-radius: 100px;
+            display: inline-flex;
+            align-items: center;
+            gap: 16px;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            margin-top: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 40px rgba(255,255,255,0.2);
+        }
+
+        .cta-button::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0; left: -100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
+            transition: 0.5s;
+        }
+
+        .cta-button:hover::after {
+            left: 100%;
+        }
+
+        /* Feature Grid */
+        .features {
+            padding: 100px 5vw;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+        }
+
+        .feature-cell {
+            padding: 40px;
+            background: var(--vitreous-glass);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 24px;
+            transition: border 0.3s ease;
+        }
+
+        .feature-cell:hover {
+            border-color: var(--liquid-primary);
+        }
+
+        .feature-cell h3 {
+            font-family: var(--mono);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            color: var(--liquid-primary);
+            margin-bottom: 20px;
+        }
+
+        .feature-cell p {
+            font-size: 1.2rem;
+            line-height: 1.4;
+            color: rgba(255,255,255,0.7);
+        }
+
+        /* Pay Per Result Gauge */
+        .gauge-section {
+            padding: 100px 5vw;
+            text-align: center;
+        }
+
+        .gauge-wrap {
+            width: 100%;
+            max-width: 800px;
+            margin: 60px auto;
+            height: 12px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 100px;
+            position: relative;
+            overflow: visible;
+        }
+
+        .gauge-fill {
+            position: absolute;
+            left: 0; top: 0;
+            height: 100%;
+            width: 75%;
+            background: linear-gradient(90deg, var(--liquid-secondary), var(--liquid-primary));
+            border-radius: 100px;
+            box-shadow: 0 0 30px var(--liquid-primary);
+        }
+
+        .gauge-marker {
+            position: absolute;
+            top: -40px;
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            transform: translateX(-50%);
+        }
+
+        /* Utility */
+        .text-mono { font-family: var(--mono); }
+        .success-tag {
+            background: rgba(0, 242, 255, 0.1);
+            border: 1px solid var(--liquid-primary);
+            color: var(--liquid-primary);
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            vertical-align: middle;
+            margin-left: 10px;
+        }
+
+        @media (max-width: 900px) {
+            .hero { grid-template-columns: 1fr; }
+            .features { grid-template-columns: 1fr; }
+            .siphon-container { height: 400px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">
+            <div class="logo-orb"></div>
+            SIPHON.AI
+        </div>
+        <div class="nav-links text-mono" style="font-size: 0.8rem; display: flex; gap: 40px;">
+            <a href="#" style="color: #fff; text-decoration: none;">INFRASTRUCTURE</a>
+            <a href="#" style="color: #fff; text-decoration: none;">PRICING</a>
+            <a href="#" style="color: #fff; text-decoration: none; opacity: 0.5;">DOCS</a>
+        </div>
+        <a href="#" class="text-mono" style="color: var(--liquid-primary); text-decoration: none; border: 1px solid var(--liquid-primary); padding: 8px 20px; border-radius: 4px; font-size: 0.8rem;">CONSOLE_LOGIN</a>
+    </nav>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h1>
+                    <span>ZERO RETAINER.</span>
+                    <span class="highlight">PURE RESULTS.</span>
+                </h1>
+                <p style="font-size: 1.4rem; color: rgba(255,255,255,0.6); max-width: 600px; line-height: 1.6;">
+                    The world's first vitreous agentic network. We don't bill for compute or hours. Our liquid siphon model extracts value first—you only pay when the task is resolved.
+                </p>
+                
+                <div class="stats-strip">
+                    <div class="stat-item">
+                        <div class="stat-label">System State</div>
+                        <div class="stat-value">Fluid <span class="success-tag">Active</span></div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Throughput</div>
+                        <div class="stat-value">1.2M/req</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Default Risk</div>
+                        <div class="stat-value">0.00%</div>
+                    </div>
+                </div>
+
+                <a href="#" class="cta-button">
+                    DEPLOY AGENT SIPHON
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                </a>
+            </div>
+
+            <div class="siphon-container">
+                <div class="glass-tube">
+                    <div class="liquid-flow"></div>
+                    <div class="data-stream" id="data-stream"></div>
+                </div>
+                <!-- Floating labels inside the vitreous container -->
+                <div class="text-mono" style="position: absolute; left: 40px; top: 40px; font-size: 0.7rem; opacity: 0.4;">
+                    INPUT_STREAM.v1<br>RAW_DATA_INJECT
+                </div>
+                <div class="text-mono" style="position: absolute; right: 40px; bottom: 40px; font-size: 0.7rem; color: var(--liquid-primary);">
+                    VALUE_EXTRACTION<br>PAYMENT_TRIGGER_ON_SUCCESS
+                </div>
+            </div>
+        </section>
+
+        <section class="features">
+            <div class="feature-cell">
+                <h3>Vitreous Transparency</h3>
+                <p>Every decision step is visible through our high-fidelity refraction engine. No black boxes.</p>
+            </div>
+            <div class="feature-cell">
+                <h3>Liquid Scaling</h3>
+                <p>Computational fluid dynamics allow our agents to surge and retract based on task complexity.</p>
+            </div>
+            <div class="feature-cell">
+                <h3>Siphon Protocol</h3>
+                <p>Our unique fee structure pulls payment only when a predefined result is achieved. Zero upfront waste.</p>
+            </div>
+        </section>
+
+        <section class="gauge-section">
+            <h2 class="text-mono" style="letter-spacing: 4px; font-size: 0.8rem; margin-bottom: 20px; opacity: 0.5;">PERFORMANCE GAUGE</h2>
+            <div class="gauge-wrap">
+                <div class="gauge-fill"></div>
+                <div class="gauge-marker" style="left: 0%;">IDLE</div>
+                <div class="gauge-marker" style="left: 75%; color: var(--liquid-primary);">OPTIMAL FLOW</div>
+                <div class="gauge-marker" style="left: 100%;">LIMIT</div>
+            </div>
+            <p style="margin-top: 40px; font-family: var(--mono); font-size: 0.9rem; color: rgba(255,255,255,0.5);">
+                Current global agentic pressure: <span style="color: #fff;">842.2 psi</span>
+            </p>
+        </section>
+    </main>
+
+    <footer style="padding: 100px 5vw; border-top: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: flex-end;">
+        <div>
+            <div class="logo" style="margin-bottom: 20px;">
+                <div class="logo-orb"></div>
+                SIPHON
+            </div>
+            <p class="text-mono" style="font-size: 0.7rem; opacity: 0.3;">© 2024 AGENTS-AS-A-SERVICE REDESIGNED.<br>ALL RIGHTS RESERVED. LIQUID MODEL REV 4.</p>
+        </div>
+        <div class="text-mono" style="text-align: right; font-size: 0.7rem; opacity: 0.5;">
+            LATENCY: 14MS<br>
+            UPTIME: 99.998%<br>
+            REGION: GLOBAL_EDGE
+        </div>
+    </footer>
+
+    <script>
+        // Generate falling data bits
+        const stream = document.getElementById('data-stream');
+        function createBit() {
+            const bit = document.createElement('div');
+            bit.className = 'data-bit';
+            bit.style.left = Math.random() * 100 + '%';
+            bit.style.animationDuration = (Math.random() * 2 + 1) + 's';
+            bit.style.opacity = Math.random();
+            stream.appendChild(bit);
+
+            setTimeout(() => {
+                bit.remove();
+            }, 3000);
+        }
+
+        setInterval(createBit, 100);
+
+        // Subtle parallax on the vitreous container
+        document.addEventListener('mousemove', (e) => {
+            const container = document.querySelector('.siphon-container');
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 50;
+            const yAxis = (window.innerHeight / 2 - e.pageY) / 50;
+            container.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AGENTS AS A SERVICE | TECTONIC COMMAND</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@300;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --granite-deep: #121212;
+            --granite-slab: #1E1E1E;
+            --granite-light: #2D2D2D;
+            --copper-core: #B87333;
+            --copper-glow: #FF8C00;
+            --copper-wire: #7A491E;
+            --human-cyan: #00F0FF;
+            --text-main: #E0E0E0;
+            --text-dim: #808080;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: crosshair;
+        }
+
+        body {
+            background-color: var(--granite-deep);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0);
+            background-size: 40px 40px;
+        }
+
+        /* Granite Texture Filter */
+        .granite-texture {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 100;
+            mix-blend-mode: overlay;
+        }
+
+        /* Layout Architecture */
+        .quarry-grid {
+            display: grid;
+            grid-template-columns: 350px 1fr 300px;
+            height: 100vh;
+            gap: 20px;
+            padding: 20px;
+            perspective: 1000px;
+        }
+
+        /* Tectonic Slabs */
+        .slab {
+            background: var(--granite-slab);
+            position: relative;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            border-left: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 
+                20px 20px 60px rgba(0,0,0,0.5),
+                inset 1px 1px 0px rgba(255,255,255,0.05);
+            padding: 30px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .slab:hover {
+            transform: translateZ(10px);
+        }
+
+        /* Copper Wiring System */
+        .copper-wire-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .braid {
+            fill: none;
+            stroke: var(--copper-core);
+            stroke-width: 1.5;
+            stroke-dasharray: 4, 2;
+            filter: drop-shadow(0 0 4px var(--copper-glow));
+            opacity: 0.6;
+        }
+
+        .pulse-path {
+            stroke: var(--copper-glow);
+            stroke-width: 2;
+            stroke-dasharray: 20, 100;
+            animation: flow 4s linear infinite;
+        }
+
+        @keyframes flow {
+            from { stroke-dashoffset: 240; }
+            to { stroke-dashoffset: 0; }
+        }
+
+        /* Typography */
+        h1 {
+            font-weight: 900;
+            font-size: 3rem;
+            letter-spacing: -2px;
+            text-transform: uppercase;
+            line-height: 0.9;
+            margin-bottom: 20px;
+            background: linear-gradient(180deg, #FFF 0%, #888 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: var(--copper-core);
+            letter-spacing: 2px;
+        }
+
+        /* Agent Interface Components */
+        .agent-list {
+            margin-top: 40px;
+            list-style: none;
+        }
+
+        .agent-item {
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(184, 115, 51, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--copper-glow);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--copper-glow);
+        }
+
+        /* Central Command (The Matrix) */
+        .matrix-core {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .human-loop-indicator {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            background: rgba(0, 240, 255, 0.05);
+            border: 1px solid var(--human-cyan);
+            padding: 15px 25px;
+            color: var(--human-cyan);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.1);
+            z-index: 10;
+        }
+
+        .human-loop-indicator::before {
+            content: '';
+            width: 10px;
+            height: 10px;
+            background: var(--human-cyan);
+            border-radius: 50%;
+            animation: heartbeat 1.5s infinite ease-in-out;
+        }
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0.4; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Large Slab Display */
+        .data-slab {
+            background: linear-gradient(145deg, #232323, #1a1a1a);
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 40px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .metric-group {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .metric-card {
+            border-left: 2px solid var(--copper-core);
+            padding-left: 15px;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .metric-label {
+            color: var(--text-dim);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+        }
+
+        /* Decorative Braided Copper Header */
+        .braid-header {
+            grid-column: 1 / -1;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 10px;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--text-dim);
+            font-family: 'JetBrains Mono';
+            font-size: 0.8rem;
+            padding: 5px 15px;
+            border: 1px solid transparent;
+            transition: 0.3s;
+        }
+
+        .nav-link:hover {
+            color: var(--copper-glow);
+            border-color: var(--copper-wire);
+            background: rgba(184, 115, 51, 0.1);
+        }
+
+        .terminal-output {
+            background: rgba(0,0,0,0.3);
+            font-family: 'JetBrains Mono';
+            font-size: 0.7rem;
+            padding: 15px;
+            border-radius: 4px;
+            color: #666;
+            margin-top: 20px;
+            height: 120px;
+            overflow-y: hidden;
+            position: relative;
+        }
+
+        .terminal-output::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            background: linear-gradient(transparent, var(--granite-slab));
+        }
+
+        /* Action Button */
+        .cta-slab {
+            margin-top: auto;
+            background: var(--copper-core);
+            color: black;
+            text-align: center;
+            padding: 20px;
+            font-weight: 900;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            border: none;
+            clip-path: polygon(0 0, 100% 0, 100% 80%, 90% 100%, 0 100%);
+        }
+
+        .cta-slab:hover {
+            background: var(--copper-glow);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 140, 0, 0.4);
+        }
+
+    </style>
+</head>
+<body>
+
+    <svg class="granite-texture">
+        <filter id='grainy'>
+            <feTurbulence type='fractalNoise' baseFrequency='0.60' numOctaves='3' stitchTiles='stitch'/>
+            <feColorMatrix type="saturate" values="0"/>
+        </filter>
+        <rect width='100%' height='100%' filter='url(#grainy)'/>
+    </svg>
+
+    <div class="quarry-grid">
+        <!-- Top Navigation Area -->
+        <header class="braid-header">
+            <div class="mono">Network Status: <span style="color: var(--human-cyan)">Synchronized</span></div>
+            <div style="display: flex; gap: 20px;">
+                <a href="#" class="nav-link">ARCHIVE</a>
+                <a href="#" class="nav-link">PROTOCOLS</a>
+                <a href="#" class="nav-link">MANIFEST</a>
+            </div>
+            <div class="mono">Auth: Root_Human_01</div>
+        </header>
+
+        <!-- Left Slab: Agent Roster -->
+        <aside class="slab">
+            <svg class="copper-wire-svg">
+                <path d="M0 50 Q 150 50 150 200 T 300 350" class="braid" />
+                <path d="M0 50 Q 150 50 150 200 T 300 350" class="braid pulse-path" />
+            </svg>
+            
+            <div class="mono" style="margin-bottom: 10px;">Deployment Units</div>
+            <h2>AGENT<br>COLLECTIVE</h2>
+            
+            <div class="agent-list">
+                <div class="agent-item">
+                    <div>
+                        <div class="mono" style="font-size: 0.6rem; color: var(--text-dim)">Node_01</div>
+                        <div style="font-weight: 700;">STRATEGIC_MIND</div>
+                    </div>
+                    <div class="status-dot"></div>
+                </div>
+                <div class="agent-item">
+                    <div>
+                        <div class="mono" style="font-size: 0.6rem; color: var(--text-dim)">Node_02</div>
+                        <div style="font-weight: 700;">CREATIVE_FLOW</div>
+                    </div>
+                    <div class="status-dot"></div>
+                </div>
+                <div class="agent-item">
+                    <div>
+                        <div class="mono" style="font-size: 0.6rem; color: var(--text-dim)">Node_03</div>
+                        <div style="font-weight: 700;">DATA_EXCAVATOR</div>
+                    </div>
+                    <div class="status-dot"></div>
+                </div>
+                <div class="agent-item">
+                    <div>
+                        <div class="mono" style="font-size: 0.6rem; color: var(--text-dim)">Node_04</div>
+                        <div style="font-weight: 700;">LOGISTICS_ENGINE</div>
+                    </div>
+                    <div class="status-dot"></div>
+                </div>
+            </div>
+
+            <div class="terminal-output">
+                > Initializing Node_01... [OK]<br>
+                > Braid-link established at 450Gbps...<br>
+                > Human verification pending...<br>
+                > Human confirmed. Proceeding.
+            </div>
+        </aside>
+
+        <!-- Main Center Slab: The Work -->
+        <main class="data-slab">
+            <div style="position: relative; z-index: 2;">
+                <div class="mono">Primary Directive</div>
+                <h1>AUTONOMOUS<br>EXECUTION</h1>
+                <p style="color: var(--text-dim); max-width: 500px; margin-top: 20px; line-height: 1.6;">
+                    The first agency built on tectonic foundations. Our agents operate in a high-conduction copper network, delivering superhuman output while maintaining a critical human-in-the-loop anchor for ethical alignment and strategic nuance.
+                </p>
+            </div>
+
+            <div class="metric-group">
+                <div class="metric-card">
+                    <div class="metric-value">98.4%</div>
+                    <div class="metric-label">Agent Autonomy</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">12ms</div>
+                    <div class="metric-label">Inference Latency</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">4.2k</div>
+                    <div class="metric-label">Tasks / Hour</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">Active</div>
+                    <div class="metric-label">Human Override</div>
+                </div>
+            </div>
+
+            <div class="human-loop-indicator">
+                Human-in-the-Loop Active
+            </div>
+        </main>
+
+        <!-- Right Slab: Control & Status -->
+        <aside class="slab">
+            <svg class="copper-wire-svg">
+                <path d="M300 100 Q 150 150 150 300 T 0 500" class="braid" />
+                <path d="M300 100 Q 150 150 150 300 T 0 500" class="braid pulse-path" style="animation-delay: -2s;" />
+            </svg>
+
+            <div class="mono">Operations Hub</div>
+            <h2 style="font-size: 1.2rem; margin: 15px 0;">TECTONIC<br>STABILITY</h2>
+
+            <div style="margin-top: 30px;">
+                <div class="mono" style="font-size: 0.6rem; margin-bottom: 10px;">System Load</div>
+                <div style="height: 4px; background: #333; width: 100%; position: relative;">
+                    <div style="position: absolute; left: 0; top: 0; height: 100%; width: 75%; background: var(--copper-glow); box-shadow: 0 0 10px var(--copper-glow);"></div>
+                </div>
+            </div>
+
+            <div style="margin-top: 30px;">
+                <div class="mono" style="font-size: 0.6rem; margin-bottom: 10px;">Ethical Alignment</div>
+                <div style="height: 4px; background: #333; width: 100%; position: relative;">
+                    <div style="position: absolute; left: 0; top: 0; height: 100%; width: 99%; background: var(--human-cyan); box-shadow: 0 0 10px var(--human-cyan);"></div>
+                </div>
+            </div>
+
+            <div style="margin-top: 40px; color: var(--text-dim); font-size: 0.8rem; line-height: 1.4;">
+                Our braided copper architecture ensures that no agent operates in isolation. Every output is filtered through the Tectonic Granite protocol before reaching the Human-in-the-Loop terminal.
+            </div>
+
+            <button class="cta-slab">Initiate New Task</button>
+        </aside>
+    </div>
+
+    <script>
+        // Subtle Mouse Interaction for Slab Tilt
+        document.querySelectorAll('.slab, .data-slab').forEach(slab => {
+            slab.addEventListener('mousemove', e => {
+                const rect = slab.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = (y - centerY) / 25;
+                const rotateY = (centerX - x) / 25;
+                
+                slab.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`;
+            });
+            
+            slab.addEventListener('mouseleave', () => {
+                slab.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px)`;
+            });
+        });
+
+        // Dynamic terminal text
+        const logs = [
+            "Analyzing market volatility...",
+            "Agent 03 extracting latent insights...",
+            "Human anchor validating strategy...",
+            "Copper link throughput optimized...",
+            "Granite slab stability 100%...",
+            "Refining neural pathways...",
+            "Synaptic braid firing at 4.2GHz..."
+        ];
+
+        const terminal = document.querySelector('.terminal-output');
+        setInterval(() => {
+            const newLog = document.createElement('div');
+            newLog.innerHTML = `> ${logs[Math.floor(Math.random() * logs.length)]}`;
+            terminal.appendChild(newLog);
+            if(terminal.childNodes.length > 10) terminal.removeChild(terminal.firstChild);
+            terminal.scrollTop = terminal.scrollHeight;
+        }, 3000);
+    </script>
+</body>
+</html>
+
+
+Anodized Titanium Frame and Pressed Wildflower Vellum
+
+Cast Iron Foundry Mold and Poured Translucent Paraffin
+
+
+Please redesign https://agents-as-a-service.com/ into an agentic agency run by agents with a human in the loop
+Grid View
+Variations
+Source
+Solar-flare energy consumption monitor
+Tab

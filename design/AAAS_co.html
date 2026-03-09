@@ -1,0 +1,457 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AaaS | Pay-Per-Result Agentic Logic</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --alloy-base: #121214;
+            --alloy-surface: #1c1c1e;
+            --alloy-border: #323235;
+            --alloy-highlight: #ffffff15;
+            --accent-glow: #3b82f6;
+            --text-main: #e2e2e7;
+            --text-dim: #8e8e93;
+            --brushed-texture: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3%3Ffilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--alloy-base);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            background-image: var(--brushed-texture);
+            background-blend-mode: overlay;
+        }
+
+        /* Brushed Metal Overlay */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, 
+                transparent 0%, 
+                rgba(255,255,255,0.02) 25%, 
+                transparent 50%, 
+                rgba(255,255,255,0.02) 75%, 
+                transparent 100%);
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .modular-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            grid-template-rows: auto;
+            gap: 1px;
+            background-color: var(--alloy-border);
+            border-bottom: 1px solid var(--alloy-border);
+            min-height: 100vh;
+        }
+
+        /* Grid Item Base */
+        .module {
+            background-color: var(--alloy-base);
+            position: relative;
+            padding: 40px;
+            overflow: hidden;
+        }
+
+        /* Header Section */
+        .nav-module {
+            grid-column: span 12;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            background: linear-gradient(180deg, var(--alloy-surface) 0%, var(--alloy-base) 100%);
+        }
+
+        .logo {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 800;
+            letter-spacing: -1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #10b981;
+            animation: pulse 2s infinite;
+        }
+
+        /* Hero Concept */
+        .hero-main {
+            grid-column: span 8;
+            grid-row: span 2;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border-right: 1px solid var(--alloy-border);
+        }
+
+        h1 {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 800;
+            line-height: 0.9;
+            text-transform: uppercase;
+            letter-spacing: -4px;
+            margin-bottom: 20px;
+            background: linear-gradient(to bottom, #fff 40%, #666 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .mono-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: var(--accent-glow);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        /* Metrics Module */
+        .metrics-sidebar {
+            grid-column: span 4;
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+            background-color: var(--alloy-border);
+        }
+
+        .metric-card {
+            background-color: var(--alloy-base);
+            padding: 30px;
+            flex-grow: 1;
+            transition: background 0.3s ease;
+        }
+
+        .metric-card:hover {
+            background-color: var(--alloy-surface);
+        }
+
+        .metric-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 32px;
+            font-weight: 700;
+            display: block;
+        }
+
+        .metric-sub {
+            color: var(--text-dim);
+            font-size: 14px;
+        }
+
+        /* The Control Panel (CTA) */
+        .control-panel {
+            grid-column: span 4;
+            background: radial-gradient(circle at top right, #1e293b, var(--alloy-base));
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        .cta-button {
+            width: 100%;
+            padding: 30px;
+            background: var(--text-main);
+            color: var(--alloy-base);
+            border: none;
+            font-family: 'Inter', sans-serif;
+            font-weight: 800;
+            font-size: 18px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button:hover {
+            background: var(--accent-glow);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.3);
+        }
+
+        .cta-button::after {
+            content: "→";
+            margin-left: 10px;
+        }
+
+        /* Results Feed */
+        .feed-module {
+            grid-column: span 12;
+            padding: 0;
+            background: transparent;
+        }
+
+        .feed-container {
+            display: flex;
+            overflow-x: auto;
+            gap: 1px;
+            background: var(--alloy-border);
+        }
+
+        .feed-item {
+            min-width: 300px;
+            background: var(--alloy-base);
+            padding: 30px;
+            border-top: 4px solid var(--alloy-border);
+            transition: border-color 0.3s;
+        }
+
+        .feed-item:hover {
+            border-top-color: var(--accent-glow);
+        }
+
+        .agent-id {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            opacity: 0.5;
+        }
+
+        /* Price Toggle Component */
+        .price-engine {
+            margin-top: 40px;
+            padding: 20px;
+            border: 1px solid var(--alloy-border);
+            border-radius: 4px;
+            display: inline-flex;
+            align-items: center;
+            gap: 20px;
+            background: rgba(0,0,0,0.2);
+        }
+
+        .machined-switch {
+            width: 50px;
+            height: 24px;
+            background: #333;
+            border-radius: 12px;
+            position: relative;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .switch-toggle {
+            width: 20px;
+            height: 20px;
+            background: #eee;
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            transition: left 0.3s ease;
+        }
+
+        /* Animations */
+        @keyframes pulse {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .fade-in {
+            animation: fadeIn 1s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Decorative chamfered corners for modularity */
+        .chamfer {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background: var(--alloy-border);
+            top: -7.5px;
+            left: -7.5px;
+            transform: rotate(45deg);
+        }
+
+        @media (max-width: 900px) {
+            .hero-main, .metrics-sidebar, .control-panel {
+                grid-column: span 12;
+            }
+            h1 { font-size: 3rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="modular-grid">
+        <!-- Navigation -->
+        <header class="nav-module">
+            <div class="logo">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <rect x="3" y="3" width="18" height="18" rx="2" />
+                    <path d="M9 3v18M15 3v18M3 9h18M3 15h18" />
+                </svg>
+                AAAS.CO
+            </div>
+            <div style="display: flex; gap: 30px; font-size: 12px; font-weight: 500;">
+                <span>NETWORK STATUS: <span style="color: #10b981">OPTIMAL</span></span>
+                <span>SYSTEM_V.4.0.1</span>
+            </div>
+            <div class="status-dot"></div>
+        </header>
+
+        <!-- Main Hero -->
+        <section class="module hero-main">
+            <span class="mono-label fade-in" style="animation-delay: 0.1s;">Precision Infrastructure</span>
+            <h1 class="fade-in" style="animation-delay: 0.2s;">PAY PER<br>SUCCESS.</h1>
+            <p class="fade-in" style="max-width: 500px; color: var(--text-dim); line-height: 1.6; animation-delay: 0.3s;">
+                Stop paying for uptime. Deploy autonomous agents that only charge your balance when the objective is finalized. Engineered for high-throughput enterprise logic.
+            </p>
+
+            <div class="price-engine fade-in" style="animation-delay: 0.4s;">
+                <div class="machined-switch">
+                    <div class="switch-toggle"></div>
+                </div>
+                <div style="font-family: 'JetBrains Mono'; font-size: 13px;">
+                    <span style="color: var(--text-dim)">IDLE COST:</span> $0.00/HR <br>
+                    <span style="color: var(--accent-glow)">RESULT COST:</span> $0.42/AVG
+                </div>
+            </div>
+        </section>
+
+        <!-- Right Metrics -->
+        <aside class="metrics-sidebar">
+            <div class="metric-card module">
+                <div class="chamfer"></div>
+                <span class="mono-label">Active Agents</span>
+                <span class="metric-value">12,842</span>
+                <span class="metric-sub">Across 42 clusters</span>
+            </div>
+            <div class="metric-card module">
+                <span class="mono-label">Success Rate</span>
+                <span class="metric-value">99.82%</span>
+                <span class="metric-sub">Validated by Proof-of-Task</span>
+            </div>
+            <div class="metric-card module">
+                <span class="mono-label">Cumulative Savings</span>
+                <span class="metric-value" style="color: #10b981;">$4.2M</span>
+                <span class="metric-sub">Vs. Traditional SaaS</span>
+            </div>
+        </aside>
+
+        <!-- Interaction Module -->
+        <section class="module control-panel">
+            <div style="margin-bottom: 40px;">
+                <span class="mono-label">Deployment Console</span>
+                <h3 style="font-size: 24px; margin-bottom: 15px;">Ignite Agentic Workflow</h3>
+                <p style="color: var(--text-dim); font-size: 14px;">Define your objective, set your bounty, and let the swarm resolve the rest.</p>
+            </div>
+            <button class="cta-button">Initiate Cluster</button>
+        </section>
+
+        <!-- Live Feed -->
+        <section class="module feed-module">
+            <div class="feed-container">
+                <div class="feed-item">
+                    <div class="agent-id">AGENT_772-X // BRAVO</div>
+                    <div style="margin: 15px 0; font-weight: 500;">Market Arbitrage Execution</div>
+                    <div style="color: #10b981; font-family: 'JetBrains Mono'; font-size: 12px;">SUCCESS: +$142.20 [Fee: $1.42]</div>
+                </div>
+                <div class="feed-item">
+                    <div class="agent-id">AGENT_109-A // KILO</div>
+                    <div style="margin: 15px 0; font-weight: 500;">Lead Generation Scrape</div>
+                    <div style="color: #10b981; font-family: 'JetBrains Mono'; font-size: 12px;">SUCCESS: 50 Verified [Fee: $5.00]</div>
+                </div>
+                <div class="feed-item">
+                    <div class="agent-id">AGENT_993-Z // OMEGA</div>
+                    <div style="margin: 15px 0; font-weight: 500;">Code Refactor Cycle</div>
+                    <div style="color: #10b981; font-family: 'JetBrains Mono'; font-size: 12px;">SUCCESS: 12 PRs Merged [Fee: $24.00]</div>
+                </div>
+                <div class="feed-item">
+                    <div class="agent-id">AGENT_042-C // DELTA</div>
+                    <div style="margin: 15px 0; font-weight: 500;">Social Sentiment Monitor</div>
+                    <div style="color: #10b981; font-family: 'JetBrains Mono'; font-size: 12px;">SUCCESS: Signal Detected [Fee: $0.10]</div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Subtle Mouse Movement Reflection Effect
+        const modules = document.querySelectorAll('.module');
+        document.addEventListener('mousemove', (e) => {
+            const x = e.clientX;
+            const y = e.clientY;
+            
+            modules.forEach(module => {
+                const rect = module.getBoundingClientRect();
+                const localX = x - rect.left;
+                const localY = y - rect.top;
+                
+                if (x > rect.left && x < rect.right && y > rect.top && y < rect.bottom) {
+                    module.style.backgroundImage = `
+                        radial-gradient(circle at ${localX}px ${localY}px, 
+                        rgba(255,255,255,0.05) 0%, 
+                        transparent 40%), 
+                        var(--brushed-texture)`;
+                } else {
+                    module.style.backgroundImage = `var(--brushed-texture)`;
+                }
+            });
+        });
+
+        // Price Switch Simulation
+        const switchBtn = document.querySelector('.machined-switch');
+        const toggle = document.querySelector('.switch-toggle');
+        let active = false;
+
+        switchBtn.addEventListener('click', () => {
+            active = !active;
+            toggle.style.left = active ? '28px' : '2px';
+            toggle.style.background = active ? '#3b82f6' : '#eee';
+            document.body.style.filter = active ? 'contrast(1.1) brightness(1.1)' : 'none';
+        });
+
+        // Numerical Animate
+        const values = document.querySelectorAll('.metric-value');
+        values.forEach(val => {
+            const original = val.innerText;
+            val.addEventListener('mouseenter', () => {
+                let iterations = 0;
+                const interval = setInterval(() => {
+                    val.innerText = original.split("")
+                        .map((char, index) => {
+                            if(index < iterations) return original[index];
+                            return String.fromCharCode(65 + Math.floor(Math.random() * 26));
+                        })
+                        .join("");
+                    
+                    if(iterations >= original.length) clearInterval(interval);
+                    iterations += 1/3;
+                }, 30);
+            });
+        });
+    </script>
+</body>
+</html>
+

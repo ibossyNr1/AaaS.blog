@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DESIGN PLAYGROUND | Carved Logic</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        /* ═══════════════════════════════════════════
+           DESIGN TOKENS — Carved Logic System
+           ═══════════════════════════════════════════ */
+        :root {
+            --basalt-deep: #080809;
+            --basalt-surface: #1a1a1c;
+            --basalt-bright: #2a2a2e;
+            --circuit-glow: #00f3ff;
+            --circuit-dim: rgba(0, 243, 255, 0.15);
+            --accent-red: #f4224b;
+            --accent-red-dim: rgba(244, 34, 75, 0.15);
+            --accent-red-glow: rgba(244, 34, 75, 0.4);
+            --text-main: #e0e0e0;
+            --text-muted: rgba(224, 224, 224, 0.5);
+            --border: rgba(255, 255, 255, 0.05);
+            --radius: 0.75rem;
+            --grain: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* ═══════════════════════════════════════════
+           LIGHT MODE — Etched Stone / Blueprint
+           ═══════════════════════════════════════════ */
+        [data-theme="light"] {
+            --basalt-deep: #f4f3f0;
+            --basalt-surface: #dddcd8;
+            --basalt-bright: #c8c7c3;
+            --circuit-glow: #0088a0;
+            --circuit-dim: rgba(0, 136, 160, 0.12);
+            --accent-red: #c91e42;
+            --accent-red-dim: rgba(201, 30, 66, 0.1);
+            --accent-red-glow: rgba(201, 30, 66, 0.3);
+            --text-main: #1a1a1c;
+            --text-muted: rgba(26, 26, 28, 0.5);
+            --border: rgba(0, 0, 0, 0.08);
+        }
+
+        [data-theme="light"] body::before {
+            opacity: 0.03;
+            mix-blend-mode: multiply;
+        }
+
+        [data-theme="light"] .monolith-title,
+        [data-theme="light"] .section-title {
+            background: linear-gradient(180deg, #1a1a1c 0%, #888 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+
+        [data-theme="light"] .metric-value {
+            background: linear-gradient(180deg, #1a1a1c 0%, #999 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+
+        [data-theme="light"] .navbar {
+            background: rgba(244, 243, 240, 0.85);
+        }
+
+        [data-theme="light"] .status-card {
+            background: rgba(0, 0, 0, 0.02);
+        }
+
+        [data-theme="light"] .status-card:hover {
+            background: rgba(0, 0, 0, 0.04);
+        }
+
+        [data-theme="light"] .pillar-card,
+        [data-theme="light"] .bento-card {
+            background: rgba(0, 0, 0, 0.02);
+        }
+
+        [data-theme="light"] .pillar-card:hover,
+        [data-theme="light"] .bento-card:hover {
+            background: rgba(0, 0, 0, 0.04);
+        }
+
+        [data-theme="light"] .step {
+            background: rgba(0, 0, 0, 0.01);
+        }
+
+        [data-theme="light"] .step:hover {
+            background: rgba(0, 0, 0, 0.03);
+        }
+
+        [data-theme="light"] .core-orb {
+            background: var(--basalt-deep);
+        }
+
+        [data-theme="light"] .click-flash {
+            background: var(--accent-red);
+        }
+
+        [data-theme="light"] .click-flash.active {
+            opacity: 0.08;
+        }
+
+        [data-theme="light"] .btn-primary:hover {
+            background: var(--text-main);
+            color: var(--basalt-deep);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.15);
+        }
+
+        [data-theme="light"] a::selection,
+        [data-theme="light"] button::selection,
+        [data-theme="light"] p::selection,
+        [data-theme="light"] h1::selection,
+        [data-theme="light"] h2::selection,
+        [data-theme="light"] h3::selection,
+        [data-theme="light"] span::selection {
+            background: var(--accent-red-dim);
+            color: var(--text-main);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--basalt-deep);
+            color: var(--text-main);
+            font-family: 'Inter', system-ui, sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        /* Grain texture overlay */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: var(--grain);
+            opacity: 0.04;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        /* ═══════════════════════════════════════════
+           BACKGROUND — Circuit Grid + SVG Paths
+           ═══════════════════════════════════════════ */
+        .bg-grid {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background:
+                linear-gradient(90deg, var(--basalt-surface) 1px, transparent 1px) 0 0 / 100px 100px,
+                linear-gradient(var(--basalt-surface) 1px, transparent 1px) 0 0 / 100px 100px;
+            mask-image: radial-gradient(circle at 50% 50%, black, transparent 80%);
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        .circuit-svg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            fill: none;
+            pointer-events: none;
+        }
+
+        .circuit-cyan {
+            stroke: var(--circuit-glow);
+            stroke-width: 1;
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            opacity: 0.18;
+            filter: drop-shadow(0 0 3px var(--circuit-dim));
+        }
+
+        .circuit-red {
+            stroke: var(--accent-red);
+            stroke-width: 1;
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            opacity: 0.18;
+            filter: drop-shadow(0 0 3px var(--accent-red-glow));
+        }
+
+        .circuit-cyan, .circuit-red {
+            transition: opacity 0.6s ease;
+        }
+
+        .circuit-cyan.speed-1 { animation: flow 10s linear infinite; }
+        .circuit-cyan.speed-2 { animation: flow 14s linear infinite; }
+        .circuit-cyan.speed-3 { animation: flow 18s linear infinite; }
+        .circuit-red.speed-1  { animation: flow 12s linear infinite; }
+        .circuit-red.speed-2  { animation: flow 16s linear infinite; }
+        .circuit-red.speed-3  { animation: flow 20s linear infinite; }
+
+        /* Light mode: hide cyan traces, keep red only */
+        [data-theme="light"] .circuit-cyan {
+            opacity: 0;
+        }
+
+        [data-theme="light"] .circuit-red {
+            opacity: 0.12;
+            filter: none;
+        }
+
+        @keyframes flow {
+            to { stroke-dashoffset: 0; }
+        }
+
+        /* ═══════════════════════════════════════════
+           ANIMATIONS
+           ═══════════════════════════════════════════ */
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 30px var(--circuit-dim); }
+            50% { transform: scale(1.1); box-shadow: 0 0 60px var(--circuit-glow); }
+        }
+
+        @keyframes fade-up {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .animate-fade-up {
+            animation: fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        .delay-5 { animation-delay: 0.5s; }
+        .delay-6 { animation-delay: 0.6s; }
+
+        /* ═══════════════════════════════════════════
+           LAYOUT
+           ═══════════════════════════════════════════ */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .container-wide {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 4rem;
+        }
+
+        section {
+            padding: 6rem 0;
+            position: relative;
+        }
+
+        /* Section divider — dual accent gradient */
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-red-dim), var(--circuit-dim), var(--accent-red-dim), transparent);
+            margin: 0 auto;
+            max-width: 1280px;
+        }
+
+        /* ═══════════════════════════════════════════
+           SECTION TOPIC LABELS — design element
+           ═══════════════════════════════════════════ */
+        .section-topic {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            color: var(--accent-red);
+            text-transform: uppercase;
+            letter-spacing: 0.3rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-topic::before {
+            content: "";
+            width: 24px;
+            height: 2px;
+            background: var(--accent-red);
+            box-shadow: 0 0 8px var(--accent-red-glow);
+            flex-shrink: 0;
+        }
+
+        .section-topic::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, var(--accent-red-dim), transparent 60%);
+        }
+
+        /* ═══════════════════════════════════════════
+           CLICK FLASH — full-page red pulse
+           ═══════════════════════════════════════════ */
+        .click-flash {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--accent-red);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 9999;
+            transition: opacity 0.08s ease-out;
+        }
+
+        .click-flash.active {
+            opacity: 0.06;
+            transition: opacity 0.01s;
+        }
+
+        /* ═══════════════════════════════════════════
+           INTERACTIVE STATES — red click color
+           ═══════════════════════════════════════════ */
+        *:active {
+            outline: none;
+        }
+
+        .btn-primary:active,
+        .btn-circuit:active,
+        .nav-cta:active {
+            border-color: var(--accent-red) !important;
+            box-shadow: 0 0 25px var(--accent-red-glow) !important;
+            color: var(--accent-red) !important;
+            background: transparent !important;
+        }
+
+        .nav-links a:active {
+            color: var(--accent-red) !important;
+            text-shadow: 0 0 10px var(--accent-red-glow) !important;
+        }
+
+        .pillar-card:active,
+        .bento-card:active,
+        .status-card:active,
+        .step:active {
+            border-color: var(--accent-red) !important;
+            box-shadow: 0 0 15px var(--accent-red-dim) !important;
+        }
+
+        /* Clickable elements get red cursor feedback */
+        a, button, .pillar-card, .bento-card, .status-card, .step {
+            cursor: pointer;
+        }
+
+        a::selection, button::selection, p::selection, h1::selection, h2::selection, h3::selection, span::selection {
+            background: var(--accent-red-dim);
+            color: var(--text-main);
+        }
+
+        /* ═══════════════════════════════════════════
+           TYPOGRAPHY
+           ═══════════════════════════════════════════ */
+        .monolith-title {
+            font-size: clamp(3.5rem, 10vw, 8rem);
+            font-weight: 900;
+            line-height: 0.85;
+            letter-spacing: -0.04em;
+            text-transform: uppercase;
+            background: linear-gradient(180deg, #fff 0%, #444 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 900;
+            line-height: 0.9;
+            letter-spacing: -0.03em;
+            text-transform: uppercase;
+            background: linear-gradient(180deg, #fff 0%, #555 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1.5rem;
+        }
+
+        .mono-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--circuit-glow);
+            text-transform: uppercase;
+            letter-spacing: 0.3rem;
+            display: block;
+            margin-bottom: 1rem;
+        }
+
+        .body-text {
+            font-size: 1.1rem;
+            font-weight: 300;
+            color: var(--text-muted);
+            max-width: 560px;
+            line-height: 1.7;
+        }
+
+        /* ═══════════════════════════════════════════
+           NAVBAR
+           ═══════════════════════════════════════════ */
+        .navbar {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 50;
+            padding: 1.5rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(12px);
+            background: rgba(8, 8, 9, 0.7);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .brand {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            letter-spacing: 0.4rem;
+            text-transform: uppercase;
+            border-left: 2px solid var(--circuit-glow);
+            padding-left: 1rem;
+            color: var(--text-main);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15rem;
+            color: var(--text-main);
+            text-decoration: none;
+            opacity: 0.5;
+            transition: all 0.3s;
+        }
+
+        .nav-links a:hover {
+            opacity: 1;
+            color: var(--circuit-glow);
+            text-shadow: 0 0 10px var(--circuit-glow);
+        }
+
+        .nav-cta {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15rem;
+            padding: 0.6rem 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: transparent;
+            color: var(--text-main);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .nav-cta:hover {
+            background: var(--text-main);
+            color: var(--basalt-deep);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
+        }
+
+        /* ═══════════════════════════════════════════
+           SECTION 1 — HERO
+           ═══════════════════════════════════════════ */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding-top: 6rem;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+        }
+
+        .status-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .status-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            padding: 2rem;
+            position: relative;
+            clip-path: polygon(0 0, 100% 0, 100% 70%, 85% 100%, 0 100%);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .status-card:hover {
+            transform: translateY(-8px);
+            background: rgba(255, 255, 255, 0.04);
+            border-color: var(--circuit-glow);
+        }
+
+        .status-card::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0;
+            width: 40px; height: 2px;
+            background: var(--circuit-glow);
+            box-shadow: 0 0 15px var(--circuit-glow);
+        }
+
+        .status-card .label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            color: var(--circuit-glow);
+            text-transform: uppercase;
+            margin-bottom: 0.75rem;
+            display: block;
+        }
+
+        .status-card .value {
+            font-size: 1.5rem;
+            font-weight: 500;
+        }
+
+        /* ═══════════════════════════════════════════
+           SECTION 2 — VALUE PROPOSITION STRIP
+           ═══════════════════════════════════════════ */
+        .value-strip {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .value-visual {
+            position: relative;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .core-orb {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: var(--basalt-deep);
+            border: 1px solid var(--circuit-glow);
+            box-shadow: 0 0 40px var(--circuit-dim), inset 0 0 30px var(--circuit-dim);
+            animation: pulse 4s ease-in-out infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .core-orb-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--circuit-glow);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--circuit-glow);
+        }
+
+        .orbit-ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* ═══════════════════════════════════════════
+           SECTION 3 — THREE PILLARS / FEATURE GRID
+           ═══════════════════════════════════════════ */
+        .pillar-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .pillar-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2.5rem 2rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .pillar-card::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: var(--circuit-glow);
+            box-shadow: 0 0 20px var(--circuit-glow);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .pillar-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(0, 243, 255, 0.2);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .pillar-card:hover::before {
+            opacity: 1;
+        }
+
+        .pillar-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: var(--circuit-dim);
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+
+        .pillar-card h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .pillar-card p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* ═══════════════════════════════════════════
+           SECTION 4 — METRICS STRIP
+           ═══════════════════════════════════════════ */
+        .metrics-strip {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .metric {
+            padding: 2rem 1rem;
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(180deg, #fff 0%, #666 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.2rem;
+        }
+
+        /* ═══════════════════════════════════════════
+           SECTION 5 — PROCESS STEPPER
+           ═══════════════════════════════════════════ */
+        .stepper {
+            display: flex;
+            gap: 0;
+            position: relative;
+        }
+
+        .step {
+            flex: 1;
+            padding: 2.5rem 2rem;
+            position: relative;
+            border: 1px solid var(--border);
+            border-right: none;
+            background: rgba(255, 255, 255, 0.01);
+            transition: all 0.4s;
+        }
+
+        .step:last-child {
+            border-right: 1px solid var(--border);
+        }
+
+        .step:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .step-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2rem;
+            font-weight: 300;
+            color: var(--circuit-glow);
+            opacity: 0.4;
+            margin-bottom: 1rem;
+        }
+
+        .step h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05rem;
+        }
+
+        .step p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .step-connector {
+            position: absolute;
+            right: -1px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 2px;
+            height: 40px;
+            background: var(--circuit-glow);
+            box-shadow: 0 0 10px var(--circuit-glow);
+            z-index: 2;
+        }
+
+        /* ═══════════════════════════════════════════
+           SECTION 6 — USE CASES / BENTO GRID
+           ═══════════════════════════════════════════ */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: auto auto;
+            gap: 1.5rem;
+        }
+
+        .bento-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2.5rem 2rem;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bento-card.span-2 {
+            grid-column: span 2;
+        }
+
+        .bento-card.span-row {
+            grid-row: span 2;
+        }
+
+        .bento-card:hover {
+            border-color: rgba(0, 243, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .bento-card h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .bento-card p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .bento-card .tag {
+            display: inline-block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15rem;
+            padding: 0.3rem 0.8rem;
+            border: 1px solid var(--circuit-dim);
+            color: var(--circuit-glow);
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+
+        /* ═══════════════════════════════════════════
+           SECTION 7 — CTA BLOCK
+           ═══════════════════════════════════════════ */
+        .cta-block {
+            text-align: center;
+            padding: 8rem 2rem;
+        }
+
+        .cta-block .section-title {
+            margin-bottom: 1rem;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            padding: 1.2rem 3.5rem;
+            background: transparent;
+            border: 1px solid var(--text-main);
+            color: var(--text-main);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3rem;
+            cursor: pointer;
+            transition: all 0.4s;
+            text-decoration: none;
+            margin-top: 2rem;
+        }
+
+        .btn-primary:hover {
+            background: var(--text-main);
+            color: var(--basalt-deep);
+            box-shadow: 0 0 40px rgba(255, 255, 255, 0.15);
+        }
+
+        .btn-circuit {
+            display: inline-block;
+            padding: 1.2rem 3.5rem;
+            background: transparent;
+            border: 1px solid var(--circuit-glow);
+            color: var(--circuit-glow);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3rem;
+            cursor: pointer;
+            transition: all 0.4s;
+            text-decoration: none;
+            margin-top: 2rem;
+        }
+
+        .btn-circuit:hover {
+            background: var(--circuit-glow);
+            color: var(--basalt-deep);
+            box-shadow: 0 0 40px var(--circuit-dim);
+        }
+
+        /* ═══════════════════════════════════════════
+           FOOTER
+           ═══════════════════════════════════════════ */
+        .footer {
+            border-top: 1px solid var(--border);
+            padding: 3rem 0;
+        }
+
+        .footer-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-brand {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3rem;
+            opacity: 0.4;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .footer-links a {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--circuit-glow);
+        }
+
+        /* ═══════════════════════════════════════════
+           THEME TOGGLE
+           ═══════════════════════════════════════════ */
+        .theme-toggle {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .toggle-track {
+            width: 44px;
+            height: 22px;
+            border-radius: 11px;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.05);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        [data-theme="light"] .toggle-track {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .toggle-thumb {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--circuit-glow);
+            box-shadow: 0 0 8px var(--circuit-dim);
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        [data-theme="light"] .toggle-thumb {
+            left: 24px;
+            background: var(--accent-red);
+            box-shadow: 0 0 8px var(--accent-red-dim);
+        }
+
+        .toggle-label-dark,
+        .toggle-label-light {
+            transition: opacity 0.3s;
+        }
+
+        .toggle-label-light {
+            opacity: 0.3;
+        }
+
+        [data-theme="light"] .toggle-label-dark {
+            opacity: 0.3;
+        }
+
+        [data-theme="light"] .toggle-label-light {
+            opacity: 1;
+        }
+
+        /* Smooth transitions for themed elements */
+        .navbar, .pillar-card, .bento-card, .status-card, .step,
+        .core-orb, .section-divider, .footer, .toggle-track, .toggle-thumb,
+        .section-topic, .section-topic::before, .section-topic::after,
+        .btn-primary, .btn-circuit, .mono-label, .step-number, .step-connector,
+        .status-card::before, .pillar-card::before, .data-stream, .brand {
+            transition: all 0.4s ease;
+        }
+
+        /* Data stream decoration */
+        .data-stream {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 2rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.55rem;
+            color: var(--circuit-glow);
+            text-align: right;
+            opacity: 0.4;
+            pointer-events: none;
+            z-index: 50;
+            white-space: pre-line;
+        }
+
+        /* ═══════════════════════════════════════════
+           RESPONSIVE
+           ═══════════════════════════════════════════ */
+        @media (max-width: 1024px) {
+            .container-wide { padding: 0 2rem; }
+            .navbar { padding: 1rem 2rem; }
+            .status-container { grid-template-columns: 1fr; }
+            .pillar-grid { grid-template-columns: 1fr; }
+            .metrics-strip { grid-template-columns: repeat(2, 1fr); }
+            .stepper { flex-direction: column; }
+            .step { border-right: 1px solid var(--border); border-bottom: none; }
+            .step:last-child { border-bottom: 1px solid var(--border); }
+            .step-connector { display: none; }
+            .bento-grid { grid-template-columns: 1fr; }
+            .bento-card.span-2 { grid-column: span 1; }
+            .value-strip { grid-template-columns: 1fr; }
+            .nav-links { display: none; }
+        }
+
+        @media (max-width: 640px) {
+            .hero { padding-top: 5rem; }
+            .footer-inner { flex-direction: column; gap: 1.5rem; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Click flash overlay -->
+    <div class="click-flash" id="clickFlash"></div>
+
+    <!-- Background layers -->
+    <div class="bg-grid"></div>
+    <!-- Circuit traces — cyan paths -->
+    <svg class="circuit-svg" viewBox="0 0 1000 1000">
+        <path class="circuit-cyan speed-1" d="M 0 100 H 200 V 300 H 400 V 100 H 600 V 500 H 1000" />
+        <path class="circuit-cyan speed-2" d="M 200 0 V 400 H 400 V 600 H 200 V 1000" />
+        <path class="circuit-cyan speed-3" d="M 0 600 H 150 V 800 H 350 V 650 H 550 V 850 H 750 V 600 H 1000" />
+        <path class="circuit-cyan speed-1" d="M 800 0 V 200 H 600 V 350 H 800 V 500 H 1000" />
+        <path class="circuit-cyan speed-2" d="M 0 450 H 100 V 250 H 300 V 450 H 500 V 300 H 700" />
+    </svg>
+    <!-- Circuit traces — red paths -->
+    <svg class="circuit-svg" viewBox="0 0 1000 1000">
+        <path class="circuit-red speed-1" d="M 1000 900 H 800 V 700 H 600 V 900 H 400 V 500 H 0" />
+        <path class="circuit-red speed-2" d="M 1000 150 H 850 V 350 H 650 V 150 H 450 V 400 H 250 V 200 H 0" />
+        <path class="circuit-red speed-3" d="M 500 0 V 150 H 700 V 300 H 500 V 450 H 300 V 600 H 500 V 1000" />
+        <path class="circuit-red speed-1" d="M 0 800 H 200 V 950 H 400 V 750 H 600 V 950 H 1000" />
+        <path class="circuit-red speed-2" d="M 900 1000 V 800 H 700 V 550 H 900 V 400 H 1000" />
+    </svg>
+
+    <!-- ═══════════════════════════════════════════
+         NAVBAR
+         ═══════════════════════════════════════════ -->
+    <nav class="navbar">
+        <div class="brand">SYSTEM://AAAS.V02</div>
+        <ul class="nav-links">
+            <li><a href="#hero">Architecture</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#process">Process</a></li>
+            <li><a href="#cases">Use Cases</a></li>
+        </ul>
+        <button class="nav-cta">Deploy Agent</button>
+    </nav>
+
+    <!-- ═══════════════════════════════════════════
+         SECTION 1: HERO
+         Source: MAIN_Carved_Logic.html
+         ═══════════════════════════════════════════ -->
+    <section class="hero" id="hero">
+        <div class="container-wide">
+            <div class="hero-content">
+                <div class="section-topic">Our Platform</div>
+
+                <h1 class="monolith-title animate-fade-up">
+                    CARVED<br>LOGIC
+                </h1>
+                <p class="body-text animate-fade-up delay-2" style="margin-top: 2rem;">
+                    High-fidelity autonomous agents forged in basalt-grade reliability.
+                    Deploy scalable intelligence across private circuitry.
+                </p>
+
+                <div class="status-container animate-fade-up delay-3">
+                    <div class="status-card">
+                        <span class="label">Processing Latency</span>
+                        <span class="value">0.002ms</span>
+                    </div>
+                    <div class="status-card">
+                        <span class="label">Active Instances</span>
+                        <span class="value">4,812 / &infin;</span>
+                    </div>
+                    <div class="status-card">
+                        <span class="label">Neural Density</span>
+                        <span class="value">98.4%</span>
+                    </div>
+                </div>
+
+                <a href="#" class="btn-primary animate-fade-up delay-4" style="margin-top: 3rem;">Initialize System</a>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ═══════════════════════════════════════════
+         SECTION 2: VALUE PROPOSITION
+         ═══════════════════════════════════════════ -->
+    <section id="value">
+        <div class="container">
+            <div class="section-topic">Why We're Different</div>
+
+            <div class="value-strip">
+                <div>
+                    <span class="mono-label" style="color: var(--circuit-glow);">Why Carved Logic</span>
+                    <h2 class="section-title">Intelligence<br>At Scale</h2>
+                    <p class="body-text">
+                        Enterprise-grade agent orchestration. Each node operates autonomously
+                        while maintaining coherence across the entire swarm mesh.
+                    </p>
+                    <a href="#" class="btn-circuit" style="margin-top: 2rem;">Explore Architecture</a>
+                </div>
+                <div class="value-visual">
+                    <div class="core-orb">
+                        <div class="core-orb-dot"></div>
+                    </div>
+                    <div class="orbit-ring" style="width: 200px; height: 200px; border-color: rgba(0,243,255,0.15); animation-delay: 0s;"></div>
+                    <div class="orbit-ring" style="width: 300px; height: 300px; border-color: rgba(255,255,255,0.05); animation-delay: 1s; stroke-dasharray: 10 5;"></div>
+                    <div class="orbit-ring" style="width: 380px; height: 380px; border-color: rgba(0,243,255,0.07); animation-delay: 2s;"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ═══════════════════════════════════════════
+         SECTION 3: THREE PILLARS / FEATURES
+         ═══════════════════════════════════════════ -->
+    <section id="features">
+        <div class="container">
+            <div class="section-topic">Core Capabilities</div>
+            <h2 class="section-title" style="margin-bottom: 3rem;">Three Pillars</h2>
+
+            <div class="pillar-grid">
+                <div class="pillar-card">
+                    <div class="pillar-icon">&#9670;</div>
+                    <h3>Autonomous Agents</h3>
+                    <p>Self-governing intelligence nodes that adapt in real-time. Zero human intervention required once deployed.</p>
+                </div>
+                <div class="pillar-card">
+                    <div class="pillar-icon">&#9674;</div>
+                    <h3>Private Circuitry</h3>
+                    <p>Your data never leaves your mesh. End-to-end encrypted agent communication with zero-knowledge architecture.</p>
+                </div>
+                <div class="pillar-card">
+                    <div class="pillar-icon">&#10022;</div>
+                    <h3>Swarm Orchestration</h3>
+                    <p>Coordinate thousands of agents in parallel. Dynamic load balancing with sub-millisecond task distribution.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ═══════════════════════════════════════════
+         SECTION 4: METRICS STRIP
+         ═══════════════════════════════════════════ -->
+    <section id="metrics">
+        <div class="container">
+            <div class="section-topic">Performance</div>
+
+            <div class="metrics-strip">
+                <div class="metric">
+                    <div class="metric-value">99.99%</div>
+                    <div class="metric-label">Uptime SLA</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">&lt;2ms</div>
+                    <div class="metric-label">Avg Latency</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">10K+</div>
+                    <div class="metric-label">Active Agents</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">47</div>
+                    <div class="metric-label">Enterprise Clients</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ═══════════════════════════════════════════
+         SECTION 5: PROCESS STEPPER
+         ═══════════════════════════════════════════ -->
+    <section id="process">
+        <div class="container">
+            <div class="section-topic">How It Works</div>
+            <h2 class="section-title" style="margin-bottom: 3rem;">Deploy in<br>Four Steps</h2>
+
+            <div class="stepper">
+                <div class="step">
+                    <div class="step-number">01</div>
+                    <h3>Define</h3>
+                    <p>Specify your agent's purpose, data sources, and decision boundaries.</p>
+                    <div class="step-connector"></div>
+                </div>
+                <div class="step">
+                    <div class="step-number">02</div>
+                    <h3>Configure</h3>
+                    <p>Set up private circuitry, integrations, and orchestration rules.</p>
+                    <div class="step-connector"></div>
+                </div>
+                <div class="step">
+                    <div class="step-number">03</div>
+                    <h3>Deploy</h3>
+                    <p>Launch across your infrastructure with one command. Zero downtime.</p>
+                    <div class="step-connector"></div>
+                </div>
+                <div class="step">
+                    <div class="step-number">04</div>
+                    <h3>Scale</h3>
+                    <p>Auto-scaling swarm mesh adapts to demand. No manual tuning needed.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ═══════════════════════════════════════════
+         SECTION 6: USE CASES / BENTO GRID
+         ═══════════════════════════════════════════ -->
+    <section id="cases">
+        <div class="container">
+            <div class="section-topic">Applications</div>
+            <h2 class="section-title" style="margin-bottom: 3rem;">Built For<br>Builders</h2>
+
+            <div class="bento-grid">
+                <div class="bento-card span-2">
+                    <span class="tag">DevOps</span>
+                    <h3>Infrastructure Automation</h3>
+                    <p>Autonomous agents that monitor, diagnose, and resolve infrastructure issues before they impact users. Self-healing systems at scale.</p>
+                </div>
+                <div class="bento-card">
+                    <span class="tag">Research</span>
+                    <h3>Market Intelligence</h3>
+                    <p>Continuous competitive analysis with real-time signal detection.</p>
+                </div>
+                <div class="bento-card">
+                    <span class="tag">Sales</span>
+                    <h3>Outreach Engine</h3>
+                    <p>Personalized multi-channel campaigns powered by behavioral signals.</p>
+                </div>
+                <div class="bento-card span-2">
+                    <span class="tag">Manufacturing</span>
+                    <h3>Process Optimization</h3>
+                    <p>Real-time production line monitoring with predictive maintenance and anomaly detection. Reduce downtime by up to 73%.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ═══════════════════════════════════════════
+         SECTION 7: CTA BLOCK
+         ═══════════════════════════════════════════ -->
+    <section id="cta">
+        <div class="container">
+            <div class="section-topic">Get Started</div>
+
+            <div class="cta-block">
+                <h2 class="section-title">Start Building<br>Today</h2>
+                <p class="body-text" style="margin: 0 auto;">
+                    Connect with our team to architect your autonomous agent mesh.
+                    From concept to production in weeks, not months.
+                </p>
+                <div style="display: flex; gap: 1.5rem; justify-content: center; margin-top: 2.5rem; flex-wrap: wrap;">
+                    <a href="#" class="btn-primary">Book a Call</a>
+                    <a href="#" class="btn-circuit">View Platform</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         FOOTER
+         ═══════════════════════════════════════════ -->
+    <footer class="footer">
+        <div class="container">
+            <div class="section-topic">Connect</div>
+            <div class="footer-inner" style="margin-top: 1rem;">
+                <span class="footer-brand">Agents-as-a-Service &copy; 2026</span>
+                <ul class="footer-links">
+                    <li><a href="#">Platform</a></li>
+                    <li><a href="#">Documentation</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Theme toggle -->
+    <div class="theme-toggle" id="themeToggle">
+        <span class="toggle-label-dark">Dark</span>
+        <div class="toggle-track">
+            <div class="toggle-thumb"></div>
+        </div>
+        <span class="toggle-label-light">Light</span>
+    </div>
+
+    <!-- Data stream decoration -->
+    <div class="data-stream">
+        SYS: CARVED_LOGIC_V02<br>
+        ACCENT: #FF0C00 ↔ #00F3FF<br>
+        CLICK_FEEDBACK: ACTIVE
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         SCRIPTS
+         ═══════════════════════════════════════════ -->
+    <script>
+        // Theme toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        const streamEl = document.querySelector('.data-stream');
+        const darkStreamText = 'SYS: CARVED_LOGIC_V02\nACCENT: #F4224B \u2194 #00F3FF\nCLICK_FEEDBACK: ACTIVE';
+        const lightStreamText = 'SYS: CARVED_LOGIC_V02\nMODE: ETCHED_STONE\nACCENT: #C91E42 \u2194 #0088A0';
+
+        themeToggle.addEventListener('click', () => {
+            const current = html.getAttribute('data-theme');
+            const next = current === 'light' ? 'dark' : 'light';
+            html.setAttribute('data-theme', next);
+            streamEl.textContent = next === 'light' ? lightStreamText : darkStreamText;
+        });
+
+        // Mouse-reactive orb
+        document.addEventListener('mousemove', (e) => {
+            const orb = document.querySelector('.core-orb');
+            if (orb) {
+                const x = (e.clientX - window.innerWidth / 2) / 40;
+                const y = (e.clientY - window.innerHeight / 2) / 40;
+                orb.style.transform = `translate(${x}px, ${y}px)`;
+            }
+        });
+
+        // Click flash — full-page red pulse on every click
+        const flash = document.getElementById('clickFlash');
+        document.addEventListener('mousedown', () => {
+            flash.classList.add('active');
+        });
+        document.addEventListener('mouseup', () => {
+            // Small delay so the flash is visible
+            setTimeout(() => flash.classList.remove('active'), 80);
+        });
+
+        // Scroll-triggered fade-in for sections
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('section').forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(20px)';
+            section.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+            observer.observe(section);
+        });
+
+        // Smooth scroll for nav links
+        document.querySelectorAll('a[href^="#"]').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const target = document.querySelector(link.getAttribute('href'));
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+    </script>
+
+</body>
+</html>

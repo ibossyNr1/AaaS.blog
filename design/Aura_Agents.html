@@ -1,0 +1,361 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LIQUIDITY | Pay-Per-Result Agentic Intelligence</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;800&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #050505;
+            --pigment-primary: #ff3e00;
+            --pigment-secondary: #7000ff;
+            --pigment-tertiary: #00f0ff;
+            --text-main: #ffffff;
+            --text-dim: rgba(255, 255, 255, 0.6);
+            --mono: 'Roboto Mono', monospace;
+            --sans: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: crosshair;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: var(--sans);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Viscous Background Suspension */
+        .canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            filter: blur(80px) contrast(1.2);
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .pigment-blob {
+            position: absolute;
+            border-radius: 50%;
+            mix-blend-mode: screen;
+            animation: drift var(--duration) ease-in-out infinite alternate;
+        }
+
+        .blob-1 {
+            width: 60vw;
+            height: 60vw;
+            background: radial-gradient(circle, var(--pigment-primary) 0%, transparent 70%);
+            top: -10%;
+            left: -10%;
+            --duration: 20s;
+        }
+
+        .blob-2 {
+            width: 50vw;
+            height: 50vw;
+            background: radial-gradient(circle, var(--pigment-secondary) 0%, transparent 70%);
+            bottom: -5%;
+            right: -5%;
+            --duration: 25s;
+        }
+
+        .blob-3 {
+            width: 40vw;
+            height: 40vw;
+            background: radial-gradient(circle, var(--pigment-tertiary) 0%, transparent 70%);
+            top: 40%;
+            left: 30%;
+            --duration: 18s;
+        }
+
+        @keyframes drift {
+            from { transform: translate(0, 0) scale(1); }
+            to { transform: translate(10%, 15%) scale(1.1); }
+        }
+
+        /* Layout */
+        nav {
+            padding: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .logo {
+            font-weight: 800;
+            letter-spacing: -1px;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+        }
+
+        .nav-stats {
+            font-family: var(--mono);
+            font-size: 0.75rem;
+            color: var(--pigment-tertiary);
+        }
+
+        main {
+            padding: 10rem 2rem 5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 10vw, 8rem);
+            font-weight: 800;
+            line-height: 0.9;
+            letter-spacing: -0.04em;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+
+        .hero-title span {
+            display: block;
+            color: transparent;
+            -webkit-text-stroke: 1px rgba(255,255,255,0.3);
+        }
+
+        .hero-title b {
+            display: block;
+            color: var(--text-main);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 2rem;
+            margin-top: 6rem;
+        }
+
+        /* High Fidelity Components */
+        .card {
+            grid-column: span 4;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2.5rem;
+            backdrop-filter: blur(20px);
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            background: rgba(255, 255, 255, 0.07);
+            border-color: var(--pigment-tertiary);
+            transform: translateY(-10px);
+        }
+
+        .card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--pigment-primary), var(--pigment-secondary));
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        .card:hover::after {
+            transform: translateX(0);
+        }
+
+        .card-label {
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            display: block;
+            color: var(--pigment-tertiary);
+        }
+
+        .card-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-desc {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            line-height: 1.6;
+        }
+
+        .cta-section {
+            grid-column: span 12;
+            margin-top: 4rem;
+            padding: 6rem 0;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .main-button {
+            background: #fff;
+            color: #000;
+            padding: 1.5rem 4rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            text-decoration: none;
+            font-size: 1.2rem;
+            border-radius: 0;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-button:hover {
+            background: var(--pigment-tertiary);
+            transform: scale(1.05);
+            letter-spacing: 2px;
+        }
+
+        .pricing-tag {
+            font-family: var(--mono);
+            margin-top: 2rem;
+            color: var(--pigment-primary);
+            font-size: 1rem;
+        }
+
+        .visual-accent {
+            position: absolute;
+            bottom: 2rem;
+            right: 2rem;
+            width: 80px;
+            height: 80px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: spin 10s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 768px) {
+            .card { grid-column: span 12; }
+            .hero-title { font-size: 4rem; }
+            .grid { margin-top: 2rem; }
+        }
+
+        .noise-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://grainy-gradients.vercel.app/noise.svg');
+            opacity: 0.05;
+            pointer-events: none;
+            z-index: 999;
+        }
+    </style>
+</head>
+<body>
+    <div class="noise-overlay"></div>
+    <div class="canvas-container">
+        <div class="pigment-blob blob-1"></div>
+        <div class="pigment-blob blob-2"></div>
+        <div class="pigment-blob blob-3"></div>
+    </div>
+
+    <nav>
+        <div class="logo">Aura Agents</div>
+        <div class="nav-stats">NODE_STATUS: ACTIVE // SUCCESS_RATE: 99.8%</div>
+    </nav>
+
+    <main>
+        <h1 class="hero-title">
+            <span>STOP PAYING FOR</span>
+            <b>COMPUTE.</b>
+            <span>START PAYING FOR</span>
+            <b>OUTCOMES.</b>
+        </h1>
+
+        <div class="grid">
+            <div class="card" style="transition-delay: 0.1s;">
+                <span class="card-label">The Protocol</span>
+                <div class="card-value">$0.00</div>
+                <div class="card-desc">Zero upfront fees. Zero subscription costs. Our agents are suspended in a high-viscosity liquidity pool until a task is triggered.</div>
+            </div>
+
+            <div class="card" style="transition-delay: 0.2s;">
+                <span class="card-label">The Performance</span>
+                <div class="card-value">100%</div>
+                <div class="card-desc">Payment is cryptographically locked and only released upon verifiable objective completion. If the agent fails, you pay nothing.</div>
+            </div>
+
+            <div class="card" style="transition-delay: 0.3s;">
+                <span class="card-label">The Scale</span>
+                <div class="card-value">∞</div>
+                <div class="card-desc">Deploy thousands of specialized task-agents simultaneously. Viscous architecture allows for infinite parallel processing without overhead.</div>
+            </div>
+
+            <div class="cta-section">
+                <a href="#" class="main-button">Initiate Agentic Flow</a>
+                <p class="pricing-tag">Current Result Fee: 2.5% of Value Generated</p>
+                <div class="visual-accent">
+                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                        <path d="M20 0L22.4495 17.5505L40 20L22.4495 22.4495L20 40L17.5505 22.4495L0 20L17.5505 17.5505L20 0Z" fill="white" fill-opacity="0.5"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Subtle Mouse Interaction for Viscosity
+        document.addEventListener('mousemove', (e) => {
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            
+            document.querySelector('.blob-3').style.transform = `translate(${x * 50}px, ${y * 50}px)`;
+        });
+
+        // Entrance animation for cards
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1)';
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>
