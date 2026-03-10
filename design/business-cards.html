@@ -41,6 +41,77 @@
             --card-h: 360px;
         }
 
+        /* ═══ Energy traces for light cards ═══ */
+        .energy-traces {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 2;
+        }
+        .energy-traces svg {
+            width: 100%;
+            height: 100%;
+        }
+        .energy-trace {
+            stroke: rgba(180,180,175,0.15);
+            stroke-width: 0.5;
+            fill: none;
+            stroke-dasharray: 800;
+            stroke-dashoffset: 800;
+            animation: trace-flow 12s linear infinite;
+        }
+        .energy-trace.t2 { stroke: rgba(170,170,165,0.1); animation-duration: 16s; animation-delay: -3s; }
+        .energy-trace.t3 { stroke: rgba(160,160,155,0.12); animation-duration: 20s; animation-delay: -7s; }
+        .energy-trace.t4 { stroke: rgba(175,175,170,0.08); animation-duration: 14s; animation-delay: -5s; }
+        @keyframes trace-flow { to { stroke-dashoffset: 0; } }
+
+        /* ═══ Circuit streams for dark cards ═══ */
+        .circuit-streams {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 2;
+        }
+        .circuit-streams svg { width: 100%; height: 100%; }
+        .stream-green {
+            stroke: var(--aaas-green);
+            stroke-width: 1;
+            fill: none;
+            opacity: 0.08;
+            stroke-dasharray: 600;
+            stroke-dashoffset: 600;
+            animation: trace-flow 10s linear infinite;
+        }
+        .stream-green.s2 { opacity: 0.06; animation-duration: 14s; animation-delay: -4s; }
+        .stream-green.s3 { opacity: 0.05; animation-duration: 18s; animation-delay: -8s; }
+        .stream-red {
+            stroke: var(--accent-red);
+            stroke-width: 1;
+            fill: none;
+            opacity: 0.08;
+            stroke-dasharray: 600;
+            stroke-dashoffset: 600;
+            animation: trace-flow 12s linear infinite;
+        }
+        .stream-red.s2 { opacity: 0.06; animation-duration: 16s; animation-delay: -5s; }
+        .stream-red.s3 { opacity: 0.05; animation-duration: 20s; animation-delay: -10s; }
+
+        /* ═══ Gradient text for product names (PLAYGROUND style) ═══ */
+        .gradient-text-green {
+            background: linear-gradient(180deg, #fff 0%, var(--aaas-green) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .gradient-text-red {
+            background: linear-gradient(180deg, #fff 0%, var(--accent-red) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
@@ -1375,6 +1446,1026 @@
             text-transform: uppercase;
         }
 
+        /* ═══ Approach 7: The Print Card ═══ */
+
+        /* Side A — Light, clean, print-ready */
+        .bcard-print-light {
+            width: var(--card-w);
+            height: var(--card-h);
+            border-radius: var(--radius);
+            position: relative;
+            overflow: hidden;
+            background: #f4f3f0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            cursor: default;
+        }
+        .bcard-print-light .inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            padding: 40px 48px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .bcard-print-light .print-logo {
+            position: absolute;
+            top: 32px;
+            right: 40px;
+            width: 100px;
+            height: 100px;
+            z-index: 5;
+        }
+        .bcard-print-light .print-logo svg {
+            width: 100%;
+            height: 100%;
+        }
+        .bcard-print-light .print-brand {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 26px;
+            color: #1a1a1c;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            line-height: 1;
+        }
+        .bcard-print-light .print-tagline {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.62rem;
+            color: #888;
+            letter-spacing: 0.06rem;
+            margin-top: 8px;
+        }
+        .bcard-print-light .print-underline {
+            width: 100%;
+            height: 5px;
+            background: #1a1a1c;
+            border-radius: 2px;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+        }
+        .bcard-print-light .print-url {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.5rem;
+            color: #aaa;
+            letter-spacing: 0.05rem;
+        }
+
+        /* Side B — Dark, vertical text, QR matrix fill */
+        .bcard-print-dark {
+            width: var(--card-w);
+            height: var(--card-h);
+            border-radius: var(--radius);
+            position: relative;
+            overflow: hidden;
+            background: #080809;
+            cursor: default;
+        }
+        .bcard-print-dark .inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        /* QR matrix background */
+        .bcard-print-dark .qr-matrix-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            opacity: 0.06;
+        }
+        .bcard-print-dark .qr-matrix-bg canvas {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            image-rendering: pixelated;
+        }
+        /* Vertical text columns */
+        .vert-text-col {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 90px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
+            gap: 6px;
+        }
+        .vert-text-col.left { left: 0; }
+        .vert-text-col.right { right: 0; }
+        .vert-text-col .vert-name {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 28px;
+            color: #fff;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            line-height: 1;
+        }
+        .vert-text-col .vert-underline {
+            width: 3px;
+            height: 30px;
+            background: #fff;
+            border-radius: 2px;
+        }
+        .vert-text-col .vert-domain {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.42rem;
+            color: rgba(255,255,255,0.35);
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            letter-spacing: 0.08rem;
+        }
+        /* Center QR codes */
+        .print-dark-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 5;
+            display: flex;
+            gap: 40px;
+            align-items: center;
+        }
+        .print-dark-center .print-qr {
+            width: 90px;
+            height: 90px;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 8px;
+            background: rgba(255,255,255,0.02);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .print-dark-center .print-qr canvas { border-radius: 4px; }
+        .print-dark-center .print-qr-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.42rem;
+            color: rgba(255,255,255,0.25);
+            text-align: center;
+            margin-top: 4px;
+        }
+        .print-dark-center .print-qr-unit {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .print-dark-center .center-line {
+            width: 1px;
+            height: 60px;
+            background: rgba(255,255,255,0.06);
+        }
+        /* SUPRA-FORGE whisper */
+        .print-dark-forge {
+            position: absolute;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 5;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .print-dark-forge .forge-logo-tiny {
+            width: 16px;
+            height: 16px;
+        }
+        .print-dark-forge .forge-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.4rem;
+            color: rgba(255,255,255,0.12);
+            letter-spacing: 0.2rem;
+            text-transform: uppercase;
+        }
+
+        .bcard-gradient .flow-product-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.48rem;
+            text-align: center;
+            max-width: 150px;
+        }
+        .bcard-gradient .flow-qr {
+            width: 72px;
+            height: 72px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .bcard-gradient .flow-qr canvas { border-radius: 3px; }
+        .bcard-gradient .flow-url {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.42rem;
+        }
+        .bcard-gradient .gradient-stripe {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+        }
+
+        /* ═══ Approach 10: Chromatic Print v2 ═══ */
+        /* Light side — same as 8 */
+        .bcard-chroma2-light {
+            width: var(--card-w);
+            height: var(--card-h);
+            border-radius: var(--radius);
+            position: relative;
+            overflow: hidden;
+            background: #f4f3f0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            cursor: default;
+        }
+        .bcard-chroma2-light .inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            padding: 40px 48px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .bcard-chroma2-light .c2-logo {
+            position: absolute;
+            top: 36px;
+            right: 44px;
+            width: 50px;
+            height: 50px;
+            z-index: 5;
+        }
+        .bcard-chroma2-light .c2-logo svg { width: 100%; height: 100%; }
+        .bcard-chroma2-light .c2-brand {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 26px;
+            color: #1a1a1c;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            line-height: 1;
+            position: relative;
+            z-index: 5;
+        }
+        .bcard-chroma2-light .c2-tagline {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.62rem;
+            color: #888;
+            letter-spacing: 0.06rem;
+            margin-top: 8px;
+            position: relative;
+            z-index: 5;
+        }
+        .bcard-chroma2-light .c2-url {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.5rem;
+            color: #aaa;
+            letter-spacing: 0.05rem;
+            position: relative;
+            z-index: 5;
+        }
+        .bcard-chroma2-light .c2-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--aaas-green) 0%, var(--light-teal) 50%, var(--accent-red) 100%);
+            z-index: 10;
+        }
+
+        /* Dark side — enhanced chromatic */
+        .bcard-chroma2-dark {
+            width: var(--card-w);
+            height: var(--card-h);
+            border-radius: var(--radius);
+            position: relative;
+            overflow: hidden;
+            background: #080809;
+            cursor: default;
+        }
+        .bcard-chroma2-dark .inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        /* Chromatic layers — HIGHER intensity */
+        .chroma2-layer {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+        .chroma2-layer.green {
+            z-index: 2;
+            mix-blend-mode: screen;
+            opacity: 0.35;
+        }
+        .chroma2-layer.red {
+            z-index: 3;
+            mix-blend-mode: screen;
+            opacity: 0.35;
+        }
+        /* Vertical text columns — AAAS left "text---", ENORA right "---text" */
+        .c2-vert-col {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
+            gap: 8px;
+        }
+        .c2-vert-col .c2-name {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 36px;
+            color: #fff;
+            letter-spacing: 8px;
+            text-transform: uppercase;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            line-height: 1;
+            position: relative;
+        }
+        /* TikTok chromatic text effect — pseudo-element offset layers */
+        .c2-vert-col .c2-name::before,
+        .c2-vert-col .c2-name::after {
+            content: attr(data-text);
+            position: absolute;
+            inset: 0;
+            font-family: inherit;
+            font-weight: inherit;
+            font-size: inherit;
+            letter-spacing: inherit;
+            text-transform: inherit;
+            writing-mode: inherit;
+            text-orientation: inherit;
+            line-height: inherit;
+            mix-blend-mode: screen;
+        }
+        .c2-vert-col .c2-name::before {
+            color: var(--aaas-green);
+            transform: translate(-2px, -1px);
+            opacity: 0.6;
+        }
+        .c2-vert-col .c2-name::after {
+            color: var(--accent-red);
+            transform: translate(2px, 1px);
+            opacity: 0.6;
+        }
+        .c2-vert-col .c2-bar {
+            width: 3px;
+            height: 32px;
+            background: #fff;
+            border-radius: 2px;
+        }
+        .c2-vert-col .c2-domain {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.48rem;
+            color: rgba(255,255,255,0.4);
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            letter-spacing: 0.06rem;
+        }
+        /* Center QR area */
+        .c2-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 5;
+            display: flex;
+            gap: 36px;
+            align-items: center;
+        }
+        .c2-center .c2q-unit {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+        .c2-center .c2q-box {
+            width: 88px;
+            height: 88px;
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 8px;
+            background: rgba(255,255,255,0.01);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .c2-center .c2q-box canvas { border-radius: 4px; }
+        .c2-center .c2q-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.45rem;
+            color: rgba(255,255,255,0.25);
+            letter-spacing: 0.1rem;
+        }
+        .c2-center .c2q-divider {
+            width: 1px;
+            height: 60px;
+            background: rgba(255,255,255,0.05);
+        }
+        .c2-forge-bottom {
+            position: absolute;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 5;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .c2-forge-bottom .c2f-logo { width: 14px; height: 14px; }
+        .c2-forge-bottom .c2f-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.38rem;
+            color: rgba(255,255,255,0.1);
+            letter-spacing: 0.2rem;
+            text-transform: uppercase;
+        }
+
+        /* ═══ Approach 11: Chromatic Print v3 — Diagonal QR ═══ */
+        .bcard-chroma3-light {
+            width: var(--card-w);
+            height: var(--card-h);
+            border-radius: var(--radius);
+            position: relative;
+            overflow: hidden;
+            background: #f4f3f0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            cursor: default;
+        }
+        .bcard-chroma3-light .inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            padding: 40px 48px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .bcard-chroma3-light .c3-logo {
+            position: absolute;
+            top: 36px;
+            right: 44px;
+            width: 50px;
+            height: 50px;
+            z-index: 5;
+        }
+        .bcard-chroma3-light .c3-logo svg { width: 100%; height: 100%; }
+        .bcard-chroma3-light .c3-brand {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 26px;
+            color: #1a1a1c;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            line-height: 1;
+            z-index: 5;
+            position: relative;
+        }
+        .bcard-chroma3-light .c3-tagline {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.62rem;
+            color: #888;
+            letter-spacing: 0.06rem;
+            margin-top: 8px;
+            z-index: 5;
+            position: relative;
+        }
+        .bcard-chroma3-light .c3-url {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.5rem;
+            color: #aaa;
+            letter-spacing: 0.05rem;
+            z-index: 5;
+            position: relative;
+        }
+        .bcard-chroma3-light .c3-bar {
+            position: absolute;
+            bottom: 19px; left: 0; right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--aaas-green) 0%, var(--light-teal) 50%, var(--accent-red) 100%);
+            z-index: 10;
+        }
+        .bcard-chroma3-light .c3-edge-distortion {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 19px;
+            z-index: 6;
+            overflow: hidden;
+            background: #080809;
+        }
+        .bcard-chroma3-light .c3-edge-distortion canvas {
+            position: absolute;
+            bottom: 0; left: 50%;
+            transform: translateX(-50%);
+        }
+        .bcard-chroma3-light .c3-edge-green,
+        .bcard-chroma3-light .c3-edge-red {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        .bcard-chroma3-light .c3-edge-green {
+            mix-blend-mode: screen;
+            opacity: 0.4;
+            transform: translate(-3px, -1px);
+        }
+        .bcard-chroma3-light .c3-edge-red {
+            mix-blend-mode: screen;
+            opacity: 0.4;
+            transform: translate(3px, 1px);
+        }
+
+        /* Dark side — diagonal QR placement */
+        .bcard-chroma3-dark {
+            width: var(--card-w);
+            height: var(--card-h);
+            border-radius: var(--radius);
+            position: relative;
+            overflow: hidden;
+            background: #080809;
+            cursor: default;
+        }
+        .bcard-chroma3-dark .inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        .chroma3-layer {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+        .chroma3-layer.green {
+            z-index: 2;
+            mix-blend-mode: screen;
+            opacity: 0.35;
+        }
+        .chroma3-layer.red {
+            z-index: 3;
+            mix-blend-mode: screen;
+            opacity: 0.35;
+        }
+        /* Vertical text columns */
+        .c3-vert-col {
+            position: absolute;
+            top: 0; bottom: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
+            gap: 8px;
+        }
+        .c3-vert-col .c3-name {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 36px;
+            color: #fff;
+            letter-spacing: 8px;
+            text-transform: uppercase;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            line-height: 1;
+            position: relative;
+        }
+        .c3-vert-col .c3-name::before,
+        .c3-vert-col .c3-name::after {
+            content: attr(data-text);
+            position: absolute;
+            inset: 0;
+            font: inherit;
+            letter-spacing: inherit;
+            text-transform: inherit;
+            writing-mode: inherit;
+            text-orientation: inherit;
+            line-height: inherit;
+            mix-blend-mode: screen;
+        }
+        .c3-vert-col .c3-name::before {
+            color: var(--aaas-green);
+            transform: translate(-2px, -1px);
+            opacity: 0.6;
+        }
+        .c3-vert-col .c3-name::after {
+            color: var(--accent-red);
+            transform: translate(2px, 1px);
+            opacity: 0.6;
+        }
+        .c3-vert-col .c3-vbar {
+            width: 3px;
+            height: 32px;
+            background: #fff;
+            border-radius: 2px;
+        }
+        .c3-vert-col .c3-domain {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.48rem;
+            color: rgba(255,255,255,0.4);
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            letter-spacing: 0.06rem;
+        }
+        /* Diagonal QR placement — AAAS bottom-left, ENORA top-right */
+        .c3-qr-aaas {
+            position: absolute;
+            bottom: 28px;
+            left: 80px;
+            z-index: 5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+        .c3-qr-enora {
+            position: absolute;
+            top: 28px;
+            right: 80px;
+            z-index: 5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+        .c3-qr-box {
+            width: 120px;
+            height: 120px;
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 10px;
+            background: rgba(255,255,255,0.01);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .c3-qr-box canvas {
+            border-radius: 4px;
+        }
+        .c3-qr-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.48rem;
+            color: rgba(255,255,255,0.3);
+            letter-spacing: 0.1rem;
+        }
+        .c3-forge-bottom {
+            position: absolute;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 5;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .c3-forge-bottom .c3f-logo { width: 14px; height: 14px; }
+        .c3-forge-bottom .c3f-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.38rem;
+            color: rgba(255,255,255,0.1);
+            letter-spacing: 0.2rem;
+            text-transform: uppercase;
+        }
+
+        /* Approach 11 slogans — top-left and bottom-right */
+        .bcard-chroma3-dark .c3-slogan {
+            position: absolute !important;
+            z-index: 5;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.2rem;
+            letter-spacing: 0.1rem;
+            text-transform: uppercase;
+            line-height: 1.4;
+        }
+        .bcard-chroma3-dark .c3-slogan-aaas {
+            top: 18px !important;
+            left: 70px !important;
+            color: rgba(255,255,255,0.55);
+        }
+        .bcard-chroma3-dark .c3-slogan-enora {
+            bottom: 18px !important;
+            right: 70px !important;
+            text-align: right;
+            color: rgba(255,255,255,0.55);
+        }
+
+        /* ═══ Approach 12: Clean AAAS + ENORA ═══ */
+        .bcard-a12-light {
+            width: var(--card-w);
+            height: var(--card-h);
+            border-radius: var(--radius);
+            position: relative;
+            overflow: hidden;
+            background: #f4f3f0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            cursor: default;
+        }
+        .bcard-a12-light .inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            padding: 40px 48px 46px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .bcard-a12-light .a12-logo {
+            position: absolute;
+            top: 36px; right: 44px;
+            width: 50px; height: 50px;
+            z-index: 5;
+        }
+        .bcard-a12-light .a12-logo svg { width: 100%; height: 100%; }
+        .bcard-a12-light .a12-brand {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 26px;
+            color: #1a1a1c;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            line-height: 1;
+            z-index: 5;
+            position: relative;
+        }
+        .bcard-a12-light .a12-tagline {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.62rem;
+            color: #888;
+            letter-spacing: 0.06rem;
+            margin-top: 8px;
+            z-index: 5;
+            position: relative;
+        }
+        .bcard-a12-light .a12-url {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.5rem;
+            color: #aaa;
+            letter-spacing: 0.05rem;
+            z-index: 5;
+            position: relative;
+        }
+        /* Chromatic distortion strip at bottom edge (~19px ≈ 0.5cm) */
+        .a12-edge-distortion {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 19px;
+            z-index: 6;
+            overflow: hidden;
+            background: #080809;
+        }
+        .a12-edge-distortion canvas {
+            position: absolute;
+            bottom: 0; left: 50%;
+            transform: translateX(-50%);
+        }
+        .a12-edge-distortion .a12-edge-green,
+        .a12-edge-distortion .a12-edge-red {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        .a12-edge-distortion .a12-edge-green {
+            mix-blend-mode: screen;
+            opacity: 0.4;
+            transform: translate(-3px, -1px);
+        }
+        .a12-edge-distortion .a12-edge-red {
+            mix-blend-mode: screen;
+            opacity: 0.4;
+            transform: translate(3px, 1px);
+        }
+        /* Gradient bar — barrier between white and distortion */
+        .a12-gradient-bar {
+            position: absolute;
+            bottom: 19px; left: 0; right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--aaas-green) 0%, var(--light-teal) 50%, var(--accent-red) 100%);
+            z-index: 10;
+        }
+
+        /* Dark side */
+        .bcard-a12-dark {
+            width: var(--card-w);
+            height: var(--card-h);
+            border-radius: var(--radius);
+            position: relative;
+            overflow: hidden;
+            background: #080809;
+            cursor: default;
+        }
+        .bcard-a12-dark .inner {
+            position: relative;
+            width: 100%; height: 100%;
+        }
+        .a12-chroma-layer {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+        .a12-chroma-layer.green {
+            z-index: 2;
+            mix-blend-mode: screen;
+            opacity: 0.35;
+        }
+        .a12-chroma-layer.red {
+            z-index: 3;
+            mix-blend-mode: screen;
+            opacity: 0.35;
+        }
+        /* AAAS vertical left */
+        .a12-vert-left {
+            position: absolute;
+            top: 0; bottom: 0; left: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
+            gap: 8px;
+        }
+        .a12-vert-left .a12-vname {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 36px;
+            color: #fff;
+            letter-spacing: 8px;
+            text-transform: uppercase;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            line-height: 1;
+            position: relative;
+        }
+        .a12-vert-left .a12-vname::before,
+        .a12-vert-left .a12-vname::after {
+            content: attr(data-text);
+            position: absolute; inset: 0;
+            font: inherit; letter-spacing: inherit;
+            text-transform: inherit; writing-mode: inherit;
+            text-orientation: inherit; line-height: inherit;
+            mix-blend-mode: screen;
+        }
+        .a12-vert-left .a12-vname::before {
+            color: var(--aaas-green);
+            transform: translate(-2px, -1px);
+            opacity: 0.6;
+        }
+        .a12-vert-left .a12-vname::after {
+            color: var(--accent-red);
+            transform: translate(2px, 1px);
+            opacity: 0.6;
+        }
+        /* ENORA vertical right (reversed column, matching A11 style) */
+        .a12-vert-right {
+            position: absolute;
+            top: 0; bottom: 0; right: 24px;
+            display: flex;
+            flex-direction: column-reverse;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
+            gap: 8px;
+        }
+        .a12-vert-right .a12-vname {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 36px;
+            color: #fff;
+            letter-spacing: 8px;
+            text-transform: uppercase;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            line-height: 1;
+            position: relative;
+        }
+        .a12-vert-right .a12-vname::before,
+        .a12-vert-right .a12-vname::after {
+            content: attr(data-text);
+            position: absolute; inset: 0;
+            font: inherit; letter-spacing: inherit;
+            text-transform: inherit; writing-mode: inherit;
+            text-orientation: inherit; line-height: inherit;
+            mix-blend-mode: screen;
+        }
+        .a12-vert-right .a12-vname::before {
+            color: var(--aaas-green);
+            transform: translate(-2px, -1px);
+            opacity: 0.6;
+        }
+        .a12-vert-right .a12-vname::after {
+            color: var(--accent-red);
+            transform: translate(2px, 1px);
+            opacity: 0.6;
+        }
+
+        /* ═══ Approach 9: Vertical Portrait ═══ */
+        .bcard-vertical {
+            width: var(--card-h);
+            height: var(--card-w);
+            border-radius: var(--radius);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.4s var(--liquid-ease);
+            cursor: default;
+        }
+        .bcard-vertical:hover { transform: scale(1.015); }
+        .bcard-vertical .inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            padding: 36px 28px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .bcard-vertical.vert-light {
+            background: var(--light-bg);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+        }
+        .bcard-vertical.vert-dark {
+            background: #080809;
+            border: 1px solid var(--border);
+        }
+        .bcard-vertical .vert-brand {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 20px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            line-height: 1.1;
+        }
+        .bcard-vertical .vert-sub {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.5rem;
+            margin-top: 8px;
+            line-height: 1.5;
+        }
+        .bcard-vertical .vert-logo {
+            width: 44px;
+            height: 44px;
+        }
+        .bcard-vertical .vert-accent {
+            width: 3px;
+            height: 30px;
+            border-radius: 2px;
+        }
+        .bcard-vertical .vert-product-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+        }
+        .bcard-vertical .vert-product-row + .vert-product-row {
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+        .bcard-vertical .vert-p-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .bcard-vertical .vert-p-name {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 14px;
+            line-height: 1;
+        }
+        .bcard-vertical .vert-p-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.42rem;
+        }
+        .bcard-vertical .vert-p-qr {
+            width: 56px;
+            height: 56px;
+            flex-shrink: 0;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .bcard-vertical .vert-p-qr canvas { border-radius: 3px; }
+        .bcard-vertical .vert-forge-mark {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.38rem;
+            letter-spacing: 0.2rem;
+            text-transform: uppercase;
+            text-align: center;
+        }
+        .cards-row-vertical {
+            display: flex;
+            gap: 40px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
         /* Hover hint */
         .hover-hint {
             font-family: 'JetBrains Mono', monospace;
@@ -2269,6 +3360,470 @@
 </section>
 
 <div class="section-divider"></div>
+<div class="kinetic-bar" style="max-width:1400px;margin:0 auto"></div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- APPROACH 7: THE PRINT CARD -->
+<!-- ═══════════════════════════════════════════ -->
+<section>
+    <div class="container">
+        <div class="section-topic">Approach 7</div>
+        <h2 class="section-title">The Print Card</h2>
+        <p class="body-text">
+            Designed for print, not screen. Side A is flat off-white with the SUPRA-FORGE logo prominent top-right, a bold underline, and subtle gray energy traces. No QR code — just the brand. Side B is matte black with AAAS and ENORA running vertically at full height on the outer edges, white text only, and the interior filled with a decorative QR-code matrix pattern. Two scannable QR codes sit centered.
+        </p>
+
+        <div class="cards-row" style="margin-top:2.5rem;">
+            <!-- Side A: Light, logo prominent, no QR -->
+            <div class="card-wrapper">
+                <div class="side-label">Side A — The Brand</div>
+                <div class="bcard-print-light">
+                    <div class="inner">
+                        <!-- Subtle gray energy traces -->
+                        <div class="energy-traces" style="z-index:1;">
+                            <svg viewBox="0 0 630 360" fill="none">
+                                <path d="M 0 80 H 120 V 180 H 280 V 120 H 420 V 220 H 630" stroke="rgba(180,180,175,0.12)" stroke-width="0.5" fill="none"/>
+                                <path d="M 0 200 H 80 V 300 H 200 V 160 H 350 V 280 H 500 V 180 H 630" stroke="rgba(170,170,165,0.08)" stroke-width="0.5" fill="none"/>
+                                <path d="M 630 60 H 500 V 140 H 350 V 50 H 180 V 160 H 0" stroke="rgba(160,160,155,0.1)" stroke-width="0.5" fill="none"/>
+                                <path d="M 200 0 V 100 H 350 V 250 H 480 V 150 H 630" stroke="rgba(175,175,170,0.07)" stroke-width="0.5" fill="none"/>
+                                <path d="M 0 320 H 150 V 260 H 300 V 340 H 450 V 240 H 630" stroke="rgba(165,165,160,0.09)" stroke-width="0.5" fill="none"/>
+                            </svg>
+                        </div>
+
+                        <!-- SUPRA-FORGE logo top-right, bigger -->
+                        <div class="print-logo">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" fill="none">
+                                <path d="M18 2 L32 9 L32 23 L18 34 L4 23 L4 9 Z" fill="rgba(26,26,28,0.06)" stroke="rgba(26,26,28,0.15)" stroke-width="0.4"/>
+                                <path d="M18 8 L26 14 L18 28 L10 14 Z" fill="rgba(26,26,28,0.04)" stroke="rgba(26,26,28,0.1)" stroke-width="0.4"/>
+                                <path d="M12 16 L16 20 L24 12" stroke="rgba(26,26,28,0.3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                            </svg>
+                        </div>
+
+                        <div style="position:relative;z-index:5;">
+                            <div class="print-brand">SUPRA-FORGE</div>
+                            <div class="print-tagline">Venture studio for autonomous intelligence</div>
+                        </div>
+                        <div style="position:relative;z-index:5;">
+                            <div class="print-url">supra-forge.com</div>
+                        </div>
+
+                        <!-- Thick underline for print visibility -->
+                        <div class="print-underline"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Side B: Dark, vertical text, QR matrix -->
+            <div class="card-wrapper">
+                <div class="side-label">Side B — The Products</div>
+                <div class="bcard-print-dark">
+                    <div class="inner">
+                        <!-- QR matrix background (generated by JS) -->
+                        <div class="qr-matrix-bg" id="qr-matrix-bg"></div>
+
+                        <!-- AAAS vertical left -->
+                        <div class="vert-text-col left">
+                            <div class="vert-name">AAAS</div>
+                            <div class="vert-underline"></div>
+                            <div class="vert-domain">agents-as-a-service.com</div>
+                        </div>
+
+                        <!-- Center: two scannable QR codes -->
+                        <div class="print-dark-center">
+                            <div class="print-qr-unit">
+                                <div class="print-qr" id="qr-print-aaas"></div>
+                                <div class="print-qr-label">AAAS</div>
+                            </div>
+                            <div class="center-line"></div>
+                            <div class="print-qr-unit">
+                                <div class="print-qr" id="qr-print-enora"></div>
+                                <div class="print-qr-label">ENORA</div>
+                            </div>
+                        </div>
+
+                        <!-- ENORA vertical right -->
+                        <div class="vert-text-col right">
+                            <div class="vert-name">ENORA</div>
+                            <div class="vert-underline"></div>
+                            <div class="vert-domain">enora.ai</div>
+                        </div>
+
+                        <!-- SUPRA-FORGE with tiny logo -->
+                        <div class="print-dark-forge">
+                            <div class="forge-logo-tiny">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" fill="none">
+                                    <path d="M18 2 L32 9 L32 23 L18 34 L4 23 L4 9 Z" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" stroke-width="0.5"/>
+                                    <path d="M12 16 L16 20 L24 12" stroke="rgba(255,255,255,0.15)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                                </svg>
+                            </div>
+                            <div class="forge-label">SUPRA-FORGE</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="spec-row">
+            <div class="spec-chip"><span>Side A</span> Flat off-white, logo top-right, 5px underline</div>
+            <div class="spec-chip"><span>Side B</span> Matte black, vertical AAAS/ENORA, QR matrix fill</div>
+            <div class="spec-chip"><span>Print</span> No animation, no gradients, print-optimized</div>
+        </div>
+    </div>
+</section>
+
+<div class="section-divider"></div>
+<div class="kinetic-bar" style="max-width:1400px;margin:0 auto"></div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- APPROACH 9: VERTICAL PORTRAIT -->
+<!-- ═══════════════════════════════════════════ -->
+<section>
+    <div class="container">
+        <div class="section-topic">Approach 9</div>
+        <h2 class="section-title">Vertical Portrait</h2>
+        <p class="body-text">
+            Portrait orientation — rarely used, instantly distinctive. Side A is a light vertical card with the SUPRA-FORGE brand stacked vertically. Side B is dark with both products listed in a compact vertical layout, QR codes right-aligned. Stands out in any card holder or stack.
+        </p>
+
+        <div class="cards-row-vertical" style="margin-top:2.5rem;">
+            <div class="card-wrapper">
+                <div class="side-label">Side A — Vertical Light</div>
+                <div class="bcard-vertical vert-light">
+                    <div class="inner">
+                        <div>
+                            <div class="vert-accent" style="background:var(--light-red);margin-bottom:16px;"></div>
+                            <div class="vert-logo">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" fill="none">
+                                    <path d="M18 2 L32 9 L32 23 L18 34 L4 23 L4 9 Z" fill="rgba(0,136,160,0.08)" stroke="rgba(0,136,160,0.2)" stroke-width="0.5"/>
+                                    <path d="M18 8 L26 14 L18 28 L10 14 Z" fill="rgba(0,136,160,0.05)" stroke="rgba(0,136,160,0.12)" stroke-width="0.5"/>
+                                    <path d="M12 16 L16 20 L24 12" stroke="var(--light-teal)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="vert-brand" style="color:#1a1a1c;">SUPRA-<br>FORGE</div>
+                            <div class="vert-sub" style="color:#888;">Venture studio for<br>autonomous intelligence</div>
+                        </div>
+                        <div style="font-family:'JetBrains Mono',monospace;font-size:0.45rem;color:#bbb;letter-spacing:0.05rem;">supra-forge.com</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-wrapper">
+                <div class="side-label">Side B — Vertical Dark</div>
+                <div class="bcard-vertical vert-dark">
+                    <div class="inner">
+                        <div class="vert-accent" style="background:var(--aaas-green);"></div>
+
+                        <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:4px;">
+                            <div class="vert-product-row">
+                                <div class="vert-p-info">
+                                    <div class="vert-p-name" style="color:var(--aaas-green);">AaaS</div>
+                                    <div class="vert-p-tag" style="color:rgba(0,255,194,0.4);">From Zero to Agentic Hero</div>
+                                </div>
+                                <div class="vert-p-qr" id="qr-vert-aaas" style="border:1px solid rgba(0,255,194,0.1);background:rgba(0,255,194,0.02);"></div>
+                            </div>
+
+                            <div class="vert-product-row" style="border-top:1px solid rgba(255,255,255,0.04);padding-top:10px;">
+                                <div class="vert-p-info">
+                                    <div class="vert-p-name" style="color:var(--accent-red);">enora.ai</div>
+                                    <div class="vert-p-tag" style="color:rgba(244,34,75,0.4);">Find issues before they find you</div>
+                                </div>
+                                <div class="vert-p-qr" id="qr-vert-enora" style="border:1px solid rgba(244,34,75,0.1);background:rgba(244,34,75,0.02);"></div>
+                            </div>
+                        </div>
+
+                        <div class="vert-forge-mark" style="color:rgba(255,255,255,0.08);">SUPRA-FORGE</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="spec-row" style="justify-content:center;">
+            <div class="spec-chip"><span>Format</span> Portrait 51×89mm — instantly stands out</div>
+            <div class="spec-chip"><span>Side A</span> Stacked brand with red accent bar</div>
+            <div class="spec-chip"><span>Side B</span> Compact dual product layout</div>
+        </div>
+    </div>
+</section>
+
+<div class="section-divider"></div>
+<div class="kinetic-bar" style="max-width:1400px;margin:0 auto"></div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- APPROACH 10: CHROMATIC PRINT v2 -->
+<!-- ═══════════════════════════════════════════ -->
+<section>
+    <div class="container">
+        <div class="section-topic">Approach 10</div>
+        <h2 class="section-title">Chromatic Print v2</h2>
+        <p class="body-text">
+            The refined chromatic card. Higher-intensity RGB shift creates a bolder CRT distortion. The vertical brand names themselves get the TikTok treatment — green and red offset shadows on each letter. AAAS sits on the left edge with bar below (AAAS ——), ENORA on the right edge with bar above (—— ENORA), creating visual asymmetry. Domain text is larger and more legible for print.
+        </p>
+
+        <div class="cards-row" style="margin-top:2.5rem;">
+            <div class="card-wrapper">
+                <div class="side-label">Side A — Gradient Bar</div>
+                <div class="bcard-chroma2-light">
+                    <div class="inner">
+                        <div class="c2-logo">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" fill="none">
+                                <path d="M18 2 L32 9 L32 23 L18 34 L4 23 L4 9 Z" fill="rgba(0,136,160,0.08)" stroke="rgba(0,136,160,0.2)" stroke-width="0.5"/>
+                                <path d="M18 8 L26 14 L18 28 L10 14 Z" fill="rgba(0,136,160,0.05)" stroke="rgba(0,136,160,0.12)" stroke-width="0.5"/>
+                                <path d="M12 16 L16 20 L24 12" stroke="#0088a0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="c2-brand">SUPRA-FORGE</div>
+                            <div class="c2-tagline">Venture studio for autonomous intelligence</div>
+                        </div>
+                        <div class="c2-url">supra-forge.com</div>
+                    </div>
+                    <div class="c2-bar"></div>
+                </div>
+            </div>
+
+            <div class="card-wrapper">
+                <div class="side-label">Side B — Chromatic Shift v2</div>
+                <div class="bcard-chroma2-dark">
+                    <div class="inner">
+                        <!-- QR matrix background -->
+                        <div class="qr-matrix-bg" id="qr-c2-matrix-bg" style="opacity:0.06;"></div>
+
+                        <!-- Chromatic aberration layers — higher intensity -->
+                        <div class="chroma2-layer green" id="chroma2-green-layer"></div>
+                        <div class="chroma2-layer red" id="chroma2-red-layer"></div>
+
+                        <!-- AAAS vertical left edge: NAME — bar — domain (bar below) -->
+                        <div class="c2-vert-col" style="left:24px;">
+                            <div class="c2-name" data-text="AAAS">AAAS</div>
+                            <div class="c2-bar"></div>
+                            <div class="c2-domain">aaas.blog</div>
+                        </div>
+
+                        <!-- Center: two scannable QR codes -->
+                        <div class="c2-center">
+                            <div class="c2q-unit">
+                                <div class="c2q-box" id="qr-c2-aaas"></div>
+                                <div class="c2q-label">AAAS</div>
+                            </div>
+                            <div class="c2q-divider"></div>
+                            <div class="c2q-unit">
+                                <div class="c2q-box" id="qr-c2-enora"></div>
+                                <div class="c2q-label">ENORA</div>
+                            </div>
+                        </div>
+
+                        <!-- ENORA vertical right edge: domain — bar — NAME (bar above) -->
+                        <div class="c2-vert-col" style="right:24px;left:auto;flex-direction:column-reverse;">
+                            <div class="c2-name" data-text="ENORA">ENORA</div>
+                            <div class="c2-bar"></div>
+                            <div class="c2-domain">enora.ai</div>
+                        </div>
+
+                        <!-- SUPRA-FORGE badge bottom -->
+                        <div class="c2-forge-bottom">
+                            <div class="c2f-logo">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" fill="none">
+                                    <path d="M18 2 L32 9 L32 23 L18 34 L4 23 L4 9 Z" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" stroke-width="0.5"/>
+                                    <path d="M12 16 L16 20 L24 12" stroke="rgba(255,255,255,0.15)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                                </svg>
+                            </div>
+                            <div class="c2f-label">SUPRA-FORGE</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="spec-row">
+            <div class="spec-chip"><span>Side A</span> 50px logo, gradient bar (green→teal→red)</div>
+            <div class="spec-chip"><span>Side B</span> Bold chromatic shift, TikTok text effect</div>
+            <div class="spec-chip"><span>Print</span> Higher intensity RGB, asymmetric bar placement</div>
+        </div>
+    </div>
+</section>
+
+<div class="section-divider"></div>
+<div class="kinetic-bar" style="max-width:1400px;margin:0 auto"></div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- APPROACH 11: CHROMATIC PRINT v3 — DIAGONAL QR -->
+<!-- ═══════════════════════════════════════════ -->
+<section>
+    <div class="container">
+        <div class="section-topic">Approach 11</div>
+        <h2 class="section-title">Chromatic Print v3</h2>
+        <p class="body-text">
+            Same chromatic formula, but the QR codes get promoted to ~150% larger and placed diagonally — AAAS bottom-left, ENORA top-right. The diagonal tension creates visual energy while giving each code plenty of breathing room. Vertical brand names stay on the edges with the TikTok chromatic text effect.
+        </p>
+
+        <div class="cards-row" style="margin-top:2.5rem;">
+            <div class="card-wrapper">
+                <div class="side-label">Side A — Gradient Bar</div>
+                <div class="bcard-chroma3-light">
+                    <div class="inner">
+                        <div class="c3-logo">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" fill="none">
+                                <path d="M18 2 L32 9 L32 23 L18 34 L4 23 L4 9 Z" fill="rgba(0,136,160,0.08)" stroke="rgba(0,136,160,0.2)" stroke-width="0.5"/>
+                                <path d="M18 8 L26 14 L18 28 L10 14 Z" fill="rgba(0,136,160,0.05)" stroke="rgba(0,136,160,0.12)" stroke-width="0.5"/>
+                                <path d="M12 16 L16 20 L24 12" stroke="#0088a0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="c3-brand">SUPRA-FORGE</div>
+                            <div class="c3-tagline">Venture studio for autonomous intelligence</div>
+                        </div>
+                        <div class="c3-url">supra-forge.com</div>
+                    </div>
+                    <div class="c3-bar"></div>
+                    <div class="c3-edge-distortion" id="c3-edge-strip">
+                        <div class="c3-edge-green" id="c3-edge-green"></div>
+                        <div class="c3-edge-red" id="c3-edge-red"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-wrapper">
+                <div class="side-label">Side B — Diagonal QR</div>
+                <div class="bcard-chroma3-dark">
+                    <div class="inner">
+                        <!-- QR matrix background -->
+                        <div class="qr-matrix-bg" id="qr-c3-matrix-bg" style="opacity:0.06;"></div>
+
+                        <!-- Chromatic aberration layers -->
+                        <div class="chroma3-layer green" id="chroma3-green-layer"></div>
+                        <div class="chroma3-layer red" id="chroma3-red-layer"></div>
+
+                        <!-- AAAS vertical left edge: NAME — bar — domain -->
+                        <div class="c3-vert-col" style="left:24px;">
+                            <div class="c3-name" data-text="AAAS">AAAS</div>
+                            <div class="c3-vbar"></div>
+                            <div class="c3-domain">aaas.blog</div>
+                        </div>
+
+                        <!-- ENORA vertical right edge: domain — bar — NAME (reversed) -->
+                        <div class="c3-vert-col" style="right:24px;left:auto;flex-direction:column-reverse;">
+                            <div class="c3-name" data-text="ENORA">ENORA</div>
+                            <div class="c3-vbar"></div>
+                            <div class="c3-domain">enora.ai</div>
+                        </div>
+
+                        <!-- QR AAAS — bottom-left -->
+                        <div class="c3-qr-aaas">
+                            <div class="c3-qr-box" id="qr-c3-aaas"></div>
+                            <div class="c3-qr-label">AAAS</div>
+                        </div>
+
+                        <!-- QR ENORA — top-right -->
+                        <div class="c3-qr-enora">
+                            <div class="c3-qr-box" id="qr-c3-enora"></div>
+                            <div class="c3-qr-label">ENORA</div>
+                        </div>
+
+                        <!-- Brand slogans — top-left / bottom-right -->
+                        <div class="c3-slogan c3-slogan-aaas">Zero to Agentic Hero</div>
+                        <div class="c3-slogan c3-slogan-enora">See an Issue —<br>Before it Sees You</div>
+
+                        <!-- SUPRA-FORGE badge bottom -->
+                        <div class="c3-forge-bottom">
+                            <div class="c3f-logo">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" fill="none">
+                                    <path d="M18 2 L32 9 L32 23 L18 34 L4 23 L4 9 Z" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" stroke-width="0.5"/>
+                                    <path d="M12 16 L16 20 L24 12" stroke="rgba(255,255,255,0.15)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                                </svg>
+                            </div>
+                            <div class="c3f-label">SUPRA-FORGE</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="spec-row">
+            <div class="spec-chip"><span>Side A</span> 50px logo, gradient bar (green→teal→red)</div>
+            <div class="spec-chip"><span>Side B</span> 150% larger QR, diagonal placement</div>
+            <div class="spec-chip"><span>Print</span> Bold chromatic + TikTok text, high scannability</div>
+        </div>
+    </div>
+</section>
+
+<div class="section-divider"></div>
+<div class="kinetic-bar" style="max-width:1400px;margin:0 auto"></div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- APPROACH 12: CLEAN AAAS + ENORA -->
+<!-- ═══════════════════════════════════════════ -->
+<section>
+    <div class="container">
+        <div class="section-topic">Approach 12</div>
+        <h2 class="section-title">Clean AAAS + ENORA</h2>
+        <p class="body-text">
+            Stripped-back variant of Approach 11. Dark side features only the two brand names — AAAS (left) and ENORA (right) — with TikTok chromatic text effect on the chromatic QR matrix background. No QR codes, slogans, or additional text. The light side retains the SUPRA-FORGE studio identity with chromatic edge distortion.
+        </p>
+
+        <div class="cards-row" style="margin-top:2.5rem;">
+            <div class="card-wrapper">
+                <div class="side-label">Side A — Chromatic Edge</div>
+                <div class="bcard-a12-light">
+                    <div class="inner">
+                        <div class="a12-logo">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" fill="none">
+                                <path d="M18 2 L32 9 L32 23 L18 34 L4 23 L4 9 Z" fill="rgba(0,136,160,0.08)" stroke="rgba(0,136,160,0.2)" stroke-width="0.5"/>
+                                <path d="M18 8 L26 14 L18 28 L10 14 Z" fill="rgba(0,136,160,0.05)" stroke="rgba(0,136,160,0.12)" stroke-width="0.5"/>
+                                <path d="M12 16 L16 20 L24 12" stroke="#0088a0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="a12-brand">SUPRA-FORGE</div>
+                            <div class="a12-tagline">Venture studio for autonomous intelligence</div>
+                        </div>
+                        <div class="a12-url">supra-forge.com</div>
+                    </div>
+                    <!-- Gradient bar — barrier between white and distortion -->
+                    <div class="a12-gradient-bar"></div>
+                    <!-- Chromatic distortion strip at bottom edge -->
+                    <div class="a12-edge-distortion" id="a12-edge-strip">
+                        <div class="a12-edge-green" id="a12-edge-green"></div>
+                        <div class="a12-edge-red" id="a12-edge-red"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-wrapper">
+                <div class="side-label">Side B — Clean AAAS + ENORA</div>
+                <div class="bcard-a12-dark">
+                    <div class="inner">
+                        <!-- QR matrix background -->
+                        <div class="qr-matrix-bg" id="qr-a12-matrix-bg" style="opacity:0.06;"></div>
+
+                        <!-- Chromatic aberration layers -->
+                        <div class="a12-chroma-layer green" id="a12-green-layer"></div>
+                        <div class="a12-chroma-layer red" id="a12-red-layer"></div>
+
+                        <!-- AAAS vertical left -->
+                        <div class="a12-vert-left">
+                            <div class="a12-vname" data-text="AAAS">AAAS</div>
+                        </div>
+
+                        <!-- ENORA vertical right -->
+                        <div class="a12-vert-right">
+                            <div class="a12-vname" data-text="ENORA">ENORA</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="spec-row">
+            <div class="spec-chip"><span>Side A</span> Chromatic distortion edge strip + gradient bar</div>
+            <div class="spec-chip"><span>Side B</span> AAAS + ENORA only, chromatic text on QR matrix</div>
+            <div class="spec-chip"><span>Print</span> Clean minimal dark side, no QR codes</div>
+        </div>
+    </div>
+</section>
+
+<div class="section-divider"></div>
 <div class="kinetic-bar red" style="max-width:1400px;margin:0 auto"></div>
 
 <!-- ═══════════════════════════════════════════ -->
@@ -2290,62 +3845,97 @@
                     <th style="color:var(--aaas-green);">4. Carved Logic</th>
                     <th style="color:var(--text-muted);">5. Basalt Mono</th>
                     <th style="color:var(--accent-red);">6. Edge Glow</th>
+                    <th style="color:var(--text-muted);">7. Print Card</th>
+                    <th style="color:var(--text-muted);">9. Vertical</th>
+                    <th style="color:var(--accent-red);">10. Chroma v2</th>
+                    <th style="color:var(--aaas-green);">11. Chroma v3</th>
+                    <th style="color:var(--accent-red);">12. Clean</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td>Light/Dark</td>
-                    <td style="color:#fff;">Dark only</td>
-                    <td style="color:#fff;">Dark only</td>
-                    <td style="color:#fff;">Light + Dark</td>
-                    <td style="color:#fff;">Light + Dark</td>
-                    <td style="color:#fff;">Light + Dark</td>
-                    <td style="color:#fff;">Light + Dark</td>
+                    <td style="color:#fff;">Dark</td>
+                    <td style="color:#fff;">Dark</td>
+                    <td style="color:#fff;">L + D</td>
+                    <td style="color:#fff;">L + D</td>
+                    <td style="color:#fff;">L + D</td>
+                    <td style="color:#fff;">L + D</td>
+                    <td style="color:#fff;">L + D</td>
+                    <td style="color:#fff;">L + D</td>
+                    <td style="color:#fff;">L + D</td>
+                    <td style="color:#fff;">L + D</td>
+                    <td style="color:#fff;">L + D</td>
                 </tr>
                 <tr>
-                    <td>Brand Colors</td>
+                    <td>Colors</td>
                     <td style="color:#fff;">Cyan</td>
                     <td style="color:#fff;">Cyan</td>
-                    <td style="color:#fff;">Orange + Cyan</td>
-                    <td style="color:var(--aaas-green);">Green + Red</td>
-                    <td style="color:var(--accent-red);">Green + Red</td>
-                    <td style="color:var(--aaas-green);">Green + Red</td>
+                    <td style="color:var(--forge-orange);">Org+Cyn</td>
+                    <td style="color:var(--aaas-green);">Grn+Red</td>
+                    <td style="color:var(--accent-red);">Grn+Red</td>
+                    <td style="color:var(--aaas-green);">Grn+Red</td>
+                    <td style="color:var(--aaas-green);">Grn+Red</td>
+                    <td style="color:var(--aaas-green);">Grn+Red</td>
+                    <td style="color:var(--accent-red);">Grn+Red</td>
+                    <td style="color:var(--aaas-green);">Grn+Red</td>
+                    <td style="color:var(--accent-red);">Grn+Red</td>
                 </tr>
                 <tr>
-                    <td>QR Codes</td>
-                    <td style="color:#fff;">Placeholder</td>
-                    <td style="color:#fff;">Placeholder</td>
-                    <td style="color:#fff;">Real ✓</td>
-                    <td style="color:#fff;">Real ✓</td>
-                    <td style="color:#fff;">Real ✓</td>
-                    <td style="color:#fff;">Real ✓</td>
+                    <td>QR</td>
+                    <td style="color:rgba(255,255,255,0.3);">—</td>
+                    <td style="color:rgba(255,255,255,0.3);">—</td>
+                    <td style="color:#fff;">✓</td>
+                    <td style="color:#fff;">✓</td>
+                    <td style="color:#fff;">✓</td>
+                    <td style="color:#fff;">✓</td>
+                    <td style="color:#fff;">✓</td>
+                    <td style="color:#fff;">✓</td>
+                    <td style="color:#fff;">✓</td>
+                    <td style="color:var(--aaas-green);">✓✓</td>
+                    <td style="color:var(--aaas-green);">✓✓</td>
                 </tr>
                 <tr>
                     <td>Clarity</td>
-                    <td style="color:#fff;">●●●●●</td>
-                    <td style="color:#fff;">●●●○○</td>
-                    <td style="color:#fff;">●●●●○</td>
-                    <td style="color:#fff;">●●●●●</td>
-                    <td style="color:#fff;">●●●●●</td>
-                    <td style="color:#fff;">●●●●○</td>
+                    <td>●●●●●</td>
+                    <td>●●●○○</td>
+                    <td>●●●●○</td>
+                    <td>●●●●●</td>
+                    <td>●●●●●</td>
+                    <td>●●●●○</td>
+                    <td>●●●●○</td>
+                    <td>●●●●○</td>
+                    <td>●●●●○</td>
+                    <td>●●●●●</td>
+                    <td>●●●●●</td>
                 </tr>
                 <tr>
-                    <td>Visual Impact</td>
-                    <td style="color:#fff;">●●●●○</td>
-                    <td style="color:#fff;">●●●○○</td>
-                    <td style="color:#fff;">●●●●●</td>
-                    <td style="color:#fff;">●●●●○</td>
-                    <td style="color:#fff;">●●●○○</td>
-                    <td style="color:#fff;">●●●●○</td>
+                    <td>Impact</td>
+                    <td>●●●●○</td>
+                    <td>●●●○○</td>
+                    <td>●●●●●</td>
+                    <td>●●●●○</td>
+                    <td>●●●○○</td>
+                    <td>●●●●○</td>
+                    <td>●●●●○</td>
+                    <td>●●●●○</td>
+                    <td>●●●●●</td>
+                    <td>●●●●●</td>
+                    <td>●●●●●</td>
                 </tr>
                 <tr>
                     <td>Best For</td>
-                    <td style="color:var(--text-muted);font-size:0.6rem;">Targeted pitches</td>
-                    <td style="color:var(--text-muted);font-size:0.6rem;">Story telling</td>
-                    <td style="color:var(--forge-orange);font-size:0.6rem;">Dual personality</td>
-                    <td style="color:var(--aaas-green);font-size:0.6rem;">Brand-native</td>
-                    <td style="color:var(--text-muted);font-size:0.6rem;">Restraint</td>
-                    <td style="color:var(--accent-red);font-size:0.6rem;">Card stack presence</td>
+                    <td style="color:var(--text-muted);font-size:0.55rem;">Pitches</td>
+                    <td style="color:var(--text-muted);font-size:0.55rem;">Story</td>
+                    <td style="color:var(--forge-orange);font-size:0.55rem;">Dual</td>
+                    <td style="color:var(--aaas-green);font-size:0.55rem;">Native</td>
+                    <td style="color:var(--text-muted);font-size:0.55rem;">Restraint</td>
+                    <td style="color:var(--accent-red);font-size:0.55rem;">Stack</td>
+                    <td style="color:var(--text-muted);font-size:0.55rem;">Print</td>
+                    <td style="color:var(--text-muted);font-size:0.55rem;">Unique</td>
+                    <td style="color:var(--accent-red);font-size:0.55rem;">Bold</td>
+                    <td style="color:var(--aaas-green);font-size:0.55rem;">Scan+Bold</td>
+                    <td style="color:var(--accent-red);font-size:0.55rem;">Focus</td>
                 </tr>
             </tbody>
         </table>
@@ -2429,21 +4019,368 @@
             container.appendChild(canvas);
         }
 
+        var W = '#ffffff';
+
         // Approach 3: Forge & Field
-        generateQR('qr-aaas', 'https://agents-as-a-service.com', '#00f3ff');
-        generateQR('qr-enora', 'https://enora.ai', '#FF6B1A');
+        generateQR('qr-aaas', 'https://agents-as-a-service.com', W);
+        generateQR('qr-enora', 'https://enora.ai', W);
 
         // Approach 4: Carved Logic
-        generateQR('qr-carved-aaas', 'https://agents-as-a-service.com', '#00ffc2');
-        generateQR('qr-carved-enora', 'https://enora.ai', '#f4224b');
+        generateQR('qr-carved-aaas', 'https://agents-as-a-service.com', W);
+        generateQR('qr-carved-enora', 'https://enora.ai', W);
 
         // Approach 5: Basalt Mono
-        generateQR('qr-basalt-aaas', 'https://agents-as-a-service.com', '#00ffc2');
-        generateQR('qr-basalt-enora', 'https://enora.ai', '#f4224b');
+        generateQR('qr-basalt-aaas', 'https://agents-as-a-service.com', W);
+        generateQR('qr-basalt-enora', 'https://enora.ai', W);
 
         // Approach 6: Edge Glow
-        generateQR('qr-edge-aaas', 'https://agents-as-a-service.com', '#00ffc2');
-        generateQR('qr-edge-enora', 'https://enora.ai', '#f4224b');
+        generateQR('qr-edge-aaas', 'https://agents-as-a-service.com', W);
+        generateQR('qr-edge-enora', 'https://enora.ai', W);
+
+        // Approach 7: The Print Card
+        generateQR('qr-print-aaas', 'https://agents-as-a-service.com', W);
+        generateQR('qr-print-enora', 'https://enora.ai', W);
+
+        // Generate decorative QR matrix background for dark card
+        (function() {
+            var bg = document.getElementById('qr-matrix-bg');
+            if (!bg || typeof qrcode === 'undefined') return;
+
+            // Generate a dense QR from a long string to get a full pattern
+            var qr = qrcode(0, 'L');
+            qr.addData('SUPRA-FORGE//AAAS//ENORA//agents-as-a-service.com//enora.ai//venture-studio-for-autonomous-intelligence//forging-the-future');
+            qr.make();
+
+            var mc = qr.getModuleCount();
+            var cellSize = 4;
+            var size = mc * cellSize;
+            var canvas = document.createElement('canvas');
+            canvas.width = size;
+            canvas.height = size;
+            // Scale to fill card area
+            canvas.style.width = '560px';
+            canvas.style.height = '560px';
+            canvas.style.imageRendering = 'pixelated';
+            var ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, size, size);
+            ctx.fillStyle = '#ffffff';
+            for (var r = 0; r < mc; r++) {
+                for (var c = 0; c < mc; c++) {
+                    if (qr.isDark(r, c)) {
+                        ctx.fillRect(c * cellSize, r * cellSize, cellSize, cellSize);
+                    }
+                }
+            }
+            bg.appendChild(canvas);
+        })();
+
+        // Approach 9: Vertical Portrait
+        generateQR('qr-vert-aaas', 'https://agents-as-a-service.com', W);
+        generateQR('qr-vert-enora', 'https://enora.ai', W);
+
+        // Approach 10: Chromatic Print v2
+        generateQR('qr-c2-aaas', 'https://aaas.blog', W);
+        generateQR('qr-c2-enora', 'https://enora.ai', W);
+
+        // Chromatic v2 QR matrix background + aberration layers (higher intensity)
+        (function() {
+            var matBg = document.getElementById('qr-c2-matrix-bg');
+            var greenLayer = document.getElementById('chroma2-green-layer');
+            var redLayer = document.getElementById('chroma2-red-layer');
+            if (!matBg || typeof qrcode === 'undefined') return;
+
+            var qr = qrcode(0, 'L');
+            qr.addData('SUPRA-FORGE//AAAS//ENORA//aaas.blog//enora.ai//chromatic-v2//autonomous-intelligence//forging-futures');
+            qr.make();
+
+            var mc = qr.getModuleCount();
+            var cellSize = 4;
+            var size = mc * cellSize;
+
+            function makeCanvas(fg) {
+                var c = document.createElement('canvas');
+                c.width = size; c.height = size;
+                c.style.width = '560px'; c.style.height = '560px';
+                c.style.imageRendering = 'pixelated';
+                var x = c.getContext('2d');
+                x.clearRect(0, 0, size, size);
+                x.fillStyle = fg;
+                for (var r = 0; r < mc; r++) {
+                    for (var col = 0; col < mc; col++) {
+                        if (qr.isDark(r, col)) x.fillRect(col * cellSize, r * cellSize, cellSize, cellSize);
+                    }
+                }
+                return c;
+            }
+
+            matBg.appendChild(makeCanvas('#ffffff'));
+
+            // Green layer — shifted left 4px, up 3px (bolder offset)
+            if (greenLayer) {
+                greenLayer.style.transform = 'translate(-4px, -3px)';
+                var gc = makeCanvas('#00ffc2');
+                gc.style.position = 'absolute';
+                gc.style.top = '50%'; gc.style.left = '50%';
+                gc.style.transform = 'translate(-50%, -50%)';
+                greenLayer.appendChild(gc);
+            }
+
+            // Red layer — shifted right 4px, down 3px (bolder offset)
+            if (redLayer) {
+                redLayer.style.transform = 'translate(4px, 3px)';
+                var rc = makeCanvas('#f4224b');
+                rc.style.position = 'absolute';
+                rc.style.top = '50%'; rc.style.left = '50%';
+                rc.style.transform = 'translate(-50%, -50%)';
+                redLayer.appendChild(rc);
+            }
+        })();
+
+        // Approach 11: Chromatic Print v3 — Diagonal QR (150% bigger = 120px boxes)
+        (function() {
+            // Generate larger QR codes for approach 11
+            function generateQRLarge(containerId, url, fgColor) {
+                var container = document.getElementById(containerId);
+                if (!container || typeof qrcode === 'undefined') return;
+                var qr = qrcode(0, 'M');
+                qr.addData(url);
+                qr.make();
+                var mc = qr.getModuleCount();
+                var cellSize = 4;
+                var size = mc * cellSize;
+                var canvas = document.createElement('canvas');
+                canvas.width = size; canvas.height = size;
+                canvas.style.width = '108px'; canvas.style.height = '108px';
+                canvas.style.imageRendering = 'pixelated';
+                var ctx = canvas.getContext('2d');
+                ctx.clearRect(0, 0, size, size);
+                ctx.fillStyle = fgColor;
+                for (var r = 0; r < mc; r++) {
+                    for (var c = 0; c < mc; c++) {
+                        if (qr.isDark(r, c)) ctx.fillRect(c * cellSize, r * cellSize, cellSize, cellSize);
+                    }
+                }
+                container.appendChild(canvas);
+            }
+
+            generateQRLarge('qr-c3-aaas', 'https://aaas.blog', '#ffffff');
+            generateQRLarge('qr-c3-enora', 'https://www.supra-forge.com', '#ffffff');
+
+            // Chromatic matrix background + aberration layers
+            var matBg = document.getElementById('qr-c3-matrix-bg');
+            var greenLayer = document.getElementById('chroma3-green-layer');
+            var redLayer = document.getElementById('chroma3-red-layer');
+            if (!matBg || typeof qrcode === 'undefined') return;
+
+            var qr = qrcode(0, 'L');
+            qr.addData('SUPRA-FORGE//AAAS//ENORA//aaas.blog//enora.ai//diagonal-qr//chromatic-v3//forging-autonomous-futures');
+            qr.make();
+            var mc = qr.getModuleCount();
+            var cellSize = 4;
+            var size = mc * cellSize;
+
+            function makeCanvas(fg) {
+                var c = document.createElement('canvas');
+                c.width = size; c.height = size;
+                c.style.width = '560px'; c.style.height = '560px';
+                c.style.imageRendering = 'pixelated';
+                var x = c.getContext('2d');
+                x.clearRect(0, 0, size, size);
+                x.fillStyle = fg;
+                for (var r = 0; r < mc; r++) {
+                    for (var col = 0; col < mc; col++) {
+                        if (qr.isDark(r, col)) x.fillRect(col * cellSize, r * cellSize, cellSize, cellSize);
+                    }
+                }
+                return c;
+            }
+
+            matBg.appendChild(makeCanvas('#ffffff'));
+
+            if (greenLayer) {
+                greenLayer.style.transform = 'translate(-4px, -3px)';
+                var gc = makeCanvas('#00ffc2');
+                gc.style.position = 'absolute';
+                gc.style.top = '50%'; gc.style.left = '50%';
+                gc.style.transform = 'translate(-50%, -50%)';
+                greenLayer.appendChild(gc);
+            }
+            if (redLayer) {
+                redLayer.style.transform = 'translate(4px, 3px)';
+                var rc = makeCanvas('#f4224b');
+                rc.style.position = 'absolute';
+                rc.style.top = '50%'; rc.style.left = '50%';
+                rc.style.transform = 'translate(-50%, -50%)';
+                redLayer.appendChild(rc);
+            }
+        })();
+
+        // Approach 12: Clean AAAS + ENORA
+        (function() {
+            // QR matrix + chromatic layers for dark side
+            var matBg = document.getElementById('qr-a12-matrix-bg');
+            var gL = document.getElementById('a12-green-layer');
+            var rL = document.getElementById('a12-red-layer');
+            if (!matBg || typeof qrcode === 'undefined') return;
+
+            var qr = qrcode(0, 'L');
+            qr.addData('SUPRA-FORGE//AAAS//aaas.blog//supra-forge.com//from-zero-to-agentic-hero//venture-studio//autonomous-intelligence');
+            qr.make();
+            var mc = qr.getModuleCount(), cs = 4, sz = mc * cs;
+
+            function mkC(fg) {
+                var c = document.createElement('canvas');
+                c.width = sz; c.height = sz;
+                c.style.width = '560px'; c.style.height = '560px';
+                c.style.imageRendering = 'pixelated';
+                var x = c.getContext('2d');
+                x.clearRect(0, 0, sz, sz);
+                x.fillStyle = fg;
+                for (var r = 0; r < mc; r++)
+                    for (var col = 0; col < mc; col++)
+                        if (qr.isDark(r, col)) x.fillRect(col * cs, r * cs, cs, cs);
+                return c;
+            }
+
+            matBg.appendChild(mkC('#ffffff'));
+
+            if (gL) {
+                gL.style.transform = 'translate(-4px, -3px)';
+                var gc = mkC('#00ffc2');
+                gc.style.position = 'absolute';
+                gc.style.top = '50%'; gc.style.left = '50%';
+                gc.style.transform = 'translate(-50%, -50%)';
+                gL.appendChild(gc);
+            }
+            if (rL) {
+                rL.style.transform = 'translate(4px, 3px)';
+                var rc = mkC('#f4224b');
+                rc.style.position = 'absolute';
+                rc.style.top = '50%'; rc.style.left = '50%';
+                rc.style.transform = 'translate(-50%, -50%)';
+                rL.appendChild(rc);
+            }
+
+            // Edge distortion strip for A12 light side
+            var strip = document.getElementById('a12-edge-strip');
+            var eGreen = document.getElementById('a12-edge-green');
+            var eRed = document.getElementById('a12-edge-red');
+
+            // Reuse the same QR matrix pattern clipped to strip height
+            if (strip) {
+                var baseC = mkC('#ffffff');
+                baseC.style.width = '700px'; baseC.style.height = '700px';
+                baseC.style.opacity = '0.12';
+                strip.insertBefore(baseC, strip.firstChild);
+
+                if (eGreen) {
+                    var gc2 = mkC('#00ffc2');
+                    gc2.style.width = '700px'; gc2.style.height = '700px';
+                    gc2.style.position = 'absolute';
+                    gc2.style.bottom = '0'; gc2.style.left = '50%';
+                    gc2.style.transform = 'translateX(-50%)';
+                    eGreen.appendChild(gc2);
+                }
+                if (eRed) {
+                    var rc2 = mkC('#f4224b');
+                    rc2.style.width = '700px'; rc2.style.height = '700px';
+                    rc2.style.position = 'absolute';
+                    rc2.style.bottom = '0'; rc2.style.left = '50%';
+                    rc2.style.transform = 'translateX(-50%)';
+                    eRed.appendChild(rc2);
+                }
+            }
+
+            // Edge distortion strip for Approach 11 light side
+            var c3strip = document.getElementById('c3-edge-strip');
+            var c3Green = document.getElementById('c3-edge-green');
+            var c3Red = document.getElementById('c3-edge-red');
+
+            if (c3strip) {
+                var baseC3 = mkC('#ffffff');
+                baseC3.style.width = '700px'; baseC3.style.height = '700px';
+                baseC3.style.opacity = '0.12';
+                c3strip.insertBefore(baseC3, c3strip.firstChild);
+
+                if (c3Green) {
+                    var gc3 = mkC('#00ffc2');
+                    gc3.style.width = '700px'; gc3.style.height = '700px';
+                    gc3.style.position = 'absolute';
+                    gc3.style.bottom = '0'; gc3.style.left = '50%';
+                    gc3.style.transform = 'translateX(-50%)';
+                    c3Green.appendChild(gc3);
+                }
+                if (c3Red) {
+                    var rc3 = mkC('#f4224b');
+                    rc3.style.width = '700px'; rc3.style.height = '700px';
+                    rc3.style.position = 'absolute';
+                    rc3.style.bottom = '0'; rc3.style.left = '50%';
+                    rc3.style.transform = 'translateX(-50%)';
+                    c3Red.appendChild(rc3);
+                }
+            }
+        })();
+    })();
+
+    // ═══════════════════════════════════════════
+    // CARD ENHANCEMENTS
+    // White text, energy traces, circuit streams, gradient names
+    // ═══════════════════════════════════════════
+    (function() {
+        // Energy traces SVG for light cards
+        var energySVG = '<div class="energy-traces"><svg viewBox="0 0 630 360" fill="none">'
+            + '<path class="energy-trace" d="M 0 80 H 120 V 180 H 280 V 120 H 420 V 220 H 630"/>'
+            + '<path class="energy-trace t2" d="M 0 200 H 80 V 300 H 200 V 160 H 350 V 280 H 500 V 180 H 630"/>'
+            + '<path class="energy-trace t3" d="M 630 60 H 500 V 140 H 350 V 50 H 180 V 160 H 0"/>'
+            + '<path class="energy-trace t4" d="M 200 0 V 100 H 350 V 250 H 480 V 150 H 630"/>'
+            + '<path class="energy-trace t2" d="M 0 320 H 150 V 260 H 300 V 340 H 450 V 240 H 630"/>'
+            + '</svg></div>';
+
+        // Circuit streams SVG for dark cards (green + red like PLAYGROUND)
+        var streamSVG = '<div class="circuit-streams"><svg viewBox="0 0 630 360" fill="none">'
+            + '<path class="stream-green" d="M 0 60 H 140 V 180 H 300 V 100 H 450 V 240 H 630"/>'
+            + '<path class="stream-green s2" d="M 0 280 H 100 V 160 H 250 V 300 H 400 V 200 H 630"/>'
+            + '<path class="stream-green s3" d="M 200 0 V 120 H 350 V 260 H 500 V 140 H 630"/>'
+            + '<path class="stream-red" d="M 630 300 H 500 V 180 H 350 V 280 H 200 V 140 H 0"/>'
+            + '<path class="stream-red s2" d="M 630 80 H 480 V 200 H 330 V 100 H 180 V 240 H 0"/>'
+            + '<path class="stream-red s3" d="M 400 360 V 240 H 250 V 100 H 100 V 200 H 0"/>'
+            + '</svg></div>';
+
+        // Inject energy traces into all light cards (approaches 4-9)
+        document.querySelectorAll('.bcard-carved-light .inner, .bcard-basalt-light .inner, .bcard-edge-light .inner, .bcard-gradient.light-flow .inner, .bcard-chroma2-light .inner, .bcard-chroma3-light .inner, .bcard-a12-light .inner, .bcard-vertical.vert-light .inner, .bcard-light .bcard-inner-light').forEach(function(el) {
+            el.insertAdjacentHTML('afterbegin', energySVG);
+        });
+
+        // Inject circuit streams into all dark cards (approaches 4-9)
+        document.querySelectorAll('.bcard-carved-dark .inner, .bcard-basalt-dark .inner, .bcard-edge-dark .inner, .bcard-gradient.dark-flow .inner, .bcard-vertical.vert-dark .inner, .bcard-split .bcard-split-inner').forEach(function(el) {
+            el.insertAdjacentHTML('afterbegin', streamSVG);
+        });
+
+        // Make all product names CAPITAL with gradient text
+        // AaaS → AAAS (green gradient)
+        document.querySelectorAll('.product-name-carved, .plate-name, .p-name, .flow-product-name, .qh-name, .vert-p-name, .product-name-split').forEach(function(el) {
+            var text = el.textContent.trim();
+            if (text === 'AaaS' || text === 'AAAS') {
+                el.textContent = 'AAAS';
+                el.className = el.className + ' gradient-text-green';
+                el.removeAttribute('style');
+            }
+            if (text === 'enora.ai' || text === 'ENORA') {
+                el.textContent = 'ENORA';
+                el.className = el.className + ' gradient-text-red';
+                el.removeAttribute('style');
+            }
+        });
+
+        // Make taglines white/muted instead of colored
+        document.querySelectorAll('.product-tagline-carved, .plate-tag, .p-tag, .flow-product-tag, .qh-tag, .vert-p-tag, .product-tag-split').forEach(function(el) {
+            el.style.color = 'rgba(255,255,255,0.4)';
+        });
+
+        // Make URLs white/muted
+        document.querySelectorAll('.url-carved, .plate-url, .p-url, .flow-url, .qh-url, .qr-url').forEach(function(el) {
+            el.style.color = 'rgba(255,255,255,0.25)';
+        });
     })();
 
     // Intersection observer for fade-up animations

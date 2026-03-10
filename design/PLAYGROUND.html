@@ -31,17 +31,17 @@
            LIGHT MODE — Etched Stone / Blueprint
            ═══════════════════════════════════════════ */
         [data-theme="light"] {
-            --basalt-deep: #f4f3f0;
-            --basalt-surface: #dddcd8;
-            --basalt-bright: #c8c7c3;
+            --basalt-deep: #eaeae8;
+            --basalt-surface: #e0e0dd;
+            --basalt-bright: #d4d4d0;
             --circuit-glow: #0088a0;
-            --circuit-dim: rgba(0, 136, 160, 0.12);
+            --circuit-dim: rgba(0, 136, 160, 0.15);
             --accent-red: #c91e42;
             --accent-red-dim: rgba(201, 30, 66, 0.1);
             --accent-red-glow: rgba(201, 30, 66, 0.3);
-            --text-main: #1a1a1c;
-            --text-muted: rgba(26, 26, 28, 0.5);
-            --border: rgba(0, 0, 0, 0.08);
+            --text-main: #111113;
+            --text-muted: rgba(17, 17, 19, 0.55);
+            --border: rgba(0, 0, 0, 0.1);
         }
 
         [data-theme="light"] body::before {
@@ -51,41 +51,50 @@
 
         [data-theme="light"] .monolith-title,
         [data-theme="light"] .section-title {
-            background: linear-gradient(180deg, #1a1a1c 0%, #888 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
+            background: none;
+            -webkit-background-clip: unset;
+            background-clip: unset;
+            -webkit-text-fill-color: var(--text-main);
+            color: var(--text-main);
         }
 
         [data-theme="light"] .metric-value {
-            background: linear-gradient(180deg, #1a1a1c 0%, #999 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
+            background: none;
+            -webkit-background-clip: unset;
+            background-clip: unset;
+            -webkit-text-fill-color: var(--text-main);
+            color: var(--text-main);
         }
 
         [data-theme="light"] .navbar {
-            background: rgba(244, 243, 240, 0.85);
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
         }
 
         [data-theme="light"] .status-card,
         [data-theme="light"] .pillar-card,
         [data-theme="light"] .bento-card,
         [data-theme="light"] .step {
-            background: rgba(255, 255, 255, 0.5);
-            border-color: rgba(0, 0, 0, 0.06);
+            background: rgba(255, 255, 255, 0.82);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-color: rgba(255, 255, 255, 0.6);
+            box-shadow: 0 2px 16px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.8);
         }
 
         [data-theme="light"] .status-card:hover,
         [data-theme="light"] .pillar-card:hover,
         [data-theme="light"] .bento-card:hover,
         [data-theme="light"] .step:hover {
-            background: rgba(255, 255, 255, 0.7);
-            border-color: rgba(0, 136, 160, 0.3);
-            box-shadow: 0 0 20px var(--circuit-dim), 0 8px 32px rgba(0, 0, 0, 0.08);
+            background: rgba(255, 255, 255, 0.92);
+            border-color: rgba(0, 136, 160, 0.25);
+            box-shadow: 0 0 24px var(--circuit-dim), 0 8px 32px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.9);
         }
 
         [data-theme="light"] .pillar-card::before,
         [data-theme="light"] .bento-card::before {
-            background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(0, 136, 160, 0.06) 0%, transparent 50%);
+            background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(0, 136, 160, 0.05) 0%, transparent 50%);
         }
 
         [data-theme="light"] .core-orb {
@@ -162,7 +171,7 @@
         }
 
         [data-theme="light"] .chromium-canvas {
-            background: radial-gradient(circle at 50% 40%, #fff 0%, var(--basalt-deep) 70%);
+            background: radial-gradient(circle at 50% 40%, #fff 0%, #e2e2df 70%);
         }
 
         .bg-grid {
@@ -911,6 +920,275 @@
         }
 
         /* ═══════════════════════════════════════════
+           AGENTIC BEDROCK — monolith grid section
+           from PAGE_STRUCTURE_Agentic_Bedrock.html
+           ═══════════════════════════════════════════ */
+        .bedrock-section {
+            padding: 0;
+        }
+
+        .monolith-container {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 1px;
+            background: var(--border-strong, rgba(255, 255, 255, 0.1));
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .monolith-block {
+            background: var(--basalt-deep);
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .monolith-block::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(255, 255, 255, 0.04) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        [data-theme="light"] .monolith-block {
+            background: rgba(255, 255, 255, 0.82);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            box-shadow: 0 2px 16px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        }
+
+        [data-theme="light"] .monolith-block:hover {
+            background: rgba(255, 255, 255, 0.92);
+        }
+
+        [data-theme="light"] .monolith-block::before {
+            background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(0, 136, 160, 0.05) 0%, transparent 50%);
+        }
+
+        /* Bedrock Hero */
+        .bedrock-hero {
+            grid-column: span 12;
+            min-height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 5rem 3rem;
+            background: radial-gradient(circle at 50% -20%, var(--basalt-bright) 0%, var(--basalt-deep) 70%);
+        }
+
+        [data-theme="light"] .bedrock-hero {
+            background: radial-gradient(circle at 50% -20%, #fff 0%, #e2e2df 70%);
+        }
+
+        .bedrock-title {
+            font-size: clamp(3.5rem, 12vw, 9rem);
+            font-weight: 900;
+            letter-spacing: -0.05em;
+            text-transform: uppercase;
+            line-height: 0.85;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(180deg, #fff 0%, #444 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        [data-theme="light"] .bedrock-title {
+            background: none;
+            -webkit-background-clip: unset;
+            -webkit-text-fill-color: var(--text-main);
+        }
+
+        .bedrock-meta {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            width: 100%;
+            border-top: 1px solid var(--border);
+            padding-top: 1.5rem;
+        }
+
+        .bedrock-desc {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.95rem;
+            max-width: 500px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* Tectonic perspective grid accent */
+        .tectonic-grid {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 280px;
+            height: 280px;
+            background-image:
+                linear-gradient(var(--basalt-bright) 1px, transparent 1px),
+                linear-gradient(90deg, var(--basalt-bright) 1px, transparent 1px);
+            background-size: 20px 20px;
+            opacity: 0.15;
+            transform: perspective(500px) rotateX(60deg) rotateZ(-20deg);
+            pointer-events: none;
+        }
+
+        /* Service blocks — 4 cols each */
+        .service-block {
+            grid-column: span 4;
+            min-height: 350px;
+            border-right: 1px solid var(--border);
+            transition: all 0.6s var(--liquid-ease, cubic-bezier(0.23, 1, 0.32, 1));
+        }
+
+        .service-block:last-child {
+            border-right: none;
+        }
+
+        .service-block:hover {
+            background: var(--basalt-surface);
+            box-shadow: inset 0 0 50px rgba(244, 34, 75, 0.15);
+        }
+
+        .service-block:hover .block-label {
+            color: var(--text-main);
+            transform: translateY(-4px);
+        }
+
+        [data-theme="light"] .service-block:hover {
+            background: rgba(255, 255, 255, 0.85);
+            box-shadow: inset 0 0 50px rgba(201, 30, 66, 0.08);
+        }
+
+        .block-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+            display: block;
+            transition: all 0.3s;
+        }
+
+        .block-title {
+            font-size: 2rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            line-height: 0.95;
+        }
+
+        .block-content {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* Wide feature block — 8 cols */
+        .feature-wide {
+            grid-column: span 8;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 2rem;
+        }
+
+        .system-readout {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            color: var(--text-muted);
+            line-height: 1.8;
+            white-space: pre-line;
+        }
+
+        /* Connect block — 4 cols */
+        .connect-block {
+            grid-column: span 4;
+            border-top: 1px solid var(--border);
+            background: var(--basalt-surface);
+        }
+
+        [data-theme="light"] .connect-block {
+            background: rgba(255, 255, 255, 0.82);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        /* CTA button with offset shadow */
+        .btn-bedrock {
+            display: inline-block;
+            padding: 1.2rem 2.5rem;
+            background: var(--text-main);
+            color: var(--basalt-deep);
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.05rem;
+            transition: all 0.3s;
+        }
+
+        .btn-bedrock:hover {
+            transform: translate(4px, -4px);
+            box-shadow: -4px 4px 0 var(--circuit-glow);
+        }
+
+        .btn-bedrock:active {
+            box-shadow: -4px 4px 0 var(--accent-red);
+        }
+
+        /* Data ticker tape */
+        .data-tape {
+            grid-column: span 12;
+            padding: 0.75rem 0;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+            overflow: hidden;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            background: var(--basalt-deep);
+        }
+
+        [data-theme="light"] .data-tape {
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        .data-tape-inner {
+            display: inline-block;
+            animation: tape-scroll 35s linear infinite;
+        }
+
+        @keyframes tape-scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Bedrock reveal animation */
+        .bedrock-reveal {
+            opacity: 0;
+            transform: translateY(25px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .bedrock-reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (max-width: 1024px) {
+            .service-block, .feature-wide, .connect-block {
+                grid-column: span 12 !important;
+                border-right: none;
+            }
+            .bedrock-title { font-size: 3.5rem; }
+            .bedrock-meta { grid-template-columns: 1fr; gap: 1.5rem; }
+            .feature-wide { flex-direction: column; }
+        }
+
+        /* ═══════════════════════════════════════════
            FOOTER
            ═══════════════════════════════════════════ */
         .footer {
@@ -1382,6 +1660,75 @@
     </section>
 
     <!-- ═══════════════════════════════════════════
+         AGENTIC BEDROCK — monolith grid section
+         from PAGE_STRUCTURE_Agentic_Bedrock.html
+         ═══════════════════════════════════════════ -->
+    <section class="bedrock-section">
+        <div class="monolith-container">
+            <!-- Bedrock Hero -->
+            <div class="monolith-block bedrock-hero" data-monolith>
+                <div class="tectonic-grid"></div>
+                <h2 class="bedrock-title bedrock-reveal">AGENTIC<br>BEDROCK.</h2>
+                <div class="bedrock-meta bedrock-reveal">
+                    <p class="bedrock-desc">
+                        Redefining the layer of interaction. We build structural intelligence that doesn't just respond — it architecturalizes outcomes.
+                    </p>
+                    <div style="text-align: right;">
+                        <a href="#" class="btn-bedrock">Initialize Protocol</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Ticker -->
+            <div class="data-tape">
+                <div class="data-tape-inner">
+                    NEURAL_LATENCY: 0.04ms // SUBSTRATE_INTEGRITY: 100% // TECTONIC_RESOURCES_ALLOCATED // ASYNC_TASK_ORCHESTRATION // SYSTEM_READY // NEURAL_LATENCY: 0.04ms // SUBSTRATE_INTEGRITY: 100% // TECTONIC_RESOURCES_ALLOCATED // ASYNC_TASK_ORCHESTRATION // SYSTEM_READY
+                </div>
+            </div>
+
+            <!-- Service Monoliths -->
+            <div class="monolith-block service-block bedrock-reveal" data-monolith>
+                <span class="block-label">01 // ARCHITECTURE</span>
+                <h3 class="block-title">CARVED<br>LOGIC</h3>
+                <p class="block-content">Autonomous systems built with immutable foundations. Our agents operate on a zero-drift principle within the basalt-stack.</p>
+            </div>
+
+            <div class="monolith-block service-block bedrock-reveal" data-monolith>
+                <span class="block-label">02 // KINETICS</span>
+                <h3 class="block-title">ORCHESTRA</h3>
+                <p class="block-content">Multi-agent swarms that move with the precision of tectonic shifts. Massive coordination, zero overhead.</p>
+            </div>
+
+            <div class="monolith-block service-block bedrock-reveal" data-monolith>
+                <span class="block-label">03 // SYNTHESIS</span>
+                <h3 class="block-title">DEEP<br>CORE</h3>
+                <p class="block-content">Access the raw computational magma. High-fidelity inference models fine-tuned for specialized industrial agency.</p>
+            </div>
+
+            <!-- Wide Feature -->
+            <div class="monolith-block feature-wide bedrock-reveal" data-monolith>
+                <div style="max-width: 60%;">
+                    <span class="block-label">SYSTEM CAPABILITIES</span>
+                    <h3 class="block-title">STRUCTURALIST<br>INTEGRATION</h3>
+                    <p class="block-content">We replace fragmented SaaS tools with a singular, monolithic agentic layer. No more integration friction. Only the bedrock.</p>
+                </div>
+                <div class="system-readout">[ ANALYZING_INFRASTRUCTURE ]
+> VULNERABILITY: NONE
+> ELEGANCE: MAXIMAL
+> UPTIME: INFINITE</div>
+            </div>
+
+            <!-- Connect Block -->
+            <div class="monolith-block connect-block bedrock-reveal" data-monolith>
+                <span class="block-label">CONNECT</span>
+                <p class="block-content" style="color: var(--text-main);">
+                    Terminal access to the monolith is restricted to verified entities. Apply for a slot in the next epoch.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
          FOOTER
          ═══════════════════════════════════════════ -->
     <footer class="footer">
@@ -1467,10 +1814,10 @@
             scrollAccumulator += delta;
 
             if (scrollAccumulator > scrollThreshold) {
-                setTheme('light');
+                setTheme('dark');
                 scrollAccumulator = 0;
             } else if (scrollAccumulator < -scrollThreshold) {
-                setTheme('dark');
+                setTheme('light');
                 scrollAccumulator = 0;
             }
 
@@ -1531,6 +1878,33 @@
                 e.preventDefault();
                 const target = document.querySelector(link.getAttribute('href'));
                 if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+
+        // Bedrock: reveal on scroll
+        const bedrockObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    bedrockObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.bedrock-reveal').forEach(el => bedrockObserver.observe(el));
+
+        // Bedrock: monolith block mouse-tracking magma glow (matches original)
+        document.querySelectorAll('[data-monolith]').forEach(block => {
+            block.addEventListener('mousemove', e => {
+                const rect = block.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                if (x > 0 && y > 0 && x < rect.width && y < rect.height) {
+                    block.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(244, 34, 75, 0.15), var(--basalt-deep) 70%)`;
+                }
+            });
+            block.addEventListener('mouseleave', () => {
+                block.style.background = '';
             });
         });
     </script>

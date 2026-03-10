@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SUPRA-FORGE — Business Card Assets Export</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+<style>
+    :root {
+        --bg: #0a0a0b;
+        --card-bg: #111113;
+        --text: #e8e8e8;
+        --muted: #888;
+        --aaas-green: #00ffc2;
+        --accent-red: #f4224b;
+        --light-teal: #0088a0;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: 'JetBrains Mono', monospace;
+        padding: 40px;
+        min-height: 100vh;
+    }
+    h1 {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 900;
+        font-size: 28px;
+        letter-spacing: 6px;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+    }
+    .subtitle {
+        color: var(--muted);
+        font-size: 0.75rem;
+        letter-spacing: 0.08rem;
+        margin-bottom: 40px;
+    }
+    h2 {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        font-size: 16px;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: var(--aaas-green);
+        margin: 48px 0 20px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    h3 {
+        font-size: 0.7rem;
+        color: var(--muted);
+        letter-spacing: 0.1rem;
+        text-transform: uppercase;
+        margin: 24px 0 12px;
+    }
+    .assets-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 24px;
+        margin-bottom: 16px;
+    }
+    .asset-card {
+        background: var(--card-bg);
+        border: 1px solid rgba(255,255,255,0.06);
+        border-radius: 12px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        min-width: 180px;
+    }
+    .asset-card .preview {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 120px;
+    }
+    .asset-card .preview canvas {
+        image-rendering: pixelated;
+    }
+    .asset-card .preview.dark-bg {
+        background: #080809;
+        border-radius: 8px;
+        padding: 12px;
+    }
+    .asset-card .preview.light-bg {
+        background: #f4f3f0;
+        border-radius: 8px;
+        padding: 12px;
+    }
+    .asset-card .preview.checker-bg {
+        background: repeating-conic-gradient(#1a1a1c 0% 25%, #2a2a2c 0% 50%) 0 0 / 16px 16px;
+        border-radius: 8px;
+        padding: 12px;
+    }
+    .asset-label {
+        font-size: 0.55rem;
+        color: var(--text);
+        letter-spacing: 0.08rem;
+        text-transform: uppercase;
+        text-align: center;
+    }
+    .asset-detail {
+        font-size: 0.45rem;
+        color: var(--muted);
+        text-align: center;
+        line-height: 1.5;
+    }
+    .dl-btn {
+        background: rgba(255,255,255,0.06);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.5rem;
+        letter-spacing: 0.06rem;
+        padding: 6px 14px;
+        border-radius: 6px;
+        cursor: pointer;
+        text-transform: uppercase;
+        transition: all 0.2s;
+    }
+    .dl-btn:hover {
+        background: rgba(0,255,194,0.1);
+        border-color: var(--aaas-green);
+        color: var(--aaas-green);
+    }
+    .dl-all-btn {
+        background: var(--aaas-green);
+        color: #080809;
+        font-family: 'JetBrains Mono', monospace;
+        font-weight: 700;
+        font-size: 0.6rem;
+        letter-spacing: 0.1rem;
+        padding: 10px 24px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        text-transform: uppercase;
+        margin: 24px 0;
+        transition: all 0.2s;
+    }
+    .dl-all-btn:hover {
+        background: #fff;
+    }
+    .text-spec {
+        background: var(--card-bg);
+        border: 1px solid rgba(255,255,255,0.06);
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 16px;
+    }
+    .text-spec table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.55rem;
+    }
+    .text-spec th {
+        text-align: left;
+        color: var(--muted);
+        font-weight: 400;
+        padding: 6px 12px 6px 0;
+        border-bottom: 1px solid rgba(255,255,255,0.04);
+        letter-spacing: 0.06rem;
+        text-transform: uppercase;
+    }
+    .text-spec td {
+        padding: 6px 12px 6px 0;
+        border-bottom: 1px solid rgba(255,255,255,0.04);
+        color: var(--text);
+    }
+    .text-spec td.mono { font-family: 'JetBrains Mono', monospace; }
+    .text-spec td.color-swatch {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .swatch {
+        display: inline-block;
+        width: 14px; height: 14px;
+        border-radius: 3px;
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+    .note {
+        background: rgba(0,255,194,0.04);
+        border: 1px solid rgba(0,255,194,0.1);
+        border-radius: 8px;
+        padding: 16px;
+        font-size: 0.55rem;
+        color: var(--muted);
+        line-height: 1.6;
+        margin: 24px 0;
+    }
+    .note strong { color: var(--aaas-green); }
+
+    /* SVG preview sizing */
+    .svg-preview svg {
+        width: 120px;
+        height: 120px;
+    }
+
+    /* Composite preview cards */
+    .composite-preview {
+        position: relative;
+        width: 700px;
+        height: 400px;
+        border-radius: 18px;
+        overflow: hidden;
+    }
+    .composite-preview.light { background: #f4f3f0; }
+    .composite-preview.dark { background: #080809; }
+</style>
+</head>
+<body>
+
+<h1>Asset Export</h1>
+<p class="subtitle">All layers for Approach 11 & 12 — transparent PNGs at print resolution (300+ DPI equivalent)</p>
+
+<div class="note">
+    <strong>How to use in Canva:</strong> Download each asset individually or use "Download All" for a ZIP-like batch.
+    All QR codes are exported at 800×800px with transparent backgrounds — scale them down in Canva to your card dimensions.
+    Text elements are listed with exact specs so you can recreate them in Canva using the same fonts (Montserrat + JetBrains Mono).
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- QR CODES -->
+<!-- ═══════════════════════════════════════ -->
+<h2>QR Codes — Transparent PNG (800×800)</h2>
+
+<h3>Website QR Codes</h3>
+<div class="assets-grid">
+    <div class="asset-card">
+        <div class="preview dark-bg" id="qr-aaas-white"></div>
+        <div class="asset-label">AAAS — White on Transparent</div>
+        <div class="asset-detail">aaas.blog<br>For dark backgrounds</div>
+        <button class="dl-btn" onclick="dlCanvas('qr-aaas-white','qr-aaas-white.png')">Download PNG</button>
+    </div>
+    <div class="asset-card">
+        <div class="preview light-bg" id="qr-aaas-black"></div>
+        <div class="asset-label">AAAS — Black on Transparent</div>
+        <div class="asset-detail">aaas.blog<br>For light backgrounds</div>
+        <button class="dl-btn" onclick="dlCanvas('qr-aaas-black','qr-aaas-black.png')">Download PNG</button>
+    </div>
+    <div class="asset-card">
+        <div class="preview dark-bg" id="qr-enora-white"></div>
+        <div class="asset-label">ENORA — White on Transparent</div>
+        <div class="asset-detail">supra-forge.com<br>For dark backgrounds</div>
+        <button class="dl-btn" onclick="dlCanvas('qr-enora-white','qr-enora-white.png')">Download PNG</button>
+    </div>
+    <div class="asset-card">
+        <div class="preview light-bg" id="qr-enora-black"></div>
+        <div class="asset-label">ENORA — Black on Transparent</div>
+        <div class="asset-detail">supra-forge.com<br>For light backgrounds</div>
+        <button class="dl-btn" onclick="dlCanvas('qr-enora-black','qr-enora-black.png')">Download PNG</button>
+    </div>
+</div>
+
+<h3>Phone QR Codes (tel: URI — triggers phone call when scanned)</h3>
+<div class="assets-grid">
+    <div class="asset-card">
+        <div class="preview dark-bg" id="qr-tobias-white"></div>
+        <div class="asset-label">CTO: Tobias — White</div>
+        <div class="asset-detail">tel:+4917638380937<br>+49 176 38380937</div>
+        <button class="dl-btn" onclick="dlCanvas('qr-tobias-white','qr-cto-tobias-white.png')">Download PNG</button>
+    </div>
+    <div class="asset-card">
+        <div class="preview light-bg" id="qr-tobias-black"></div>
+        <div class="asset-label">CTO: Tobias — Black</div>
+        <div class="asset-detail">tel:+4917638380937<br>+49 176 38380937</div>
+        <button class="dl-btn" onclick="dlCanvas('qr-tobias-black','qr-cto-tobias-black.png')">Download PNG</button>
+    </div>
+    <div class="asset-card">
+        <div class="preview dark-bg" id="qr-jorian-white"></div>
+        <div class="asset-label">CRO: Jorian — White</div>
+        <div class="asset-detail">tel:+4917632010267<br>+49 176 32010267</div>
+        <button class="dl-btn" onclick="dlCanvas('qr-jorian-white','qr-cro-jorian-white.png')">Download PNG</button>
+    </div>
+    <div class="asset-card">
+        <div class="preview light-bg" id="qr-jorian-black"></div>
+        <div class="asset-label">CRO: Jorian — Black</div>
+        <div class="asset-detail">tel:+4917632010267<br>+49 176 32010267</div>
+        <button class="dl-btn" onclick="dlCanvas('qr-jorian-black','qr-cro-jorian-black.png')">Download PNG</button>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- CHROMATIC BACKGROUND LAYERS -->
+<!-- ═══════════════════════════════════════ -->
+<h2>Chromatic QR Matrix Background Layers</h2>
+<p class="asset-detail" style="margin-bottom:16px;">These are the full-bleed decorative QR matrix patterns used behind the dark side. Layer them with blend modes in Canva.</p>
+
+<div class="assets-grid">
+    <div class="asset-card">
+        <div class="preview dark-bg" id="matrix-white" style="max-width:200px;overflow:hidden;"></div>
+        <div class="asset-label">Base Matrix — White</div>
+        <div class="asset-detail">Use at ~6% opacity<br>1120×1120px</div>
+        <button class="dl-btn" onclick="dlCanvas('matrix-white','matrix-base-white.png')">Download PNG</button>
+    </div>
+    <div class="asset-card">
+        <div class="preview dark-bg" id="matrix-green" style="max-width:200px;overflow:hidden;"></div>
+        <div class="asset-label">Chromatic Green Layer</div>
+        <div class="asset-detail">Screen blend, 35% opacity<br>Offset: -4px, -3px</div>
+        <button class="dl-btn" onclick="dlCanvas('matrix-green','matrix-chroma-green.png')">Download PNG</button>
+    </div>
+    <div class="asset-card">
+        <div class="preview dark-bg" id="matrix-red" style="max-width:200px;overflow:hidden;"></div>
+        <div class="asset-label">Chromatic Red Layer</div>
+        <div class="asset-detail">Screen blend, 35% opacity<br>Offset: +4px, +3px</div>
+        <button class="dl-btn" onclick="dlCanvas('matrix-red','matrix-chroma-red.png')">Download PNG</button>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- GRADIENT BAR -->
+<!-- ═══════════════════════════════════════ -->
+<h2>Gradient Bar</h2>
+<div class="assets-grid">
+    <div class="asset-card" style="min-width:400px;">
+        <div class="preview checker-bg" style="width:100%;">
+            <canvas id="gradient-bar" width="2100" height="18" style="width:380px;height:6px;border-radius:1px;"></canvas>
+        </div>
+        <div class="asset-label">Gradient Bar — Green → Teal → Red</div>
+        <div class="asset-detail">2100×18px (3× print res) · Transparent background<br>Used on light side bottom edge</div>
+        <button class="dl-btn" onclick="dlCanvasById('gradient-bar','gradient-bar.png')">Download PNG</button>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- LOGO SVGs -->
+<!-- ═══════════════════════════════════════ -->
+<h2>SUPRA-FORGE Logo</h2>
+<div class="assets-grid">
+    <div class="asset-card">
+        <div class="preview light-bg svg-preview" id="logo-dark">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" fill="none">
+                <path d="M18 2 L32 9 L32 23 L18 34 L4 23 L4 9 Z" fill="rgba(0,136,160,0.08)" stroke="rgba(0,136,160,0.2)" stroke-width="0.5"/>
+                <path d="M18 8 L26 14 L18 28 L10 14 Z" fill="rgba(0,136,160,0.05)" stroke="rgba(0,136,160,0.12)" stroke-width="0.5"/>
+                <path d="M12 16 L16 20 L24 12" stroke="#0088a0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            </svg>
+        </div>
+        <div class="asset-label">Logo — Teal (Light Side)</div>
+        <div class="asset-detail">SVG vector</div>
+        <button class="dl-btn" onclick="dlSvg('logo-dark','supra-forge-logo-teal.svg')">Download SVG</button>
+        <button class="dl-btn" onclick="dlSvgAsPng('logo-dark','supra-forge-logo-teal.png', 400)">Download PNG 400px</button>
+    </div>
+    <div class="asset-card">
+        <div class="preview dark-bg svg-preview" id="logo-light">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" fill="none">
+                <path d="M18 2 L32 9 L32 23 L18 34 L4 23 L4 9 Z" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" stroke-width="0.5"/>
+                <path d="M12 16 L16 20 L24 12" stroke="rgba(255,255,255,0.15)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            </svg>
+        </div>
+        <div class="asset-label">Logo — White (Dark Side)</div>
+        <div class="asset-detail">SVG vector · Used in forge badge</div>
+        <button class="dl-btn" onclick="dlSvg('logo-light','supra-forge-logo-white.svg')">Download SVG</button>
+        <button class="dl-btn" onclick="dlSvgAsPng('logo-light','supra-forge-logo-white.png', 400)">Download PNG 400px</button>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- EDGE DISTORTION STRIP -->
+<!-- ═══════════════════════════════════════ -->
+<h2>Chromatic Edge Distortion Strip</h2>
+<p class="asset-detail" style="margin-bottom:16px;">The dark strip below the gradient bar on the light side. Three layers composited.</p>
+
+<div class="assets-grid">
+    <div class="asset-card" style="min-width:300px;">
+        <div class="preview dark-bg" id="edge-base" style="max-width:280px;height:40px;overflow:hidden;"></div>
+        <div class="asset-label">Edge Strip — Base White</div>
+        <div class="asset-detail">12% opacity · 2100×57px</div>
+        <button class="dl-btn" onclick="dlCanvas('edge-base','edge-strip-base.png')">Download PNG</button>
+    </div>
+    <div class="asset-card" style="min-width:300px;">
+        <div class="preview dark-bg" id="edge-green" style="max-width:280px;height:40px;overflow:hidden;"></div>
+        <div class="asset-label">Edge Strip — Green Shift</div>
+        <div class="asset-detail">Screen blend, 40% opacity, offset(-3px,-1px)</div>
+        <button class="dl-btn" onclick="dlCanvas('edge-green','edge-strip-green.png')">Download PNG</button>
+    </div>
+    <div class="asset-card" style="min-width:300px;">
+        <div class="preview dark-bg" id="edge-red" style="max-width:280px;height:40px;overflow:hidden;"></div>
+        <div class="asset-label">Edge Strip — Red Shift</div>
+        <div class="asset-detail">Screen blend, 40% opacity, offset(+3px,+1px)</div>
+        <button class="dl-btn" onclick="dlCanvas('edge-red','edge-strip-red.png')">Download PNG</button>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- COMBINED EDGE STRIP VARIATIONS -->
+<!-- ═══════════════════════════════════════ -->
+<h3>Combined Variations (Pre-composited, ready to use)</h3>
+<p class="asset-detail" style="margin-bottom:16px;">All three layers merged into a single image. Each variation renders at 2100px wide (3× print resolution for a 3.5" card at 300 DPI).</p>
+
+<div class="assets-grid">
+    <div class="asset-card" style="min-width:440px;">
+        <div class="preview" style="background:#080809;border-radius:8px;padding:0;overflow:hidden;width:420px;">
+            <canvas id="combo-standard" width="2100" height="57" style="width:420px;height:11px;display:block;"></canvas>
+        </div>
+        <div class="asset-label">Standard — Dark BG (19px strip)</div>
+        <div class="asset-detail">As used on the card · #080809 background<br>2100 × 57px (3×) · Opacity: base 12%, chroma 40%</div>
+        <button class="dl-btn" onclick="dlCanvasById('combo-standard','edge-combined-standard.png')">Download PNG</button>
+    </div>
+
+    <div class="asset-card" style="min-width:440px;">
+        <div class="preview" style="background:#080809;border-radius:8px;padding:0;overflow:hidden;width:420px;">
+            <canvas id="combo-intense" width="2100" height="57" style="width:420px;height:11px;display:block;"></canvas>
+        </div>
+        <div class="asset-label">High Intensity — Bolder Chroma</div>
+        <div class="asset-detail">Stronger chromatic shift for more visual punch<br>2100 × 57px · Opacity: base 18%, chroma 60%</div>
+        <button class="dl-btn" onclick="dlCanvasById('combo-intense','edge-combined-intense.png')">Download PNG</button>
+    </div>
+
+    <div class="asset-card" style="min-width:440px;">
+        <div class="preview" style="background:#080809;border-radius:8px;padding:0;overflow:hidden;width:420px;">
+            <canvas id="combo-subtle" width="2100" height="57" style="width:420px;height:11px;display:block;"></canvas>
+        </div>
+        <div class="asset-label">Subtle — Restrained</div>
+        <div class="asset-detail">Understated, barely there distortion<br>2100 × 57px · Opacity: base 6%, chroma 20%</div>
+        <button class="dl-btn" onclick="dlCanvasById('combo-subtle','edge-combined-subtle.png')">Download PNG</button>
+    </div>
+
+    <div class="asset-card" style="min-width:440px;">
+        <div class="preview" style="background:#080809;border-radius:8px;padding:0;overflow:hidden;width:420px;">
+            <canvas id="combo-tall" width="2100" height="120" style="width:420px;height:24px;display:block;"></canvas>
+        </div>
+        <div class="asset-label">Tall Strip — 40px Height</div>
+        <div class="asset-detail">Double height for more visual presence<br>2100 × 120px · Opacity: base 12%, chroma 40%</div>
+        <button class="dl-btn" onclick="dlCanvasById('combo-tall','edge-combined-tall.png')">Download PNG</button>
+    </div>
+
+    <div class="asset-card" style="min-width:440px;">
+        <div class="preview checker-bg" style="padding:0;overflow:hidden;width:420px;">
+            <canvas id="combo-transparent" width="2100" height="57" style="width:420px;height:11px;display:block;"></canvas>
+        </div>
+        <div class="asset-label">Transparent BG — Overlay Anywhere</div>
+        <div class="asset-detail">No background, place over any color<br>2100 × 57px · Transparent PNG</div>
+        <button class="dl-btn" onclick="dlCanvasById('combo-transparent','edge-combined-transparent.png')">Download PNG</button>
+    </div>
+
+    <div class="asset-card" style="min-width:440px;">
+        <div class="preview checker-bg" style="padding:0;overflow:hidden;width:420px;">
+            <canvas id="combo-transparent-intense" width="2100" height="57" style="width:420px;height:11px;display:block;"></canvas>
+        </div>
+        <div class="asset-label">Transparent BG — High Intensity</div>
+        <div class="asset-detail">Stronger chroma, no background<br>2100 × 57px · Transparent PNG</div>
+        <button class="dl-btn" onclick="dlCanvasById('combo-transparent-intense','edge-combined-transparent-intense.png')">Download PNG</button>
+    </div>
+
+    <div class="asset-card" style="min-width:440px;">
+        <div class="preview" style="background:#f4f3f0;border-radius:8px;padding:0;overflow:hidden;width:420px;">
+            <canvas id="combo-with-bar" width="2100" height="75" style="width:420px;height:15px;display:block;"></canvas>
+        </div>
+        <div class="asset-label">With Gradient Bar — Full Bottom Edge</div>
+        <div class="asset-detail">Gradient bar (6px) + distortion strip (19px) combined<br>2100 × 75px · Light side bottom edge, complete</div>
+        <button class="dl-btn" onclick="dlCanvasById('combo-with-bar','edge-combined-with-gradient-bar.png')">Download PNG</button>
+    </div>
+
+    <div class="asset-card" style="min-width:440px;">
+        <div class="preview" style="background:#f4f3f0;border-radius:8px;padding:0;overflow:hidden;width:420px;">
+            <canvas id="combo-with-bar-intense" width="2100" height="75" style="width:420px;height:15px;display:block;"></canvas>
+        </div>
+        <div class="asset-label">With Gradient Bar — High Intensity</div>
+        <div class="asset-detail">Bolder chromatic distortion under gradient bar<br>2100 × 75px · Light side bottom edge</div>
+        <button class="dl-btn" onclick="dlCanvasById('combo-with-bar-intense','edge-combined-bar-intense.png')">Download PNG</button>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- FULL CARD BACKGROUNDS (COMPOSITED) -->
+<!-- ═══════════════════════════════════════ -->
+<h2>Full Card Backgrounds — Composited</h2>
+<p class="asset-detail" style="margin-bottom:16px;">Complete card-sized backgrounds at 1050×600px (300 DPI). Drop these into Canva as the base layer, then place text and QR codes on top.</p>
+
+<h3>Solid Backgrounds (Plain)</h3>
+<div class="assets-grid">
+    <div class="asset-card">
+        <div class="preview" style="width:210px;height:120px;background:#f4f3f0;border-radius:8px;border:1px solid rgba(255,255,255,0.1);"></div>
+        <div class="asset-label">Light Side — Plain</div>
+        <div class="asset-detail">#F4F3F0 · 1050×600px</div>
+        <button class="dl-btn" onclick="dlSolid(1050,600,'#f4f3f0','bg-light-plain.png')">Download PNG</button>
+    </div>
+    <div class="asset-card">
+        <div class="preview" style="width:210px;height:120px;background:#080809;border-radius:8px;border:1px solid rgba(255,255,255,0.1);"></div>
+        <div class="asset-label">Dark Side — Plain</div>
+        <div class="asset-detail">#080809 · 1050×600px</div>
+        <button class="dl-btn" onclick="dlSolid(1050,600,'#080809','bg-dark-plain.png')">Download PNG</button>
+    </div>
+</div>
+
+<h3>Light Side — With Edge Distortion</h3>
+<div class="assets-grid">
+    <div class="asset-card" style="min-width:340px;">
+        <div class="preview" style="padding:0;overflow:hidden;border-radius:8px;">
+            <canvas id="card-light-standard" width="1050" height="600" style="width:280px;height:160px;display:block;"></canvas>
+        </div>
+        <div class="asset-label">Light Side — Standard Edge</div>
+        <div class="asset-detail">Off-white + gradient bar + chromatic strip<br>1050×600px · As used on card</div>
+        <button class="dl-btn" onclick="dlCanvasById('card-light-standard','card-light-standard.png')">Download PNG</button>
+    </div>
+    <div class="asset-card" style="min-width:340px;">
+        <div class="preview" style="padding:0;overflow:hidden;border-radius:8px;">
+            <canvas id="card-light-intense" width="1050" height="600" style="width:280px;height:160px;display:block;"></canvas>
+        </div>
+        <div class="asset-label">Light Side — High Intensity Edge</div>
+        <div class="asset-detail">Bolder chromatic distortion<br>1050×600px</div>
+        <button class="dl-btn" onclick="dlCanvasById('card-light-intense','card-light-intense.png')">Download PNG</button>
+    </div>
+    <div class="asset-card" style="min-width:340px;">
+        <div class="preview" style="padding:0;overflow:hidden;border-radius:8px;">
+            <canvas id="card-light-tall" width="1050" height="600" style="width:280px;height:160px;display:block;"></canvas>
+        </div>
+        <div class="asset-label">Light Side — Tall Edge Strip</div>
+        <div class="asset-detail">Taller distortion area (40px)<br>1050×600px</div>
+        <button class="dl-btn" onclick="dlCanvasById('card-light-tall','card-light-tall-edge.png')">Download PNG</button>
+    </div>
+</div>
+
+<h3>Dark Side — With Chromatic QR Matrix</h3>
+<div class="assets-grid">
+    <div class="asset-card" style="min-width:340px;">
+        <div class="preview" style="padding:0;overflow:hidden;border-radius:8px;">
+            <canvas id="card-dark-standard" width="1050" height="600" style="width:280px;height:160px;display:block;"></canvas>
+        </div>
+        <div class="asset-label">Dark Side — Standard Chroma</div>
+        <div class="asset-detail">Basalt + QR matrix + green/red shift<br>1050×600px · As used on card</div>
+        <button class="dl-btn" onclick="dlCanvasById('card-dark-standard','card-dark-chromatic.png')">Download PNG</button>
+    </div>
+    <div class="asset-card" style="min-width:340px;">
+        <div class="preview" style="padding:0;overflow:hidden;border-radius:8px;">
+            <canvas id="card-dark-intense" width="1050" height="600" style="width:280px;height:160px;display:block;"></canvas>
+        </div>
+        <div class="asset-label">Dark Side — High Intensity</div>
+        <div class="asset-detail">Stronger chromatic aberration<br>1050×600px</div>
+        <button class="dl-btn" onclick="dlCanvasById('card-dark-intense','card-dark-chromatic-intense.png')">Download PNG</button>
+    </div>
+    <div class="asset-card" style="min-width:340px;">
+        <div class="preview" style="padding:0;overflow:hidden;border-radius:8px;">
+            <canvas id="card-dark-subtle" width="1050" height="600" style="width:280px;height:160px;display:block;"></canvas>
+        </div>
+        <div class="asset-label">Dark Side — Subtle</div>
+        <div class="asset-detail">Barely-there QR matrix pattern<br>1050×600px</div>
+        <button class="dl-btn" onclick="dlCanvasById('card-dark-subtle','card-dark-chromatic-subtle.png')">Download PNG</button>
+    </div>
+    <div class="asset-card" style="min-width:340px;">
+        <div class="preview" style="padding:0;overflow:hidden;border-radius:8px;">
+            <canvas id="card-dark-noshift" width="1050" height="600" style="width:280px;height:160px;display:block;"></canvas>
+        </div>
+        <div class="asset-label">Dark Side — Matrix Only (No Chroma)</div>
+        <div class="asset-detail">White QR matrix, no green/red shift<br>1050×600px</div>
+        <button class="dl-btn" onclick="dlCanvasById('card-dark-noshift','card-dark-matrix-only.png')">Download PNG</button>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- TEXT SPECIFICATIONS -->
+<!-- ═══════════════════════════════════════ -->
+<h2>Text Specifications</h2>
+<p class="asset-detail" style="margin-bottom:16px;">Recreate these in Canva using the exact fonts and sizes below. All fonts are Google Fonts (free).</p>
+
+<h3>Light Side Text</h3>
+<div class="text-spec">
+    <table>
+        <tr><th>Element</th><th>Text</th><th>Font</th><th>Weight</th><th>Size</th><th>Color</th><th>Spacing</th></tr>
+        <tr><td>Brand Name</td><td>SUPRA-FORGE</td><td class="mono">Montserrat</td><td>900 (Black)</td><td>26px</td><td><span class="swatch" style="background:#1a1a1c;"></span> #1A1A1C</td><td>5px tracking</td></tr>
+        <tr><td>Tagline</td><td>Venture studio for autonomous intelligence</td><td class="mono">JetBrains Mono</td><td>400</td><td>0.62rem</td><td><span class="swatch" style="background:#888;"></span> #888888</td><td>0.06rem</td></tr>
+        <tr><td>URL</td><td>supra-forge.com</td><td class="mono">JetBrains Mono</td><td>400</td><td>0.5rem</td><td><span class="swatch" style="background:#aaa;"></span> #AAAAAA</td><td>0.05rem</td></tr>
+    </table>
+</div>
+
+<h3>Dark Side — Vertical Edge Text (Approach 11 & 12)</h3>
+<div class="text-spec">
+    <table>
+        <tr><th>Element</th><th>Text</th><th>Font</th><th>Weight</th><th>Size</th><th>Color</th><th>Notes</th></tr>
+        <tr><td>AAAS (left edge)</td><td>AAAS</td><td class="mono">Montserrat</td><td>900</td><td>36px</td><td><span class="swatch" style="background:#fff;"></span> #FFFFFF</td><td>Writing-mode: vertical-rl, 8px tracking, TikTok effect</td></tr>
+        <tr><td>AAAS domain</td><td>aaas.blog</td><td class="mono">JetBrains Mono</td><td>400</td><td>0.48rem</td><td><span class="swatch" style="background:rgba(255,255,255,0.4);"></span> rgba(255,255,255,0.4)</td><td>Vertical, below bar</td></tr>
+        <tr><td>ENORA (right edge, A11)</td><td>ENORA</td><td class="mono">Montserrat</td><td>900</td><td>36px</td><td><span class="swatch" style="background:#fff;"></span> #FFFFFF</td><td>Vertical, reversed direction, TikTok effect</td></tr>
+        <tr><td>SUPRA-FORGE (right edge, A12)</td><td>SUPRA-FORGE</td><td class="mono">Montserrat</td><td>900</td><td>20px</td><td><span class="swatch" style="background:rgba(255,255,255,0.55);"></span> rgba(255,255,255,0.55)</td><td>Vertical, reversed</td></tr>
+    </table>
+</div>
+
+<h3>Dark Side — Slogans</h3>
+<div class="text-spec">
+    <table>
+        <tr><th>Element</th><th>Text</th><th>Font</th><th>Weight</th><th>Size</th><th>Color</th><th>Position</th></tr>
+        <tr><td>AaaS Slogan (A11)</td><td>ZERO TO AGENTIC HERO</td><td class="mono">JetBrains Mono</td><td>400</td><td>1.2rem</td><td><span class="swatch" style="background:rgba(255,255,255,0.55);"></span> rgba(255,255,255,0.55)</td><td>Top-left, 18px/70px</td></tr>
+        <tr><td>Enora Slogan (A11)</td><td>SEE AN ISSUE —<br>BEFORE IT SEES YOU</td><td class="mono">JetBrains Mono</td><td>400</td><td>1.2rem</td><td><span class="swatch" style="background:rgba(255,255,255,0.55);"></span> rgba(255,255,255,0.55)</td><td>Bottom-right, 18px/70px</td></tr>
+        <tr><td>Centerline Slogan (A12)</td><td>FROM ZERO TO AGENTIC HERO</td><td class="mono">JetBrains Mono</td><td>400</td><td>0.96rem</td><td><span class="swatch" style="background:rgba(255,255,255,0.18);"></span> rgba(255,255,255,0.18)</td><td>Centered horizontally & vertically</td></tr>
+    </table>
+</div>
+
+<h3>Dark Side — QR Labels (Approach 12 Contact Card)</h3>
+<div class="text-spec">
+    <table>
+        <tr><th>Position</th><th>Name Label</th><th>Detail Label</th><th>Font</th><th>Name Size</th><th>Detail Size</th></tr>
+        <tr><td>Top-left</td><td>AAAS</td><td>aaas.blog</td><td class="mono">JetBrains Mono</td><td>0.42rem / rgba(255,255,255,0.5)</td><td>0.34rem / rgba(255,255,255,0.3)</td></tr>
+        <tr><td>Top-right</td><td>CTO: TOBIAS</td><td>+49 176 38380937</td><td class="mono">JetBrains Mono</td><td>0.42rem / rgba(255,255,255,0.5)</td><td>0.34rem / rgba(255,255,255,0.3)</td></tr>
+        <tr><td>Bottom-left</td><td>CRO: JORIAN</td><td>+49 176 32010267</td><td class="mono">JetBrains Mono</td><td>0.42rem / rgba(255,255,255,0.5)</td><td>0.34rem / rgba(255,255,255,0.3)</td></tr>
+        <tr><td>Bottom-right</td><td>ENORA</td><td>supra-forge.com</td><td class="mono">JetBrains Mono</td><td>0.42rem / rgba(255,255,255,0.5)</td><td>0.34rem / rgba(255,255,255,0.3)</td></tr>
+    </table>
+</div>
+
+<h3>TikTok Chromatic Text Effect Recipe</h3>
+<div class="note">
+    To recreate the TikTok/CRT text effect in Canva:<br><br>
+    1. Place the main text in <strong>white (#FFFFFF)</strong><br>
+    2. Duplicate the text layer — change color to <strong>#00FFC2</strong> (green), offset <strong>-2px left, -1px up</strong>, set opacity to <strong>60%</strong>, blend mode <strong>Screen</strong><br>
+    3. Duplicate again — change color to <strong>#F4224B</strong> (red), offset <strong>+2px right, +1px down</strong>, set opacity to <strong>60%</strong>, blend mode <strong>Screen</strong>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- CARD DIMENSIONS -->
+<!-- ═══════════════════════════════════════ -->
+<h2>Card Dimensions & Print Specs</h2>
+<div class="text-spec">
+    <table>
+        <tr><th>Property</th><th>Value</th></tr>
+        <tr><td>Card Size</td><td>3.5" × 2" (89mm × 51mm)</td></tr>
+        <tr><td>Corner Radius</td><td>18px screen / 3mm print</td></tr>
+        <tr><td>Canva Dimensions</td><td>1050 × 600 px (at 300 DPI)</td></tr>
+        <tr><td>Stock</td><td>600gsm Black core</td></tr>
+        <tr><td>Finish</td><td>Matte + Spot UV on circuit grid pattern</td></tr>
+        <tr><td>Edge Painting</td><td>#00F3FF (Cyan)</td></tr>
+    </table>
+</div>
+
+<h2>Color Palette</h2>
+<div class="assets-grid" style="margin-bottom:60px;">
+    <div class="asset-card" style="min-width:120px;">
+        <div style="width:60px;height:60px;border-radius:8px;background:#080809;border:1px solid rgba(255,255,255,0.15);"></div>
+        <div class="asset-label">Basalt Deep</div>
+        <div class="asset-detail">#080809</div>
+    </div>
+    <div class="asset-card" style="min-width:120px;">
+        <div style="width:60px;height:60px;border-radius:8px;background:#f4f3f0;"></div>
+        <div class="asset-label">Warm White</div>
+        <div class="asset-detail">#F4F3F0</div>
+    </div>
+    <div class="asset-card" style="min-width:120px;">
+        <div style="width:60px;height:60px;border-radius:8px;background:#00ffc2;"></div>
+        <div class="asset-label">AAAS Green</div>
+        <div class="asset-detail">#00FFC2</div>
+    </div>
+    <div class="asset-card" style="min-width:120px;">
+        <div style="width:60px;height:60px;border-radius:8px;background:#f4224b;"></div>
+        <div class="asset-label">Accent Red</div>
+        <div class="asset-detail">#F4224B</div>
+    </div>
+    <div class="asset-card" style="min-width:120px;">
+        <div style="width:60px;height:60px;border-radius:8px;background:#0088a0;"></div>
+        <div class="asset-label">Light Teal</div>
+        <div class="asset-detail">#0088A0</div>
+    </div>
+    <div class="asset-card" style="min-width:120px;">
+        <div style="width:60px;height:60px;border-radius:8px;background:#00f3ff;"></div>
+        <div class="asset-label">Edge Cyan</div>
+        <div class="asset-detail">#00F3FF</div>
+    </div>
+</div>
+
+<script>
+// ── QR Code Generation at High Resolution ──
+function generateHiResQR(containerId, url, fgColor, displaySize) {
+    var el = document.getElementById(containerId);
+    if (!el || typeof qrcode === 'undefined') return;
+    var qr = qrcode(0, 'M');
+    qr.addData(url);
+    qr.make();
+    var mc = qr.getModuleCount();
+    // Render at high res: target 800px output
+    var cellSize = Math.ceil(800 / mc);
+    var size = mc * cellSize;
+    var c = document.createElement('canvas');
+    c.width = size;
+    c.height = size;
+    c.style.width = (displaySize || 120) + 'px';
+    c.style.height = (displaySize || 120) + 'px';
+    c.style.imageRendering = 'pixelated';
+    var ctx = c.getContext('2d');
+    ctx.clearRect(0, 0, size, size);
+    ctx.fillStyle = fgColor;
+    for (var r = 0; r < mc; r++) {
+        for (var col = 0; col < mc; col++) {
+            if (qr.isDark(r, col)) {
+                ctx.fillRect(col * cellSize, r * cellSize, cellSize, cellSize);
+            }
+        }
+    }
+    el.appendChild(c);
+}
+
+// Website QRs — white and black variants
+generateHiResQR('qr-aaas-white', 'https://aaas.blog', '#ffffff', 120);
+generateHiResQR('qr-aaas-black', 'https://aaas.blog', '#1a1a1c', 120);
+generateHiResQR('qr-enora-white', 'https://www.supra-forge.com', '#ffffff', 120);
+generateHiResQR('qr-enora-black', 'https://www.supra-forge.com', '#1a1a1c', 120);
+
+// Phone QRs — white and black variants
+generateHiResQR('qr-tobias-white', 'tel:+4917638380937', '#ffffff', 120);
+generateHiResQR('qr-tobias-black', 'tel:+4917638380937', '#1a1a1c', 120);
+generateHiResQR('qr-jorian-white', 'tel:+4917632010267', '#ffffff', 120);
+generateHiResQR('qr-jorian-black', 'tel:+4917632010267', '#1a1a1c', 120);
+
+// ── Chromatic Matrix Background Layers ──
+(function() {
+    var qr = qrcode(0, 'L');
+    qr.addData('SUPRA-FORGE//AAAS//aaas.blog//supra-forge.com//from-zero-to-agentic-hero//venture-studio//autonomous-intelligence');
+    qr.make();
+    var mc = qr.getModuleCount();
+    var cellSize = Math.ceil(1120 / mc);
+    var size = mc * cellSize;
+
+    function mkMatrix(containerId, fgColor, displaySize) {
+        var el = document.getElementById(containerId);
+        if (!el) return;
+        var c = document.createElement('canvas');
+        c.width = size; c.height = size;
+        c.style.width = (displaySize || 180) + 'px';
+        c.style.height = (displaySize || 180) + 'px';
+        c.style.imageRendering = 'pixelated';
+        var ctx = c.getContext('2d');
+        ctx.clearRect(0, 0, size, size);
+        ctx.fillStyle = fgColor;
+        for (var r = 0; r < mc; r++)
+            for (var col = 0; col < mc; col++)
+                if (qr.isDark(r, col)) ctx.fillRect(col * cellSize, r * cellSize, cellSize, cellSize);
+        el.appendChild(c);
+    }
+
+    mkMatrix('matrix-white', '#ffffff', 180);
+    mkMatrix('matrix-green', '#00ffc2', 180);
+    mkMatrix('matrix-red', '#f4224b', 180);
+
+    // Edge strip layers (wider, shorter)
+    function mkEdge(containerId, fgColor) {
+        var el = document.getElementById(containerId);
+        if (!el) return;
+        var c = document.createElement('canvas');
+        c.width = size; c.height = size;
+        c.style.width = '280px';
+        c.style.height = '280px';
+        c.style.imageRendering = 'pixelated';
+        var ctx = c.getContext('2d');
+        ctx.clearRect(0, 0, size, size);
+        ctx.fillStyle = fgColor;
+        for (var r = 0; r < mc; r++)
+            for (var col = 0; col < mc; col++)
+                if (qr.isDark(r, col)) ctx.fillRect(col * cellSize, r * cellSize, cellSize, cellSize);
+        el.appendChild(c);
+    }
+
+    mkEdge('edge-base', '#ffffff');
+    mkEdge('edge-green', '#00ffc2');
+    mkEdge('edge-red', '#f4224b');
+
+    // ── Combined Edge Strip Variations ──
+    // Pre-render the QR matrix data for compositing
+    function renderMatrixData(fg, sz, mc, cellSz) {
+        var c = document.createElement('canvas');
+        c.width = sz; c.height = sz;
+        var ctx = c.getContext('2d');
+        ctx.fillStyle = fg;
+        for (var r = 0; r < mc; r++)
+            for (var col = 0; col < mc; col++)
+                if (qr.isDark(r, col)) ctx.fillRect(col * cellSz, r * cellSz, cellSz, cellSz);
+        return c;
+    }
+
+    var srcWhite = renderMatrixData('#ffffff', size, mc, cellSize);
+    var srcGreen = renderMatrixData('#00ffc2', size, mc, cellSize);
+    var srcRed   = renderMatrixData('#f4224b', size, mc, cellSize);
+
+    function compositeStrip(canvasId, opts) {
+        var c = document.getElementById(canvasId);
+        if (!c) return;
+        var ctx = c.getContext('2d');
+        var w = c.width, h = c.height;
+
+        // Background
+        if (opts.bg) {
+            ctx.fillStyle = opts.bg;
+            ctx.fillRect(0, 0, w, h);
+        }
+
+        // If this includes a gradient bar, draw it at the top
+        var stripY = 0;
+        if (opts.withBar) {
+            var barH = 18; // 6px * 3
+            var grad = ctx.createLinearGradient(0, 0, w, 0);
+            grad.addColorStop(0, '#00ffc2');
+            grad.addColorStop(0.5, '#0088a0');
+            grad.addColorStop(1, '#f4224b');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, w, barH);
+            // Dark strip below bar
+            ctx.fillStyle = '#080809';
+            ctx.fillRect(0, barH, w, h - barH);
+            stripY = barH;
+        }
+
+        // Calculate source crop: we want a horizontal strip from the center of the matrix
+        var srcCenterY = Math.floor(size / 2);
+        var stripH = h - stripY;
+        // Map strip height back to source pixels
+        var srcStripH = Math.floor(stripH * (size / w) * (w / 700)); // scale factor
+        var srcY = srcCenterY - Math.floor(srcStripH / 2);
+        if (srcY < 0) srcY = 0;
+
+        // Draw base white layer
+        ctx.globalAlpha = opts.baseOpacity;
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.drawImage(srcWhite, 0, srcY, size, srcStripH, 0, stripY, w, stripH);
+
+        // Draw green layer (screen blend, shifted)
+        ctx.globalAlpha = opts.chromaOpacity;
+        ctx.globalCompositeOperation = 'screen';
+        ctx.drawImage(srcGreen, 0, srcY, size, srcStripH, -9, stripY - 3, w, stripH);
+
+        // Draw red layer (screen blend, shifted opposite)
+        ctx.drawImage(srcRed, 0, srcY, size, srcStripH, 9, stripY + 3, w, stripH);
+
+        // Reset
+        ctx.globalAlpha = 1;
+        ctx.globalCompositeOperation = 'source-over';
+    }
+
+    // Standard (dark bg, standard intensity)
+    compositeStrip('combo-standard', {
+        bg: '#080809', baseOpacity: 0.12, chromaOpacity: 0.40
+    });
+
+    // High intensity
+    compositeStrip('combo-intense', {
+        bg: '#080809', baseOpacity: 0.18, chromaOpacity: 0.60
+    });
+
+    // Subtle
+    compositeStrip('combo-subtle', {
+        bg: '#080809', baseOpacity: 0.06, chromaOpacity: 0.20
+    });
+
+    // Tall strip
+    compositeStrip('combo-tall', {
+        bg: '#080809', baseOpacity: 0.12, chromaOpacity: 0.40
+    });
+
+    // Transparent bg — standard
+    compositeStrip('combo-transparent', {
+        bg: null, baseOpacity: 0.15, chromaOpacity: 0.50
+    });
+
+    // Transparent bg — intense
+    compositeStrip('combo-transparent-intense', {
+        bg: null, baseOpacity: 0.22, chromaOpacity: 0.70
+    });
+
+    // With gradient bar — standard
+    compositeStrip('combo-with-bar', {
+        bg: null, withBar: true, baseOpacity: 0.12, chromaOpacity: 0.40
+    });
+
+    // With gradient bar — intense
+    compositeStrip('combo-with-bar-intense', {
+        bg: null, withBar: true, baseOpacity: 0.18, chromaOpacity: 0.60
+    });
+})();
+
+// ── Full Card Background Composites ──
+(function() {
+    if (typeof qrcode === 'undefined') return;
+
+    // Generate QR matrix source canvases
+    var qr2 = qrcode(0, 'L');
+    qr2.addData('SUPRA-FORGE//AAAS//aaas.blog//supra-forge.com//from-zero-to-agentic-hero//venture-studio//autonomous-intelligence');
+    qr2.make();
+    var mc2 = qr2.getModuleCount();
+    var cs2 = Math.ceil(1120 / mc2);
+    var sz2 = mc2 * cs2;
+
+    function mkSrc(fg) {
+        var c = document.createElement('canvas');
+        c.width = sz2; c.height = sz2;
+        var ctx = c.getContext('2d');
+        ctx.fillStyle = fg;
+        for (var r = 0; r < mc2; r++)
+            for (var col = 0; col < mc2; col++)
+                if (qr2.isDark(r, col)) ctx.fillRect(col * cs2, r * cs2, cs2, cs2);
+        return c;
+    }
+
+    var mW = mkSrc('#ffffff');
+    var mG = mkSrc('#00ffc2');
+    var mR = mkSrc('#f4224b');
+
+    // ── Dark side full card ──
+    function compositeCardDark(canvasId, opts) {
+        var c = document.getElementById(canvasId);
+        if (!c) return;
+        var ctx = c.getContext('2d');
+        var w = c.width, h = c.height;
+
+        // Dark background
+        ctx.fillStyle = '#080809';
+        ctx.fillRect(0, 0, w, h);
+
+        // Center the QR matrix, scale to cover card
+        var scale = Math.max(w, h) / sz2 * 1.2;
+        var mw = sz2 * scale, mh = sz2 * scale;
+        var mx = (w - mw) / 2, my = (h - mh) / 2;
+
+        // White base matrix
+        ctx.globalAlpha = opts.baseOpacity;
+        ctx.drawImage(mW, mx, my, mw, mh);
+
+        if (opts.chromaOpacity > 0) {
+            // Green layer — shifted
+            ctx.globalCompositeOperation = 'screen';
+            ctx.globalAlpha = opts.chromaOpacity;
+            ctx.drawImage(mG, mx - 6, my - 4, mw, mh);
+
+            // Red layer — shifted opposite
+            ctx.drawImage(mR, mx + 6, my + 4, mw, mh);
+        }
+
+        ctx.globalAlpha = 1;
+        ctx.globalCompositeOperation = 'source-over';
+    }
+
+    compositeCardDark('card-dark-standard', { baseOpacity: 0.06, chromaOpacity: 0.35 });
+    compositeCardDark('card-dark-intense', { baseOpacity: 0.10, chromaOpacity: 0.55 });
+    compositeCardDark('card-dark-subtle', { baseOpacity: 0.03, chromaOpacity: 0.15 });
+    compositeCardDark('card-dark-noshift', { baseOpacity: 0.06, chromaOpacity: 0 });
+
+    // ── Light side full card ──
+    function compositeCardLight(canvasId, opts) {
+        var c = document.getElementById(canvasId);
+        if (!c) return;
+        var ctx = c.getContext('2d');
+        var w = c.width, h = c.height;
+
+        // Off-white background
+        ctx.fillStyle = '#f4f3f0';
+        ctx.fillRect(0, 0, w, h);
+
+        // Gradient bar position
+        var stripH = opts.stripHeight || 57; // 19px * 3
+        var barH = 18; // 6px * 3
+        var barY = h - stripH - barH;
+
+        // Gradient bar
+        var grad = ctx.createLinearGradient(0, 0, w, 0);
+        grad.addColorStop(0, '#00ffc2');
+        grad.addColorStop(0.5, '#0088a0');
+        grad.addColorStop(1, '#f4224b');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, barY, w, barH);
+
+        // Dark strip below bar
+        ctx.fillStyle = '#080809';
+        ctx.fillRect(0, barY + barH, w, stripH);
+
+        // QR matrix in the dark strip area
+        var scale = w / sz2 * 1.5;
+        var mw = sz2 * scale, mh = sz2 * scale;
+        var mx = (w - mw) / 2;
+
+        // Clip to strip area
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(0, barY + barH, w, stripH);
+        ctx.clip();
+
+        ctx.globalAlpha = opts.baseOpacity;
+        ctx.drawImage(mW, mx, barY + barH - mh / 2 + stripH / 2, mw, mh);
+
+        ctx.globalCompositeOperation = 'screen';
+        ctx.globalAlpha = opts.chromaOpacity;
+        ctx.drawImage(mG, mx - 5, barY + barH - mh / 2 + stripH / 2 - 2, mw, mh);
+        ctx.drawImage(mR, mx + 5, barY + barH - mh / 2 + stripH / 2 + 2, mw, mh);
+
+        ctx.restore();
+        ctx.globalAlpha = 1;
+        ctx.globalCompositeOperation = 'source-over';
+    }
+
+    compositeCardLight('card-light-standard', { baseOpacity: 0.12, chromaOpacity: 0.40 });
+    compositeCardLight('card-light-intense', { baseOpacity: 0.18, chromaOpacity: 0.60 });
+    compositeCardLight('card-light-tall', { baseOpacity: 0.12, chromaOpacity: 0.40, stripHeight: 120 });
+})();
+
+// ── Gradient Bar ──
+(function() {
+    var c = document.getElementById('gradient-bar');
+    if (!c) return;
+    var ctx = c.getContext('2d');
+    var grad = ctx.createLinearGradient(0, 0, c.width, 0);
+    grad.addColorStop(0, '#00ffc2');
+    grad.addColorStop(0.5, '#0088a0');
+    grad.addColorStop(1, '#f4224b');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, c.width, c.height);
+})();
+
+// ── Download Helpers ──
+function dlCanvas(containerId, filename) {
+    var el = document.getElementById(containerId);
+    var canvas = el.querySelector('canvas');
+    if (!canvas) return;
+    var a = document.createElement('a');
+    a.download = filename;
+    a.href = canvas.toDataURL('image/png');
+    a.click();
+}
+
+function dlCanvasById(canvasId, filename) {
+    var canvas = document.getElementById(canvasId);
+    if (!canvas) return;
+    var a = document.createElement('a');
+    a.download = filename;
+    a.href = canvas.toDataURL('image/png');
+    a.click();
+}
+
+function dlSolid(w, h, color, filename) {
+    var c = document.createElement('canvas');
+    c.width = w; c.height = h;
+    var ctx = c.getContext('2d');
+    ctx.fillStyle = color;
+    ctx.fillRect(0, 0, w, h);
+    var a = document.createElement('a');
+    a.download = filename;
+    a.href = c.toDataURL('image/png');
+    a.click();
+}
+
+function dlSvg(containerId, filename) {
+    var el = document.getElementById(containerId);
+    var svg = el.querySelector('svg');
+    if (!svg) return;
+    var serializer = new XMLSerializer();
+    var source = serializer.serializeToString(svg);
+    if (!source.match(/^<svg[^>]+xmlns/)) {
+        source = source.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
+    }
+    var blob = new Blob([source], { type: 'image/svg+xml;charset=utf-8' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.download = filename;
+    a.href = url;
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
+function dlSvgAsPng(containerId, filename, pxSize) {
+    var el = document.getElementById(containerId);
+    var svg = el.querySelector('svg');
+    if (!svg) return;
+    var serializer = new XMLSerializer();
+    var source = serializer.serializeToString(svg);
+    var img = new Image();
+    var blob = new Blob([source], { type: 'image/svg+xml;charset=utf-8' });
+    var url = URL.createObjectURL(blob);
+    img.onload = function() {
+        var c = document.createElement('canvas');
+        c.width = pxSize; c.height = pxSize;
+        var ctx = c.getContext('2d');
+        ctx.drawImage(img, 0, 0, pxSize, pxSize);
+        var a = document.createElement('a');
+        a.download = filename;
+        a.href = c.toDataURL('image/png');
+        a.click();
+        URL.revokeObjectURL(url);
+    };
+    img.src = url;
+}
+</script>
+
+</body>
+</html>

@@ -34,18 +34,18 @@
            LIGHT MODE
            ═══════════════════════════════════════════ */
         [data-theme="light"] {
-            --basalt-deep: #f4f3f0;
-            --basalt-surface: #dddcd8;
-            --basalt-bright: #c8c7c3;
+            --basalt-deep: #eaeae8;
+            --basalt-surface: #e0e0dd;
+            --basalt-bright: #d4d4d0;
             --circuit-glow: #0088a0;
-            --circuit-dim: rgba(0, 136, 160, 0.12);
+            --circuit-dim: rgba(0, 136, 160, 0.15);
             --accent-red: #c91e42;
             --accent-red-dim: rgba(201, 30, 66, 0.1);
             --accent-red-glow: rgba(201, 30, 66, 0.3);
-            --text-main: #1a1a1c;
-            --text-muted: rgba(26, 26, 28, 0.5);
-            --border: rgba(0, 0, 0, 0.06);
-            --border-strong: rgba(0, 0, 0, 0.12);
+            --text-main: #111113;
+            --text-muted: rgba(17, 17, 19, 0.55);
+            --border: rgba(0, 0, 0, 0.08);
+            --border-strong: rgba(0, 0, 0, 0.14);
         }
 
         [data-theme="light"] body::before {
@@ -54,30 +54,38 @@
         }
 
         [data-theme="light"] .monolith-title {
-            background: linear-gradient(180deg, #1a1a1c 0%, #888 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
+            background: none;
+            -webkit-background-clip: unset;
+            background-clip: unset;
+            -webkit-text-fill-color: var(--text-main);
+            color: var(--text-main);
         }
 
         [data-theme="light"] .navbar {
-            background: rgba(244, 243, 240, 0.85);
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
         }
 
         [data-theme="light"] .chromium-canvas {
-            background: radial-gradient(circle at 50% 40%, #fff 0%, var(--basalt-deep) 70%);
+            background: radial-gradient(circle at 50% 40%, #fff 0%, #e2e2df 70%);
         }
 
         [data-theme="light"] .module {
-            background: rgba(255, 255, 255, 0.5);
-            border-color: rgba(0, 0, 0, 0.06);
+            background: rgba(255, 255, 255, 0.82);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-color: rgba(255, 255, 255, 0.6);
+            box-shadow: 0 2px 16px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.8);
         }
 
         [data-theme="light"] .module:hover {
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.92);
+            box-shadow: 0 0 24px var(--circuit-dim), 0 8px 32px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.9);
         }
 
         [data-theme="light"] .module::before {
-            background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(0, 136, 160, 0.06) 0%, transparent 50%);
+            background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(0, 136, 160, 0.05) 0%, transparent 50%);
         }
 
         [data-theme="light"] .pricing-card.featured {
@@ -89,19 +97,25 @@
         }
 
         [data-theme="light"] .metric-card {
-            background: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.78);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.7);
         }
 
         [data-theme="light"] .metric-card:hover {
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.92);
         }
 
         [data-theme="light"] .feed-item {
-            background: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.78);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.7);
         }
 
         [data-theme="light"] .feed-item:hover {
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.92);
         }
 
         [data-theme="light"] .btn-primary:hover {
@@ -439,9 +453,11 @@
         }
 
         [data-theme="light"] .tectonic-title {
-            background: linear-gradient(180deg, #1a1a1c 0%, #888 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
+            background: none;
+            -webkit-background-clip: unset;
+            background-clip: unset;
+            -webkit-text-fill-color: var(--text-main);
+            color: var(--text-main);
         }
 
         .tectonic-desc {
@@ -482,18 +498,20 @@
         }
 
         [data-theme="light"] .plate {
-            background: rgba(255, 255, 255, 0.6);
-            box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.08);
+            background: rgba(255, 255, 255, 0.82);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.8);
         }
 
         [data-theme="light"] .plate:hover {
-            background: rgba(255, 255, 255, 0.8);
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12);
-            border-color: rgba(0, 136, 160, 0.3);
+            background: rgba(255, 255, 255, 0.92);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+            border-color: rgba(0, 136, 160, 0.25);
         }
 
         [data-theme="light"] .plate::before {
-            background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(0, 136, 160, 0.06) 0%, transparent 50%);
+            background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(0, 136, 160, 0.05) 0%, transparent 50%);
         }
 
         /* Geometric accent triangle */
@@ -548,7 +566,9 @@
         }
 
         [data-theme="light"] .data-plate {
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
         }
 
         /* Agent item rows */
@@ -614,8 +634,9 @@
         }
 
         [data-theme="light"] .results-ticker {
-            background: linear-gradient(180deg, #1a1a1c 0%, #888 100%);
-            -webkit-background-clip: text;
+            background: none;
+            -webkit-background-clip: unset;
+            -webkit-text-fill-color: var(--text-main);
         }
 
         /* Plate footer text */
@@ -680,22 +701,6 @@
             background: rgba(255, 255, 255, 0.02);
         }
 
-        [data-theme="light"] .module {
-            background: rgba(255, 255, 255, 0.5);
-        }
-
-        [data-theme="light"] .module:hover {
-            background: rgba(255, 255, 255, 0.7);
-        }
-
-        [data-theme="light"] .module::before {
-            background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(0, 136, 160, 0.06) 0%, transparent 50%);
-        }
-
-        [data-theme="light"] .modular-grid {
-            background-color: var(--basalt-bright);
-        }
-
         /* Hero panel — 8 columns, spans 2 rows */
         .hero-panel {
             grid-column: span 8;
@@ -758,7 +763,7 @@
         }
 
         [data-theme="light"] .control-panel {
-            background: radial-gradient(circle at top right, rgba(0, 136, 160, 0.08), rgba(255, 255, 255, 0.5));
+            background: radial-gradient(circle at top right, rgba(0, 136, 160, 0.08), rgba(255, 255, 255, 0.82));
         }
 
         .cta-button {
@@ -1817,10 +1822,10 @@ MODE: PAY_PER_RESULT</div>
             scrollAccumulator += delta;
 
             if (scrollAccumulator > scrollThreshold) {
-                setTheme('light');
+                setTheme('dark');
                 scrollAccumulator = 0;
             } else if (scrollAccumulator < -scrollThreshold) {
-                setTheme('dark');
+                setTheme('light');
                 scrollAccumulator = 0;
             }
 
