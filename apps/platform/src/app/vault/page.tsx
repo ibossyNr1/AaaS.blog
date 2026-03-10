@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Card, Badge, Container, Section, DataTape, cn } from "@aaas/ui";
 import { FadeUp, CountUp } from "@/components/motion";
 import { CTABlock } from "@/components/cta-block";
+import { CircuitBackground } from "@/components/circuit-background";
 
 const categories = [
   "All",
@@ -143,6 +144,7 @@ export default function VaultPage() {
 
   return (
     <>
+      <CircuitBackground />
       {/* Hero — Metaball */}
       <Section className="relative pt-32 pb-16 overflow-hidden">
         <div className="absolute inset-0 pointer-events-none overflow-hidden">

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Card, Container, Section, KineticBar, AgentRoster, cn } from "@aaas/ui";
+import { Card, Container, Section, KineticBar, cn } from "@aaas/ui";
 import { FadeUp } from "@/components/motion";
 import { CTABlock } from "@/components/cta-block";
 import { MetaballField } from "@/components/metaball-field";
@@ -93,12 +93,12 @@ const models = [
   { name: "Mistral Large", provider: "Mistral", use: "European compliance tasks" },
 ];
 
-const sampleAgents = [
-  { name: "ctx-engine", role: "Context vectorization & retrieval", status: "active" as const, model: "opus" },
-  { name: "mkt-writer", role: "Marketing content generation", status: "active" as const, model: "sonnet" },
-  { name: "lead-scout", role: "Lead research & qualification", status: "learning" as const, model: "gpt-4o" },
-  { name: "audit-bot", role: "ISO 9001 compliance scanning", status: "active" as const, model: "opus" },
-  { name: "data-synth", role: "Analytics & report generation", status: "idle" as const, model: "gemini" },
+const liveAgents = [
+  { name: "ctx-engine", role: "Context vectorization", fill: 92, status: "active" as const, model: "opus", billing: "$0.00" },
+  { name: "mkt-writer", role: "Content generation", fill: 67, status: "active" as const, model: "sonnet", billing: "$0.00" },
+  { name: "lead-scout", role: "Lead qualification", fill: 35, status: "learning" as const, model: "gpt-4o", billing: "$0.00" },
+  { name: "audit-bot", role: "ISO 9001 scanning", fill: 100, status: "complete" as const, model: "opus", billing: "+$3.20" },
+  { name: "data-synth", role: "Report generation", fill: 48, status: "active" as const, model: "gemini", billing: "$0.00" },
 ];
 
 export default function PlatformPage() {
@@ -109,23 +109,31 @@ export default function PlatformPage() {
       <MergeBackground />
       <ClickFlash />
 
-      {/* Hero — Metaball style */}
+      {/* Hero — with metaball field */}
       <section className="relative pt-32 pb-16 overflow-hidden min-h-[80vh] flex items-center">
         <MetaballField />
 
-        <Container className="relative z-10 text-center">
+        <Container className="relative z-10">
           <FadeUp>
-            <SectionTopic className="justify-center">The Platform</SectionTopic>
-            <h1 className="monolith-title text-4xl md:text-6xl font-bold mb-4 uppercase tracking-tight">
+            <SectionTopic>The Platform</SectionTopic>
+          </FadeUp>
+          <FadeUp delay={0.1}>
+            <h1 className="monolith-title text-[clamp(3rem,10vw,7rem)] font-black leading-[0.85] tracking-[-0.04em] uppercase mb-4">
               Context-First<br />Agent Architecture
             </h1>
-            <KineticBar className="max-w-md mx-auto my-6" />
-            <p className="text-lg text-text-muted max-w-2xl mx-auto mb-8">
+          </FadeUp>
+          <FadeUp delay={0.2}>
+            <KineticBar className="max-w-md my-6" />
+          </FadeUp>
+          <FadeUp delay={0.3}>
+            <p className="text-lg font-light text-text-muted max-w-[560px] leading-relaxed mb-8">
               Every agent runs on your structured business context. No generic
               prompts. No hallucinated strategy. Real understanding, real
               execution — powered by the world&apos;s best language models.
             </p>
-            <div className="flex flex-wrap justify-center gap-3">
+          </FadeUp>
+          <FadeUp delay={0.4}>
+            <div className="flex flex-wrap gap-3">
               <span className="font-mono text-[0.6rem] uppercase tracking-[0.15rem] px-3 py-1 border border-circuit text-circuit bg-circuit/5">LLM Agnostic</span>
               <span className="font-mono text-[0.6rem] uppercase tracking-[0.15rem] px-3 py-1 border border-accent-red text-accent-red bg-accent-red/5">MCP Native</span>
               <span className="font-mono text-[0.6rem] uppercase tracking-[0.15rem] px-3 py-1 border border-circuit text-circuit bg-circuit/5">Self-Optimizing</span>
@@ -138,20 +146,20 @@ export default function PlatformPage() {
 
       {/* Lock-On Mechanism */}
       <Section variant="bedrock">
-        <Container className="text-center">
+        <Container>
           <FadeUp>
-            <SectionTopic className="justify-center">The Lock-On Effect</SectionTopic>
-            <h2 className="monolith-title text-3xl md:text-4xl font-bold mb-6 uppercase tracking-tight">
-              Your Business Nervous System
+            <SectionTopic>The Lock-On Effect</SectionTopic>
+            <h2 className="monolith-title text-[clamp(2rem,5vw,3.5rem)] font-black leading-[0.9] tracking-[-0.03em] uppercase mb-6">
+              Your Business<br />Nervous System
             </h2>
-            <p className="text-text-muted max-w-2xl mx-auto leading-relaxed mb-8">
+            <p className="text-text-muted max-w-[560px] leading-relaxed mb-8">
               Unlike vendor lock-in that traps you with proprietary formats, AaaS creates
               <span className="text-circuit"> Lock-On</span> — your agents become so deeply
               integrated with your workflows, so precisely tuned to your context, that the
               system becomes indispensable. Not because you can&apos;t leave, but because
               nothing else understands your business this well.
             </p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl">
               {[
                 { label: "Context Depth", value: "847K vectors", sub: "Your business DNA" },
                 { label: "Tool Integrations", value: "Unlimited", sub: "MCPs + APIs" },
@@ -174,13 +182,13 @@ export default function PlatformPage() {
       <Section id="how-it-works">
         <Container>
           <FadeUp>
-            <SectionTopic className="justify-center">Evolution Loop</SectionTopic>
-            <h2 className="monolith-title text-3xl md:text-4xl font-bold text-center mb-16 uppercase tracking-tight">
+            <SectionTopic>Evolution Loop</SectionTopic>
+            <h2 className="monolith-title text-[clamp(2rem,5vw,3.5rem)] font-black leading-[0.9] tracking-[-0.03em] uppercase mb-12">
               The Evolution Loop
             </h2>
           </FadeUp>
 
-          <div className="flex flex-wrap justify-center gap-3 mb-12">
+          <div className="flex flex-wrap gap-3 mb-12">
             {evolutionSteps.map((step, i) => (
               <button
                 key={step.title}
@@ -198,7 +206,7 @@ export default function PlatformPage() {
             ))}
           </div>
 
-          <div className="max-w-2xl mx-auto text-center">
+          <div className="max-w-2xl">
             <h3 className="text-2xl font-semibold text-text mb-4">
               {evolutionSteps[activeEvolution]!.title}
             </h3>
@@ -216,10 +224,10 @@ export default function PlatformPage() {
         <Container>
           <FadeUp>
             <SectionTopic>Agent Capabilities</SectionTopic>
-            <h2 className="monolith-title text-3xl md:text-4xl font-bold text-center mb-4 uppercase tracking-tight">
+            <h2 className="monolith-title text-[clamp(2rem,5vw,3.5rem)] font-black leading-[0.9] tracking-[-0.03em] uppercase mb-4">
               What Agents Can Do
             </h2>
-            <p className="text-text-muted text-center mb-16 max-w-xl mx-auto">
+            <p className="text-text-muted mb-12 max-w-[560px]">
               Six capability domains, infinite applications — all powered by
               your business context and the right model for each task.
             </p>
@@ -253,17 +261,15 @@ export default function PlatformPage() {
       <Section>
         <Container>
           <FadeUp>
-            <div className="text-center mb-12">
-              <SectionTopic className="justify-center">LLM Agnostic</SectionTopic>
-              <h2 className="monolith-title text-3xl md:text-4xl font-bold mb-4 uppercase tracking-tight">
-                Best Model for Every Task
-              </h2>
-              <p className="text-text-muted max-w-2xl mx-auto">
-                AaaS automatically selects the optimal language model for each task.
-                Complex reasoning? Opus. Fast content? Sonnet. Data analysis? GPT-4o.
-                Your agents always use the sharpest tool.
-              </p>
-            </div>
+            <SectionTopic>LLM Agnostic</SectionTopic>
+            <h2 className="monolith-title text-[clamp(2rem,5vw,3.5rem)] font-black leading-[0.9] tracking-[-0.03em] uppercase mb-4">
+              Best Model for<br />Every Task
+            </h2>
+            <p className="text-text-muted max-w-[560px] mb-12">
+              AaaS automatically selects the optimal language model for each task.
+              Complex reasoning? Opus. Fast content? Sonnet. Data analysis? GPT-4o.
+              Your agents always use the sharpest tool.
+            </p>
           </FadeUp>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -285,20 +291,86 @@ export default function PlatformPage() {
 
       <SectionDivider />
 
-      {/* Live Agent Roster */}
+      {/* Live Agent Feed — deploy-feed style */}
       <Section>
-        <Container className="max-w-3xl">
+        <Container>
           <FadeUp>
-            <SectionTopic className="justify-center">Live Status</SectionTopic>
-            <h2 className="monolith-title text-3xl md:text-4xl font-bold text-center mb-4 uppercase tracking-tight">
-              Active Agent Roster
+            <SectionTopic>Live Status</SectionTopic>
+            <h2 className="monolith-title text-[clamp(2rem,5vw,3.5rem)] font-black leading-[0.9] tracking-[-0.03em] uppercase mb-4">
+              Active Agent<br />Roster
             </h2>
-            <p className="text-text-muted text-center mb-12">
+            <p className="text-text-muted max-w-[560px] mb-12">
               A live snapshot of agents currently deployed across the network.
             </p>
           </FadeUp>
+
           <FadeUp delay={0.1}>
-            <AgentRoster agents={sampleAgents} />
+            <div className="max-w-3xl bg-surface border border-border p-8 shadow-[0_8px_32px_rgba(0,0,0,0.3)]">
+              {/* Feed header */}
+              <div className="flex justify-between font-mono text-[0.6rem] text-text-muted uppercase tracking-[0.05rem] pb-3 border-b border-border">
+                <span>LIVE_AGENT_FEED</span>
+                <span>LATENCY: 12ms</span>
+              </div>
+
+              {/* Engine rows */}
+              <div className="flex flex-col gap-5 mt-5">
+                {liveAgents.map((agent) => (
+                  <div
+                    key={agent.name}
+                    className="h-9 flex items-center gap-3 font-mono text-xs border-b border-border pb-2 last:border-b-0"
+                  >
+                    {/* Status dot */}
+                    <div
+                      className={cn(
+                        "w-1.5 h-1.5 rounded-full shrink-0",
+                        agent.status === "complete"
+                          ? "bg-accent-red shadow-[0_0_8px_var(--accent-red-glow)]"
+                          : agent.status === "learning"
+                            ? "bg-accent-red shadow-[0_0_8px_var(--accent-red-glow)] animate-feed-pulse"
+                            : "bg-circuit shadow-[0_0_8px_var(--circuit-dim)] animate-feed-pulse"
+                      )}
+                    />
+                    {/* Agent name */}
+                    <div className="w-28 shrink-0 whitespace-nowrap">{agent.name}</div>
+                    {/* Model badge */}
+                    <span className="text-[0.55rem] text-circuit/50 bg-circuit/5 px-1.5 py-px shrink-0 hidden sm:block">
+                      {agent.model}
+                    </span>
+                    {/* Progress track */}
+                    <div className="flex-1 h-0.5 bg-surface-bright relative">
+                      <div
+                        className={cn(
+                          "absolute left-0 top-0 h-full transition-[width] duration-[2s] ease-in-out",
+                          agent.status === "complete"
+                            ? "bg-accent-red"
+                            : agent.status === "learning"
+                              ? "bg-accent-red"
+                              : "bg-circuit"
+                        )}
+                        style={{ width: `${agent.fill}%` }}
+                      />
+                    </div>
+                    {/* Billing tag */}
+                    <div
+                      className={cn(
+                        "text-[0.65rem] px-1.5 py-px shrink-0",
+                        agent.status === "complete"
+                          ? "bg-accent-red-dim text-accent-red"
+                          : "bg-circuit-dim text-circuit"
+                      )}
+                    >
+                      {agent.billing}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Feed total */}
+              <div className="pt-4 mt-4 border-t border-border flex justify-between font-mono text-xs">
+                <span className="text-text-muted">TOTAL_SETTLEMENT</span>
+                <span className="text-circuit font-bold">$3.20 USD</span>
+              </div>
+            </div>
           </FadeUp>
         </Container>
       </Section>
@@ -307,13 +379,13 @@ export default function PlatformPage() {
 
       {/* Adaptability */}
       <Section variant="bedrock">
-        <Container className="text-center">
+        <Container>
           <FadeUp>
-            <SectionTopic className="justify-center">Continuous Alignment</SectionTopic>
-            <h2 className="monolith-title text-3xl md:text-4xl font-bold mb-6 uppercase tracking-tight">
-              Agents That Grow With You
+            <SectionTopic>Continuous Alignment</SectionTopic>
+            <h2 className="monolith-title text-[clamp(2rem,5vw,3.5rem)] font-black leading-[0.9] tracking-[-0.03em] uppercase mb-6">
+              Agents That<br />Grow With You
             </h2>
-            <p className="text-text-muted max-w-2xl mx-auto mb-8 leading-relaxed">
+            <p className="text-text-muted max-w-[560px] mb-8 leading-relaxed">
               As your business evolves, your agents evolve too. New products,
               new markets, new strategies — the context layer adapts instantly,
               and agents immediately reflect the change. No retraining. No

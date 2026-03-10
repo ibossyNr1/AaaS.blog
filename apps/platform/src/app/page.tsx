@@ -1,3 +1,4 @@
+import { CircuitBackground } from "@/components/circuit-background";
 import { Hero } from "@/components/hero";
 import { ValueStrip } from "@/components/value-strip";
 import { ThreePillars } from "@/components/three-pillars";
@@ -10,6 +11,7 @@ import { CTABlock } from "@/components/cta-block";
 export default function Home() {
   return (
     <>
+      <CircuitBackground />
       <Hero />
       <ValueStrip />
       <ThreePillars />

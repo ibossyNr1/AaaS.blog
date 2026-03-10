@@ -61,8 +61,8 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
           else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
         }}
         className={cn(
-          "relative p-8 transition-all duration-500 ease-liquid",
-          "hover:-translate-y-1 hover:border-circuit/30",
+          "group relative p-8 transition-all duration-500 ease-liquid overflow-hidden",
+          "hover:-translate-y-2 hover:border-circuit/25 hover:shadow-[0_0_20px_var(--circuit-dim),0_8px_32px_rgba(0,0,0,0.3)]",
           variantStyles[variant],
           spotlight &&
             "before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-500 before:bg-[radial-gradient(600px_circle_at_var(--spotlight-x)_var(--spotlight-y),rgba(0,243,255,0.06),transparent_40%)]",
@@ -72,7 +72,14 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
         onMouseMove={handleMouseMove}
         {...props}
       >
-        <div className={cn("absolute top-0 left-0 w-10 h-0.5", accentBar)} />
+        {/* Full-width hover shine line at top */}
+        <div
+          className={cn(
+            "absolute top-0 left-0 right-0 h-0.5 opacity-0 transition-opacity duration-400",
+            "group-hover:opacity-100",
+            accentBar
+          )}
+        />
         {children}
       </div>
     );

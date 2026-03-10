@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Button, Card, Badge, Container, Section } from "@aaas/ui";
 import { FadeUp } from "@/components/motion";
 import { CTABlock } from "@/components/cta-block";
+import { CircuitBackground } from "@/components/circuit-background";
+import { SectionTopic } from "@/components/section-topic";
+import { SectionDivider } from "@/components/section-divider";
 
 export const metadata: Metadata = {
   title: "Collaborate | Agent-as-a-Service",
@@ -64,32 +67,36 @@ const ventureStats = [
 export default function CollaboratePage() {
   return (
     <>
-      {/* Hero — Aura */}
-      <Section className="relative pt-32 pb-16 overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute top-1/4 right-1/3 w-48 md:w-96 h-48 md:h-96 rounded-full bg-accent-red/5 blur-3xl animate-aura-drift" />
-          <div className="absolute bottom-0 left-1/4 w-40 md:w-80 h-40 md:h-80 rounded-full bg-circuit/6 blur-3xl animate-aura-drift" style={{ animationDelay: "3s" }} />
-        </div>
+      <CircuitBackground />
 
-        <Container className="relative z-10 text-center">
+      {/* Hero — Bedrock style with circuit traces */}
+      <section className="relative pt-32 pb-16 overflow-hidden min-h-[60vh] flex items-center">
+        <Container className="relative z-10">
           <FadeUp>
-            <Badge variant="red" className="mb-4">Collaborate</Badge>
-            <h1 className="monolith-title text-4xl md:text-6xl font-bold mb-4 uppercase tracking-tight">
-              Build the Future<br />With Us
+            <SectionTopic>Collaborate</SectionTopic>
+          </FadeUp>
+          <FadeUp delay={0.1}>
+            <h1 className="monolith-title text-[clamp(3rem,10vw,7rem)] font-black leading-[0.85] tracking-[-0.04em] uppercase mb-4">
+              Build the<br />Future With Us
             </h1>
-            <p className="text-lg text-text-muted max-w-2xl mx-auto">
+          </FadeUp>
+          <FadeUp delay={0.2}>
+            <p className="text-lg font-light text-text-muted max-w-[560px] leading-relaxed">
               Three paths to partnership. Whether you&apos;re investing in AI
               infrastructure, building a venture that needs it, or have an
               audience that wants it — we&apos;re looking for aligned partners.
             </p>
           </FadeUp>
         </Container>
-      </Section>
+      </section>
+
+      <SectionDivider />
 
       {/* Two Cards — Bedrock */}
-      <Section className="py-12" divider="red">
+      <Section variant="bedrock">
         <Container>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <SectionTopic>Partnership Paths</SectionTopic>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
             <FadeUp>
               <Card variant="bedrock" spotlight className="h-full flex flex-col">
                 <Badge className="mb-4 self-start">For Investors</Badge>
@@ -179,39 +186,48 @@ export default function CollaboratePage() {
         </Container>
       </Section>
 
-      {/* Venture Stats */}
-      <Section variant="surface" className="py-12">
+      <SectionDivider />
+
+      {/* Venture Stats — stats ticker style */}
+      <Section className="py-16">
         <Container>
-          <FadeUp>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-              {ventureStats.map((s) => (
-                <div key={s.label}>
-                  <div className="text-2xl font-bold font-mono text-circuit">{s.value}</div>
-                  <div className="font-mono text-xs uppercase tracking-wider text-text-muted mt-1">{s.label}</div>
+          <div className="flex flex-col sm:flex-row justify-between py-12 border-t border-b border-border">
+            {ventureStats.map((s, i) => (
+              <FadeUp key={s.label} delay={i * 0.08}>
+                <div className="text-center flex-1 relative py-4 sm:py-0">
+                  {i > 0 && (
+                    <div className="hidden sm:block absolute left-0 top-[20%] h-[60%] w-px bg-border" />
+                  )}
+                  <div className="monolith-title text-3xl font-black mb-2">
+                    {s.value}
+                  </div>
+                  <div className="font-mono text-[0.6rem] text-text-muted uppercase tracking-[0.2rem]">
+                    {s.label}
+                  </div>
                 </div>
-              ))}
-            </div>
-          </FadeUp>
+              </FadeUp>
+            ))}
+          </div>
         </Container>
       </Section>
 
+      <SectionDivider />
+
       {/* Equity Model Timeline */}
-      <Section divider>
+      <Section>
         <Container>
           <FadeUp>
-            <div className="text-center mb-16">
-              <Badge className="mb-4">The Process</Badge>
-              <h2 className="monolith-title text-3xl md:text-4xl font-bold uppercase tracking-tight">
-                The Equity Model
-              </h2>
-            </div>
+            <SectionTopic>The Process</SectionTopic>
+            <h2 className="monolith-title text-[clamp(2rem,5vw,3.5rem)] font-black leading-[0.9] tracking-[-0.03em] uppercase mb-12">
+              The Equity Model
+            </h2>
           </FadeUp>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {equitySteps.map((step, i) => (
               <FadeUp key={step.number} delay={i * 0.12}>
-                <div className="text-center">
-                  <div className="w-20 h-20 glass rounded-full flex items-center justify-center mx-auto mb-6 relative">
+                <div>
+                  <div className="w-20 h-20 bedrock rounded-full flex items-center justify-center mb-6 relative">
                     <span className="text-circuit font-mono font-bold text-xl">
                       {step.icon}
                     </span>
@@ -231,21 +247,21 @@ export default function CollaboratePage() {
         </Container>
       </Section>
 
+      <SectionDivider />
+
       {/* Ambassador Program */}
-      <Section variant="bedrock" divider="red">
+      <Section variant="bedrock">
         <Container>
           <FadeUp>
-            <div className="text-center mb-12">
-              <Badge variant="red" className="mb-4">For Creators</Badge>
-              <h2 className="monolith-title text-3xl md:text-4xl font-bold mb-4 uppercase tracking-tight">
-                Ambassador Program
-              </h2>
-              <p className="text-text-muted max-w-2xl mx-auto">
-                Are you a YouTuber, LinkedIn creator, or AI influencer with an engaged
-                audience? We&apos;ll build your specific workflows into the platform and give
-                you a co-branded instance. Your methodology, automated and scalable.
-              </p>
-            </div>
+            <SectionTopic>For Creators</SectionTopic>
+            <h2 className="monolith-title text-[clamp(2rem,5vw,3.5rem)] font-black leading-[0.9] tracking-[-0.03em] uppercase mb-4">
+              Ambassador<br />Program
+            </h2>
+            <p className="text-text-muted max-w-[560px] mb-12">
+              Are you a YouTuber, LinkedIn creator, or AI influencer with an engaged
+              audience? We&apos;ll build your specific workflows into the platform and give
+              you a co-branded instance. Your methodology, automated and scalable.
+            </p>
           </FadeUp>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -260,7 +276,7 @@ export default function CollaboratePage() {
           </div>
 
           <FadeUp delay={0.4}>
-            <div className="text-center mt-12">
+            <div className="mt-12">
               <a href={BOOKING_LINK} target="_blank" rel="noopener noreferrer">
                 <Button variant="red" size="lg">Become an Ambassador</Button>
               </a>

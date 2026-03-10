@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
-import { CircuitBackground } from "@/components/circuit-background";
 import { DataStream } from "@/components/data-stream";
 import "./globals.css";
 
@@ -42,7 +41,6 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased`}
       >
-        <CircuitBackground />
         <Navbar />
         <main className="min-h-screen">{children}</main>
         <Footer />

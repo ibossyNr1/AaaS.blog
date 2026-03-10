@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Button, Card, Badge, Container, Section, TerminalFeed } from "@aaas/ui";
 import { FadeUp } from "@/components/motion";
 import { CTABlock } from "@/components/cta-block";
+import { CircuitBackground } from "@/components/circuit-background";
 import Link from "next/link";
 
 export const metadata: Metadata = {
@@ -50,6 +51,7 @@ const otherProjects = [
 export default function ProjectsPage() {
   return (
     <>
+      <CircuitBackground />
       {/* Hero — Aura */}
       <Section className="relative pt-32 pb-16 overflow-hidden">
         <div className="absolute inset-0 pointer-events-none overflow-hidden">

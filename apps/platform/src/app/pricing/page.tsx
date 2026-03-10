@@ -4,6 +4,9 @@ import { useState } from "react";
 import { Button, Card, Badge, Container, Section, cn } from "@aaas/ui";
 import { FadeUp } from "@/components/motion";
 import { CTABlock } from "@/components/cta-block";
+import { AuraBackground } from "@/components/aura-background";
+import { SectionTopic } from "@/components/section-topic";
+import { SectionDivider } from "@/components/section-divider";
 
 const BOOKING_LINK = "https://calendar.app.google/X2MjiFt1vkksn2ga8";
 
@@ -65,10 +68,10 @@ const plans = [
 ];
 
 const tokenInfo = [
-  { label: "Context Engineering", cost: "Included in all plans" },
-  { label: "Agent Compute", cost: "Via Open Router — transparent pricing" },
-  { label: "BYOK Option", cost: "Bring your own API keys for direct pricing" },
-  { label: "Skill Repository", cost: "Free community access" },
+  { label: "Context Engineering", cost: "Included in all plans", status: "active" as const },
+  { label: "Agent Compute", cost: "Via Open Router — transparent pricing", status: "active" as const },
+  { label: "BYOK Option", cost: "Bring your own API keys for direct pricing", status: "active" as const },
+  { label: "Skill Repository", cost: "Free community access", status: "complete" as const },
 ];
 
 const faqs = [
@@ -103,30 +106,33 @@ export default function PricingPage() {
 
   return (
     <>
-      {/* Hero — Aura style */}
-      <Section className="relative pt-32 pb-16 overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute top-1/4 left-1/3 w-48 md:w-96 h-48 md:h-96 rounded-full bg-circuit/5 blur-3xl animate-aura-drift" />
-          <div className="absolute bottom-1/4 right-1/4 w-40 md:w-80 h-40 md:h-80 rounded-full bg-accent-red/5 blur-3xl animate-aura-drift" style={{ animationDelay: "3s" }} />
-        </div>
+      <AuraBackground />
 
-        <Container className="relative z-10 text-center">
+      {/* Hero — Aura style */}
+      <section className="relative pt-32 pb-16 overflow-hidden min-h-[60vh] flex items-center">
+        <Container className="relative z-10">
           <FadeUp>
-            <Badge variant="red" className="mb-4">Flexible Plans</Badge>
-            <h1 className="monolith-title text-4xl md:text-6xl font-bold mb-4 uppercase tracking-tight">
+            <SectionTopic>Flexible Plans</SectionTopic>
+          </FadeUp>
+          <FadeUp delay={0.1}>
+            <h1 className="monolith-title text-[clamp(3rem,10vw,7rem)] font-black leading-[0.85] tracking-[-0.04em] uppercase mb-4">
               Investment in<br />Intelligence
             </h1>
-            <p className="text-lg text-text-muted max-w-2xl mx-auto">
+          </FadeUp>
+          <FadeUp delay={0.2}>
+            <p className="text-lg font-light text-text-muted max-w-[560px] leading-relaxed">
               No hidden fees. No per-seat pricing. No token anxiety. Choose the
               model that fits your stage and scale — from single tasks to full
               autonomous operations.
             </p>
           </FadeUp>
         </Container>
-      </Section>
+      </section>
 
-      {/* Pricing Cards — Tectonic plates */}
-      <Section className="py-12" divider>
+      <SectionDivider />
+
+      {/* Pricing Cards */}
+      <Section className="py-12">
         <Container>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
             {plans.map((plan, i) => (
@@ -187,40 +193,62 @@ export default function PricingPage() {
         </Container>
       </Section>
 
-      {/* Token Economy */}
+      <SectionDivider />
+
+      {/* Token Economy — deploy-feed style */}
       <Section variant="bedrock">
-        <Container className="max-w-3xl">
+        <Container>
           <FadeUp>
-            <div className="text-center mb-12">
-              <Badge className="mb-4">Transparent Pricing</Badge>
-              <h2 className="monolith-title text-3xl font-bold mb-4 uppercase tracking-tight">
-                The Invisible Token Economy
-              </h2>
-              <p className="text-text-muted max-w-xl mx-auto">
-                You pay for outcomes. We optimize the compute. Open Router
-                integration ensures you always get the best model at the best price.
-              </p>
+            <SectionTopic>Transparent Pricing</SectionTopic>
+            <h2 className="monolith-title text-[clamp(2rem,5vw,3.5rem)] font-black leading-[0.9] tracking-[-0.03em] uppercase mb-4">
+              The Invisible<br />Token Economy
+            </h2>
+            <p className="text-text-muted max-w-[560px] mb-12">
+              You pay for outcomes. We optimize the compute. Open Router
+              integration ensures you always get the best model at the best price.
+            </p>
+          </FadeUp>
+
+          <FadeUp delay={0.1}>
+            <div className="max-w-3xl bg-surface border border-border p-8 shadow-[0_8px_32px_rgba(0,0,0,0.3)]">
+              <div className="flex justify-between font-mono text-[0.6rem] text-text-muted uppercase tracking-[0.05rem] pb-3 border-b border-border">
+                <span>TOKEN_ECONOMY_FEED</span>
+                <span>STATUS: LIVE</span>
+              </div>
+
+              <div className="flex flex-col gap-5 mt-5">
+                {tokenInfo.map((item) => (
+                  <div
+                    key={item.label}
+                    className="h-9 flex items-center gap-3 font-mono text-xs border-b border-border pb-2 last:border-b-0"
+                  >
+                    <div
+                      className={cn(
+                        "w-1.5 h-1.5 rounded-full shrink-0",
+                        item.status === "complete"
+                          ? "bg-accent-red shadow-[0_0_8px_var(--accent-red-glow)]"
+                          : "bg-circuit shadow-[0_0_8px_var(--circuit-dim)] animate-feed-pulse"
+                      )}
+                    />
+                    <div className="w-40 shrink-0 whitespace-nowrap text-text">{item.label}</div>
+                    <div className="flex-1 text-text-muted text-[0.7rem] truncate">{item.cost}</div>
+                  </div>
+                ))}
+              </div>
             </div>
           </FadeUp>
-          <div className="space-y-3">
-            {tokenInfo.map((item, i) => (
-              <FadeUp key={item.label} delay={i * 0.06}>
-                <Card variant="glass" className="flex items-center justify-between py-4">
-                  <span className="font-mono text-sm text-text">{item.label}</span>
-                  <span className="font-mono text-xs text-circuit">{item.cost}</span>
-                </Card>
-              </FadeUp>
-            ))}
-          </div>
         </Container>
       </Section>
 
+      <SectionDivider />
+
       {/* FAQ */}
-      <Section variant="surface" divider>
+      <Section>
         <Container className="max-w-3xl">
           <FadeUp>
-            <h2 className="monolith-title text-3xl font-bold text-center mb-12 uppercase tracking-tight">
-              Frequently Asked Questions
+            <SectionTopic>Questions</SectionTopic>
+            <h2 className="monolith-title text-[clamp(2rem,5vw,3.5rem)] font-black leading-[0.9] tracking-[-0.03em] uppercase mb-12">
+              Frequently Asked
             </h2>
           </FadeUp>
           <div className="space-y-3">
