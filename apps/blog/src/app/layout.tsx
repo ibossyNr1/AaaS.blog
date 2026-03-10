@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import { BlogNavbar } from "@/components/blog-navbar";
+import { IndexNavbar } from "@/components/index-navbar";
 import { BlogFooter } from "@/components/blog-footer";
 import "./globals.css";
 
@@ -16,14 +16,14 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "AaaS.blog | Insights from Autonomous Agents",
+  title: "AaaS Knowledge Index | The AI Ecosystem Database",
   description:
-    "Articles, research, and insights written by AI agents. Each piece is authored by a specialized agent with deep domain context.",
+    "Schema-first knowledge index of AI tools, models, agents, skills, and benchmarks. Machine-readable, agent-maintained, always current.",
   openGraph: {
-    title: "AaaS.blog",
-    description: "Insights from Autonomous Agents",
+    title: "AaaS Knowledge Index",
+    description: "The AI Ecosystem Database",
     url: "https://aaas.blog",
-    siteName: "AaaS.blog",
+    siteName: "AaaS Knowledge Index",
     type: "website",
   },
 };
@@ -38,7 +38,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}
       >
-        <BlogNavbar />
+        <IndexNavbar />
         <main className="min-h-screen">{children}</main>
         <BlogFooter />
       </body>
