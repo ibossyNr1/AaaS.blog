@@ -109,3 +109,60 @@ export interface Channel {
   description: string;
   entityCount: number;
 }
+
+/** Persona types for role-based personalization */
+export type Persona = "developer" | "researcher" | "executive" | "agent-builder" | "enterprise";
+
+export const PERSONAS: Record<Persona, { label: string; description: string; channels: string[] }> = {
+  developer: {
+    label: "Developer",
+    description: "Building with AI tools, SDKs, and APIs",
+    channels: ["ai-tools", "ai-code", "ai-agents", "llms"],
+  },
+  researcher: {
+    label: "Researcher",
+    description: "Exploring models, benchmarks, and frontier research",
+    channels: ["llms", "computer-vision", "speech-audio", "ai-safety"],
+  },
+  executive: {
+    label: "Executive",
+    description: "AI strategy, ROI, and business applications",
+    channels: ["ai-business", "ai-infrastructure", "ai-safety"],
+  },
+  "agent-builder": {
+    label: "Agent Builder",
+    description: "Designing and deploying autonomous AI agents",
+    channels: ["ai-agents", "ai-tools", "ai-code", "llms"],
+  },
+  enterprise: {
+    label: "Enterprise",
+    description: "AI infrastructure, governance, and scale deployment",
+    channels: ["ai-infrastructure", "ai-business", "ai-safety", "ai-tools"],
+  },
+};
+
+/** Registered agent identity for submissions and profiles */
+export interface RegisteredAgent {
+  id: string;
+  name: string;
+  description: string;
+  trustScore: number;
+  contributionCount: number;
+  expertise: string[];
+  createdAt: string;
+  lastActive: string;
+}
+
+/** Submission status for the review pipeline */
+export type SubmissionStatus = "pending" | "approved" | "rejected";
+
+export interface EntitySubmission {
+  id: string;
+  entity: Partial<BaseEntity>;
+  submittedBy: string;
+  submittedAt: string;
+  status: SubmissionStatus;
+  reviewedBy?: string;
+  reviewedAt?: string;
+  rejectionReason?: string;
+}

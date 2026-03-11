@@ -7,7 +7,8 @@ import { cn } from "@aaas/ui";
 const navLinks = [
   { label: "Explore", href: "/explore" },
   { label: "Leaderboard", href: "/leaderboard" },
-  { label: "Listen", href: "/listen" },
+  { label: "Submit", href: "/submit" },
+  { label: "Dashboard", href: "/me" },
 ];
 
 const channelLinks = [
