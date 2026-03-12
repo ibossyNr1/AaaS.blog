@@ -1,10 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Card, Badge, Container, Section, DataTape, cn } from "@aaas/ui";
+import { Container, DataTape, cn } from "@aaas/ui";
 import { FadeUp, CountUp } from "@/components/motion";
 import { CTABlock } from "@/components/cta-block";
-import { MergeBackground } from "@/components/merge-background";
 
 const categories = [
   "All",
@@ -144,142 +143,187 @@ export default function VaultPage() {
 
   return (
     <>
-      <MergeBackground />
-      {/* Hero — Metaball */}
-      <Section className="relative pt-32 pb-16 overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute -top-20 left-1/3 w-48 md:w-96 h-48 md:h-96 rounded-full bg-circuit/6 blur-3xl animate-aura-drift" />
-          <div className="absolute bottom-0 right-1/4 w-36 md:w-72 h-36 md:h-72 rounded-full bg-accent-red/5 blur-3xl animate-aura-drift" style={{ animationDelay: "2s" }} />
-        </div>
+      {/* Monolith Container */}
+      <div className="monolith-container border-t border-b border-border mt-16">
+        <div className="grid grid-cols-12 gap-px bg-border">
 
-        <Container className="relative z-10 text-center">
-          <FadeUp>
-            <Badge className="mb-4">The Vault</Badge>
-            <h1 className="monolith-title text-4xl md:text-6xl font-black mb-4 uppercase tracking-tight">
-              Structured<br />Intelligence
-            </h1>
-            <p className="text-lg text-text-muted max-w-2xl mx-auto">
-              Browse the living knowledge base that powers every agent.
-              4,200+ structured business assets — personas, frameworks, templates,
-              strategies, and prompt packs — all machine-readable, all agent-ready.
-            </p>
-          </FadeUp>
-        </Container>
-      </Section>
-
-      <DataTape items={tapeItems} />
-
-      {/* Search + Filters */}
-      <Section className="py-8">
-        <Container className="max-w-3xl">
-          <FadeUp>
-            <div className="relative mb-6">
-              <input
-                type="text"
-                placeholder="Search the vault..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="w-full h-14 px-6 glass rounded-lg text-text font-mono placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-circuit/50 transition-all"
-              />
-            </div>
-            <div className="flex flex-wrap justify-center gap-2">
-              {categories.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setActiveCategory(cat)}
-                  className={cn(
-                    "px-4 py-2 text-sm font-mono uppercase tracking-wider transition-all duration-300 border rounded-sm",
-                    activeCategory === cat
-                      ? "border-circuit text-circuit bg-circuit/5 shadow-[0_0_12px_var(--circuit-dim)]"
-                      : "border-border text-text-muted hover:text-text hover:border-text/20"
-                  )}
-                >
-                  {cat}
-                </button>
-              ))}
-            </div>
-          </FadeUp>
-        </Container>
-      </Section>
-
-      {/* Bento Grid */}
-      <Section className="py-8">
-        <Container>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filtered.map((entry, i) => (
-              <FadeUp key={`${entry.name}-${i}`} delay={i * 0.04}>
-                <Card variant="glass" spotlight className="cursor-pointer group">
-                  <div className="flex items-center justify-between mb-3">
-                    <Badge variant={entry.type === "Prompt Pack" ? "red" : "circuit"}>
-                      {entry.type}
-                    </Badge>
-                    <span className="font-mono text-[10px] text-text-muted">
-                      {entry.metric}
-                    </span>
-                  </div>
-                  <h3 className="text-base font-semibold text-text mb-2 group-hover:text-circuit transition-colors">
-                    {entry.name}
-                  </h3>
-                  <p className="text-xs text-text-muted leading-relaxed">
-                    {entry.description}
-                  </p>
-                </Card>
-              </FadeUp>
-            ))}
+          {/* Bedrock Hero — full width */}
+          <div
+            className="col-span-12 relative overflow-hidden bg-base min-h-[60vh] flex flex-col justify-center px-8 md:px-16 py-20"
+            style={{
+              background: "radial-gradient(circle at 50% -20%, rgb(var(--basalt-bright)) 0%, rgb(var(--basalt-deep)) 70%)",
+            }}
+          >
+            {/* Tectonic grid */}
+            <div
+              className="absolute top-8 right-8 w-[280px] h-[280px] pointer-events-none opacity-[0.12]"
+              style={{
+                backgroundImage: "linear-gradient(rgb(var(--basalt-bright)) 1px, transparent 1px), linear-gradient(90deg, rgb(var(--basalt-bright)) 1px, transparent 1px)",
+                backgroundSize: "20px 20px",
+                transform: "perspective(500px) rotateX(60deg) rotateZ(-20deg)",
+              }}
+            />
+            <FadeUp>
+              <h1
+                className="monolith-title font-black leading-[0.85] tracking-[-0.05em] uppercase mb-8"
+                style={{ fontSize: "clamp(3.5rem, 12vw, 9rem)" }}
+              >
+                THE<br />VAULT.
+              </h1>
+            </FadeUp>
+            <FadeUp delay={0.1}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-end max-w-4xl">
+                <p className="text-text-muted font-mono text-sm leading-relaxed max-w-[500px]">
+                  A living knowledge base of 4,200+ structured business assets — personas, frameworks, templates,
+                  strategies, and prompt packs. All machine-readable. All agent-ready. The collective intelligence
+                  of every AaaS deployment, distilled and structured.
+                </p>
+                <div className="flex gap-4">
+                  <a href="/collaborate" className="bedrock-btn inline-block">
+                    Access The Vault
+                  </a>
+                </div>
+              </div>
+            </FadeUp>
           </div>
-        </Container>
-      </Section>
 
-      {/* Self-Optimizing Repository */}
-      <Section variant="bedrock" divider="red">
-        <Container>
-          <FadeUp>
-            <div className="text-center mb-12">
-              <Badge variant="red" className="mb-4">Innovation Engine</Badge>
-              <h2 className="monolith-title text-3xl md:text-4xl font-black mb-4 uppercase tracking-tight">
-                Self-Optimizing Repository
+          {/* Data Tape */}
+          <div className="col-span-12 bg-base">
+            <DataTape items={tapeItems} />
+          </div>
+
+          {/* Stats strip — 4 blocks */}
+          {stats.map((s) => (
+            <div key={s.label} className="col-span-6 md:col-span-3 bg-base p-8 text-center">
+              <div className="text-3xl font-bold font-mono text-circuit">
+                <CountUp end={s.value} suffix={s.suffix} />
+              </div>
+              <div className="font-mono text-[10px] uppercase tracking-wider text-text-muted mt-2">
+                {s.label}
+              </div>
+            </div>
+          ))}
+
+          {/* Search + Filters — full width */}
+          <div className="col-span-12 bg-base p-8">
+            <Container className="max-w-3xl">
+              <div className="relative mb-6">
+                <input
+                  type="text"
+                  placeholder="Search the vault..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="w-full h-14 px-6 bg-surface rounded-sm text-text font-mono border border-border placeholder:text-text-muted focus:outline-none focus:border-circuit/50 transition-all"
+                />
+              </div>
+              <div className="flex flex-wrap justify-center gap-2">
+                {categories.map((cat) => (
+                  <button
+                    key={cat}
+                    onClick={() => setActiveCategory(cat)}
+                    className={cn(
+                      "px-4 py-2 text-sm font-mono uppercase tracking-wider transition-all duration-300 border rounded-sm",
+                      activeCategory === cat
+                        ? "border-accent-red text-accent-red bg-accent-red/5 shadow-[0_0_12px_var(--accent-red-dim)]"
+                        : "border-border text-text-muted hover:text-text hover:border-text/20"
+                    )}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+            </Container>
+          </div>
+
+          {/* Vault entries — monolith grid */}
+          {filtered.map((entry, i) => (
+            <div
+              key={`${entry.name}-${i}`}
+              className="col-span-12 md:col-span-6 lg:col-span-4 bg-base p-8 group relative overflow-hidden transition-all duration-500 ease-liquid hover:bg-surface cursor-pointer"
+              onMouseMove={(e) => {
+                const rect = e.currentTarget.getBoundingClientRect();
+                e.currentTarget.style.setProperty("--x", `${e.clientX - rect.left}px`);
+                e.currentTarget.style.setProperty("--y", `${e.clientY - rect.top}px`);
+              }}
+            >
+              {/* Mouse spotlight */}
+              <div
+                className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                style={{
+                  background: "radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(244, 63, 108, 0.1) 0%, transparent 50%)",
+                }}
+              />
+              <div className="relative z-10">
+                <div className="flex items-center justify-between mb-4">
+                  <span className="font-mono text-[0.65rem] uppercase tracking-[0.3em] text-accent-red">
+                    {entry.type}
+                  </span>
+                  <span className="font-mono text-[10px] text-text-muted">
+                    {entry.metric}
+                  </span>
+                </div>
+                <h3 className="text-lg font-bold text-text uppercase mb-2 group-hover:text-circuit transition-colors">
+                  {entry.name}
+                </h3>
+                <p className="text-xs font-mono text-text-muted leading-relaxed">
+                  {entry.description}
+                </p>
+              </div>
+            </div>
+          ))}
+
+          {/* Self-Optimizing Repository — wide block */}
+          <div
+            className="col-span-12 lg:col-span-8 bg-base p-8 md:p-12 relative overflow-hidden"
+            style={{
+              background: "radial-gradient(circle at 80% 20%, rgb(var(--basalt-bright) / 0.5) 0%, rgb(var(--basalt-deep)) 60%)",
+            }}
+          >
+            <FadeUp>
+              <span className="font-mono text-[0.65rem] uppercase tracking-[0.3em] text-accent-red mb-4 block">
+                Innovation Engine
+              </span>
+              <h2 className="text-3xl md:text-4xl font-black text-text uppercase leading-[0.9] tracking-tight mb-6">
+                Self-Optimizing<br />Repository
               </h2>
-              <p className="text-text-muted max-w-2xl mx-auto">
+              <p className="text-text-muted font-mono text-sm leading-relaxed max-w-[500px] mb-8">
                 Every client is effectively an R&D engineer for AaaS. When users create
                 effective skills and workflows, they&apos;re automatically evaluated,
                 sanitized, and merged back — making the platform smarter for everyone.
               </p>
-            </div>
-          </FadeUp>
-
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            {selfOptimizingSteps.map((step, i) => (
-              <FadeUp key={step.number} delay={i * 0.1}>
-                <Card variant="glass" className="text-center">
-                  <div className="font-mono text-2xl font-bold text-circuit mb-3">{step.number}</div>
-                  <h3 className="font-semibold text-text mb-2">{step.title}</h3>
-                  <p className="text-xs text-text-muted leading-relaxed">{step.text}</p>
-                </Card>
-              </FadeUp>
-            ))}
-          </div>
-        </Container>
-      </Section>
-
-      {/* Stats */}
-      <Section variant="surface" className="py-16" divider>
-        <Container>
-          <FadeUp>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-              {stats.map((s) => (
-                <div key={s.label} className="group">
-                  <div className="text-3xl font-bold font-mono text-circuit group-hover:text-glow transition-all">
-                    <CountUp end={s.value} suffix={s.suffix} />
+            </FadeUp>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              {selfOptimizingSteps.map((step, i) => (
+                <FadeUp key={step.number} delay={i * 0.1}>
+                  <div className="text-center">
+                    <div className="font-mono text-2xl font-bold text-circuit mb-2">{step.number}</div>
+                    <h3 className="font-bold text-text uppercase text-sm mb-2">{step.title}</h3>
+                    <p className="text-[11px] font-mono text-text-muted leading-relaxed">{step.text}</p>
                   </div>
-                  <div className="font-mono text-xs uppercase tracking-wider text-text-muted mt-2">
-                    {s.label}
-                  </div>
-                </div>
+                </FadeUp>
               ))}
             </div>
-          </FadeUp>
-        </Container>
-      </Section>
+          </div>
+
+          {/* System readout — side block */}
+          <div className="col-span-12 lg:col-span-4 bg-base p-8 flex flex-col justify-center border-t lg:border-t-0 border-border">
+            <span className="font-mono text-[0.65rem] uppercase tracking-[0.3em] text-circuit mb-4 block">
+              System Readout
+            </span>
+            <div className="font-mono text-xs text-text-muted leading-[1.8] border border-border p-6 whitespace-pre-line">
+{`VAULT_STATUS: ONLINE
+ENTRIES_INDEXED: 4,200+
+CATEGORIES: 7
+GOVERNANCE: AUTOMATED
+SANITIZATION: ACTIVE
+SYNC_INTERVAL: REAL-TIME
+AGENT_ACCESS: UNIVERSAL
+SUBSTRATE: BEDROCK_v2.4`}
+            </div>
+          </div>
+
+        </div>
+      </div>
 
       <CTABlock />
     </>

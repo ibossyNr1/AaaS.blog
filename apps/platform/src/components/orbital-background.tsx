@@ -18,7 +18,15 @@ const GHOST_RINGS = [
   { size: 210, r: 100, duration: 24, reverse: true,  style: "solid" as const },
 ];
 
-export function OrbitalBackground() {
+interface OrbitalBackgroundProps {
+  planetScale?: number;
+  /** Hide ghost rings, gravity threads, outer boundary — keep labeled orbit text */
+  minimal?: boolean;
+  /** Offset from center as percentage, e.g. { x: 25, y: 10 } shifts 25% right, 10% down */
+  offset?: { x: number; y: number };
+}
+
+export function OrbitalBackground({ planetScale = 1, minimal = false, offset }: OrbitalBackgroundProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const nebulaRef = useRef<HTMLDivElement>(null);
   const starRef = useRef<HTMLDivElement>(null);
@@ -137,13 +145,6 @@ export function OrbitalBackground() {
 
   return (
     <>
-      <style>{`
-        @keyframes twinkle { 0%,100%{opacity:var(--base-opacity,0.3)} 50%{opacity:calc(var(--base-opacity,0.3)*2.5)} }
-        [data-theme="light"] .orbital-star-field { opacity: 0.15 !important; }
-        [data-theme="light"] .orbital-nebula { opacity: 0.3 !important; }
-        [data-theme="light"] .orbital-flare { display: none !important; }
-      `}</style>
-
       {/* Star field */}
       <div ref={starRef} className="orbital-star-field fixed inset-0 z-0 pointer-events-none transition-transform duration-200 ease-out" />
 
@@ -170,66 +171,72 @@ export function OrbitalBackground() {
 
       {/* Orbital system */}
       <div ref={containerRef} className="fixed inset-0 z-[2] flex items-center justify-center transition-transform duration-150 ease-out pointer-events-none">
-        <div className="relative w-[900px] h-[900px] flex items-center justify-center">
+        <div
+          className="relative w-[900px] h-[900px] flex items-center justify-center"
+          style={offset ? { transform: `translate(${offset.x}%, ${offset.y}%)` } : undefined}
+        >
 
-          {/* Static outer boundary */}
-          <svg className="absolute w-full h-full" viewBox="0 0 900 900" aria-hidden="true">
-            <circle cx="450" cy="450" r="445" stroke="var(--border)" fill="none" strokeWidth="1" />
-          </svg>
-
-          {/* Ghost rings */}
-          {GHOST_RINGS.map((g, i) => (
-            <div
-              key={`ghost-${i}`}
-              className="absolute rounded-full animate-orbit pointer-events-none"
-              style={{ width: g.size, height: g.size, animationDuration: `${g.duration}s`, animationDirection: g.reverse ? "reverse" : "normal" }}
-            >
-              <svg className="w-full h-full overflow-visible" viewBox={`0 0 ${g.size} ${g.size}`}>
-                <circle
-                  cx={g.size / 2}
-                  cy={g.size / 2}
-                  r={g.r}
-                  fill="none"
-                  strokeWidth={g.style === "solid" ? "0.5" : "1"}
-                  strokeDasharray={g.style === "dashed" ? (i === 1 ? "4 12" : "3 10") : undefined}
-                  stroke={
-                    g.style === "solid"
-                      ? "var(--border)"
-                      : ghostStroke(i)
-                  }
-                />
+          {!minimal && (
+            <>
+              {/* Static outer boundary */}
+              <svg className="absolute w-full h-full" viewBox="0 0 900 900" aria-hidden="true">
+                <circle cx="450" cy="450" r="445" stroke="var(--border)" fill="none" strokeWidth="1" />
               </svg>
-            </div>
-          ))}
 
-          {/* Gravity threads */}
-          <svg className="absolute w-[900px] h-[900px] pointer-events-none z-[5]" viewBox="0 0 900 900" aria-hidden="true">
-            {[
-              { x1: 450, y1: 40, cls: "cyan", delay: 0 },
-              { x1: 450, y1: 860, cls: "red", delay: 1 },
-              { x1: 140, y1: 450, cls: "cyan", delay: 2 },
-              { x1: 760, y1: 450, cls: "red", delay: 3 },
-              { x1: 450, y1: 365, cls: "white", delay: 0.5 },
-            ].map((t, i) => (
-              <line
-                key={i}
-                x1={t.x1}
-                y1={t.y1}
-                x2="450"
-                y2="450"
-                strokeWidth="0.5"
-                fill="none"
-                stroke={
-                  t.cls === "cyan" ? "rgb(var(--circuit-glow) / 0.12)" : t.cls === "red" ? "rgb(var(--accent-red) / 0.1)" : "rgb(var(--text) / 0.08)"
-                }
-                className="opacity-0 animate-[thread-pulse_4s_ease-in-out_infinite]"
-                style={{ animationDelay: `${t.delay}s` }}
-              />
-            ))}
-          </svg>
+              {/* Ghost rings */}
+              {GHOST_RINGS.map((g, i) => (
+                <div
+                  key={`ghost-${i}`}
+                  className="absolute rounded-full animate-orbit pointer-events-none"
+                  style={{ width: g.size, height: g.size, animationDuration: `${g.duration}s`, animationDirection: g.reverse ? "reverse" : "normal" }}
+                >
+                  <svg className="w-full h-full overflow-visible" viewBox={`0 0 ${g.size} ${g.size}`}>
+                    <circle
+                      cx={g.size / 2}
+                      cy={g.size / 2}
+                      r={g.r}
+                      fill="none"
+                      strokeWidth={g.style === "solid" ? "0.5" : "1"}
+                      strokeDasharray={g.style === "dashed" ? (i === 1 ? "4 12" : "3 10") : undefined}
+                      stroke={
+                        g.style === "solid"
+                          ? "var(--border)"
+                          : ghostStroke(i)
+                      }
+                    />
+                  </svg>
+                </div>
+              ))}
 
-          {/* Labeled rings */}
-          {LABELED_RINGS.map((ring) => (
+              {/* Gravity threads */}
+              <svg className="absolute w-[900px] h-[900px] pointer-events-none z-[5]" viewBox="0 0 900 900" aria-hidden="true">
+                {[
+                  { x1: 450, y1: 40, cls: "cyan", delay: 0 },
+                  { x1: 450, y1: 860, cls: "red", delay: 1 },
+                  { x1: 140, y1: 450, cls: "cyan", delay: 2 },
+                  { x1: 760, y1: 450, cls: "red", delay: 3 },
+                  { x1: 450, y1: 365, cls: "white", delay: 0.5 },
+                ].map((t, i) => (
+                  <line
+                    key={i}
+                    x1={t.x1}
+                    y1={t.y1}
+                    x2="450"
+                    y2="450"
+                    strokeWidth="0.5"
+                    fill="none"
+                    stroke={
+                      t.cls === "cyan" ? "rgb(var(--circuit-glow) / 0.12)" : t.cls === "red" ? "rgb(var(--accent-red) / 0.1)" : "rgb(var(--text) / 0.08)"
+                    }
+                    className="opacity-0 animate-[thread-pulse_4s_ease-in-out_infinite]"
+                    style={{ animationDelay: `${t.delay}s` }}
+                  />
+                ))}
+              </svg>
+            </>
+          )}
+
+          {LABELED_RINGS.map((ring, ringIdx) => (
             <div
               key={ring.name}
               className="absolute rounded-full animate-orbit"
@@ -238,6 +245,7 @@ export function OrbitalBackground() {
                 height: ring.size,
                 animationDuration: `${ring.duration}s`,
                 animationDirection: ring.reverse ? "reverse" : "normal",
+                animationDelay: `-${ring.duration * (0.15 + ringIdx * 0.12)}s`,
               }}
             >
               <svg className="w-full h-full overflow-visible" viewBox={`0 0 ${ring.size} ${ring.size}`}>
@@ -252,18 +260,23 @@ export function OrbitalBackground() {
                 />
               </svg>
 
-              {/* Dot + label */}
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
+              {/* Dot + label — counter-rotate entire group to stay horizontal */}
+              <div
+                className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center animate-[counter-orbit]"
+                style={{
+                  animationDuration: `${ring.duration}s`,
+                  animationDirection: ring.reverse ? "reverse" : "normal",
+                  animationTimingFunction: "linear",
+                  animationIterationCount: "infinite",
+                  animationDelay: `-${ring.duration * (0.15 + ringIdx * 0.12)}s`,
+                }}
+              >
                 <span
-                  className="font-mono uppercase whitespace-nowrap mb-2 animate-[counter-orbit]"
+                  className="font-mono uppercase whitespace-nowrap mb-2"
                   style={{
                     fontSize: ring.fontSize,
                     letterSpacing: ring.name === "AaaS" ? "0.4em" : "0.3em",
                     color: labelColor(ring.color),
-                    animationDuration: `${ring.duration}s`,
-                    animationDirection: ring.reverse ? "reverse" : "normal",
-                    animationTimingFunction: "linear",
-                    animationIterationCount: "infinite",
                   }}
                 >
                   {ring.name}
@@ -299,7 +312,10 @@ export function OrbitalBackground() {
           ))}
 
           {/* Central planet */}
-          <div className="relative w-24 h-24 rounded-full z-10 flex items-center justify-center animate-orb-pulse">
+          <div
+            className="relative w-24 h-24 rounded-full z-10 flex items-center justify-center animate-orb-pulse"
+            style={{ transform: `scale(${planetScale})`, transition: "transform 0.8s cubic-bezier(0.23, 1, 0.32, 1)" }}
+          >
             {/* Halo */}
             <div
               className="absolute -inset-[35px] rounded-full pointer-events-none animate-[halo-pulse_5s_ease-in-out_infinite]"

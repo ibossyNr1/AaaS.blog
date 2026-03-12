@@ -1,0 +1,36 @@
+<h2>Dynamic Depth UX — How should topic exploration work?</h2>
+<p class="subtitle">The blog currently shows flat grids of entity cards. You want layered depth with associated topics. Here are 3 approaches for how a visitor navigates from surface to deep.</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Orbital Depth — Zoom-to-Focus</h3>
+      <p>Homepage shows entities as an <strong>orbital constellation</strong> — clustered by channel, floating with aura blobs behind them. Clicking a cluster zooms into that topic, revealing related entities as connected nodes. Each click goes deeper: Channel → Entity → Specs → Related entities branch outward.</p>
+      <p style="opacity:0.6;font-size:0.85rem;margin-top:0.5rem">Think: star map → solar system → planet surface. Background shifts (aura → tectonic plates → bedrock grid) signal depth changes.</p>
+    </div>
+  </div>
+
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Tectonic Layers — Scroll-to-Reveal</h3>
+      <p>Each page section uses a <strong>different background treatment</strong> from the playgrounds (aura blobs → kinetic bars → bedrock grid → tectonic plates). As you scroll, layers peel back. Topic associations appear as <strong>sidebar branches</strong> that expand on hover — "Exploring Claude 4? See related: Claude Code agent, RAG Retrieval skill, SWE-Bench benchmark."</p>
+      <p style="opacity:0.6;font-size:0.85rem;margin-top:0.5rem">Think: geological strata. Surface = trending. Dig = niche. Each layer has its own visual identity from the playgrounds.</p>
+    </div>
+  </div>
+
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Neural Graph — Click-to-Expand</h3>
+      <p>Entity pages have a <strong>relationship graph</strong> (interactive canvas) showing connected entities. The current entity is center-stage on a tectonic plate; related entities orbit around it. Clicking any node transitions smoothly — the clicked entity becomes the new center, its relations expand, previous context fades to the edge. Background effects shift per entity type.</p>
+      <p style="opacity:0.6;font-size:0.85rem;margin-top:0.5rem">Think: Wikipedia rabbit hole, but visual. Each entity type gets its own playground background treatment. Tools = bedrock grid. Models = aura blobs. Agents = kinetic bars.</p>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="margin-top:2rem;padding:1.25rem;border:1px solid rgba(255,255,255,0.1);border-radius:8px;background:rgba(255,255,255,0.03)">
+  <h3 style="margin-top:0">Or combine them?</h3>
+  <p>These aren't mutually exclusive. Option B's layered backgrounds can coexist with C's relationship graph on entity pages. We could use A's constellation as the homepage hero and B's scroll-depth for content pages. Tell me what resonates.</p>
+</div>

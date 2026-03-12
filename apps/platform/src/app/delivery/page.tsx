@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Container, Section } from "@aaas/ui";
 import { FadeUp } from "@/components/motion";
-import { OrbitalBackground } from "@/components/orbital-background";
 import { CTABlock } from "@/components/cta-block";
 import { SectionTopic } from "@/components/section-topic";
+import { DeliveryClient } from "./client";
 
 export const metadata: Metadata = {
   title: "Delivery — The Convergence Model | Agent-as-a-Service",
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 export default function DeliveryPage() {
   return (
     <>
-      <OrbitalBackground />
+      <DeliveryClient />
 
       {/* Hero */}
       <section className="relative pt-32 pb-16 overflow-hidden min-h-screen flex items-center z-10">

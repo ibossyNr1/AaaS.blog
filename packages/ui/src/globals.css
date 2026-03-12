@@ -49,24 +49,24 @@
 
   /* Light mode tokens */
   [data-theme="light"] {
-    --basalt-deep: 250 250 248;
-    --basalt-surface: 244 244 241;
-    --basalt-bright: 234 234 230;
-    --circuit-glow: 0 136 160;
-    --circuit-dim: rgba(0, 136, 160, 0.12);
-    --accent-red: 201 51 90;
-    --accent-red-dim: rgba(201, 51, 90, 0.08);
-    --accent-red-glow: rgba(201, 51, 90, 0.25);
-    --accent-teal: 0 160 140;
-    --accent-teal-dim: rgba(0, 160, 140, 0.1);
-    --pastel-lavender: 120 126 220;
-    --pastel-gold: 210 175 60;
-    --pastel-mint: 60 180 130;
-    --pastel-sky: 50 150 220;
+    --basalt-deep: 228 228 224;
+    --basalt-surface: 218 218 213;
+    --basalt-bright: 205 205 198;
+    --circuit-glow: 0 120 145;
+    --circuit-dim: rgba(0, 120, 145, 0.15);
+    --accent-red: 190 42 82;
+    --accent-red-dim: rgba(190, 42, 82, 0.1);
+    --accent-red-glow: rgba(190, 42, 82, 0.3);
+    --accent-teal: 0 140 120;
+    --accent-teal-dim: rgba(0, 140, 120, 0.12);
+    --pastel-lavender: 100 106 200;
+    --pastel-gold: 190 155 40;
+    --pastel-mint: 40 160 110;
+    --pastel-sky: 30 130 200;
     --text: 17 17 19;
-    --text-muted: rgba(17, 17, 19, 0.55);
-    --border: rgba(0, 0, 0, 0.08);
-    --grain-opacity: 0.3;
+    --text-muted: rgba(17, 17, 19, 0.6);
+    --border: rgba(0, 0, 0, 0.12);
+    --grain-opacity: 0.2;
     --aura-blend: multiply;
   }
 
@@ -127,9 +127,10 @@
   }
 
   [data-theme="light"] .monolith-title {
-    background: none;
-    -webkit-background-clip: unset;
-    -webkit-text-fill-color: rgb(var(--text));
+    background: linear-gradient(180deg, rgb(17 17 19) 0%, rgb(17 17 19 / 0.55) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
   /* Glassmorphism card */
@@ -142,9 +143,70 @@
   }
 
   [data-theme="light"] .glass {
-    background: rgba(255, 255, 255, 0.78);
-    border-color: rgba(0, 0, 0, 0.06);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 16px rgba(0, 0, 0, 0.03), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.55);
+    border-color: rgba(255, 255, 255, 0.6);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 4px 20px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  /* Default card — subtle surface lift */
+  .card-default {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  [data-theme="light"] .card-default {
+    background: rgba(255, 255, 255, 0.45);
+    border-color: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  /* Light mode: card hover — frosted lift with visible shadow */
+  [data-theme="light"] .card-default:hover,
+  [data-theme="light"] .glass:hover {
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12), 0 12px 40px rgba(0, 0, 0, 0.08);
+    border-color: rgba(0, 120, 145, 0.2);
+  }
+
+  /* Parallax overlay — sections on top of fixed background */
+  .parallax-overlay {
+    background: rgba(var(--basalt-deep), 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  [data-theme="light"] .parallax-overlay {
+    background: rgba(var(--basalt-deep), 0.75);
+  }
+
+  /* Parallax sections — alternating opacity for visual layer separation */
+  .parallax-sections > section,
+  .parallax-sections > div > section {
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    background: rgba(var(--basalt-deep), 0.48);
+  }
+
+  .parallax-sections > section:nth-of-type(even),
+  .parallax-sections > div > section:nth-of-type(even) {
+    background: rgba(var(--basalt-deep), 0.72);
+  }
+
+  [data-theme="light"] .parallax-sections > section,
+  [data-theme="light"] .parallax-sections > div > section {
+    background: rgba(255, 255, 255, 0.32);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+  }
+
+  [data-theme="light"] .parallax-sections > section:nth-of-type(even),
+  [data-theme="light"] .parallax-sections > div > section:nth-of-type(even) {
+    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
   }
 
   /* Kinetic bar divider */
@@ -180,8 +242,11 @@
   }
 
   [data-theme="light"] .bedrock {
-    background: rgba(var(--basalt-bright), 0.6);
-    border-color: rgba(0, 0, 0, 0.04);
+    background: rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
   }
 
   /* Outline text for hero sections */
@@ -212,6 +277,16 @@
   0% { transform: translateX(-120px); }
   100% { transform: translateX(calc(100vw + 120px)); }
 }
+
+/* Orbital background — twinkle + light mode overrides */
+@keyframes twinkle {
+  0%, 100% { opacity: var(--base-opacity, 0.3); }
+  50% { opacity: calc(var(--base-opacity, 0.3) * 2.5); }
+}
+
+[data-theme="light"] .orbital-star-field { opacity: 0.15 !important; }
+[data-theme="light"] .orbital-nebula { opacity: 0.3 !important; }
+[data-theme="light"] .orbital-flare { display: none !important; }
 
 @keyframes orbit {
   0% { transform: rotate(0deg); }
@@ -339,27 +414,80 @@
 :root .light-only { display: none !important; }
 [data-theme="light"] .light-only { display: block !important; }
 
-/* Light mode: soften glow utilities */
+/* Light mode: visible glow utilities */
 [data-theme="light"] .glow-circuit {
-  box-shadow: 0 0 24px var(--circuit-dim);
+  box-shadow: 0 0 30px var(--circuit-dim), 0 0 60px rgba(0, 120, 145, 0.06);
 }
 
 [data-theme="light"] .glow-red {
-  box-shadow: 0 0 24px var(--accent-red-dim);
+  box-shadow: 0 0 30px var(--accent-red-dim), 0 0 60px rgba(190, 42, 82, 0.06);
 }
 
 [data-theme="light"] .text-glow {
-  text-shadow: none;
+  text-shadow: 0 0 8px rgba(0, 120, 145, 0.25);
 }
 
 [data-theme="light"] .text-glow-red {
-  text-shadow: none;
+  text-shadow: 0 0 8px rgba(190, 42, 82, 0.2);
+}
+
+/* Light mode: stronger hover lift + accent bar visibility */
+[data-theme="light"] .group:hover > .absolute.top-0 {
+  filter: brightness(1.2);
+}
+
+[data-theme="light"] .group.relative:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1), 0 12px 40px rgba(0, 0, 0, 0.06);
 }
 
 /* Light mode: kinetic bar uses darker line for visibility */
 [data-theme="light"] .kinetic-bar::after {
   filter: blur(6px);
   opacity: 0.7;
+}
+
+/* Bedrock button — monolith style */
+.bedrock-btn {
+  padding: 1rem 2rem;
+  background: rgb(var(--text));
+  color: rgb(var(--basalt-deep));
+  font-family: var(--font-jetbrains), 'JetBrains Mono', monospace;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.05rem;
+  transition: all 0.3s var(--liquid-ease);
+  text-decoration: none;
+}
+
+.bedrock-btn:hover {
+  transform: translate(4px, -4px);
+  box-shadow: -4px 4px 0 rgb(var(--circuit-glow));
+}
+
+.bedrock-btn:active {
+  box-shadow: -4px 4px 0 rgb(var(--accent-red));
+}
+
+[data-theme="light"] .bedrock-btn {
+  background: rgb(var(--text));
+  color: rgb(var(--basalt-deep));
+}
+
+/* Light mode monolith grid */
+[data-theme="light"] .monolith-container .bg-base {
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+[data-theme="light"] .monolith-container .hover\:bg-surface:hover {
+  background: rgba(255, 255, 255, 0.75);
+  box-shadow: inset 0 0 60px rgba(0, 120, 145, 0.06);
+}
+
+[data-theme="light"] .monolith-container .bg-border {
+  background: rgba(0, 0, 0, 0.08);
 }
 
 /* Reduce motion for accessibility */

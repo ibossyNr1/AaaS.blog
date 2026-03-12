@@ -91,7 +91,7 @@ export function Footer() {
                 Blog
               </a>
               <a
-                href="https://linkedin.com"
+                href="https://www.linkedin.com/company/agents-as-a-service-com/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-circuit transition-colors"
@@ -99,12 +99,12 @@ export function Footer() {
                 LinkedIn
               </a>
               <a
-                href="https://github.com"
+                href="https://www.supra-forge.com"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-circuit transition-colors"
               >
-                GitHub
+                SupraForge
               </a>
             </div>
             <p className="font-mono text-[10px] text-text-muted/60">

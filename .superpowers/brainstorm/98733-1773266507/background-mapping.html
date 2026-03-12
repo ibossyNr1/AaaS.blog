@@ -1,0 +1,115 @@
+<h2>Background Effect Mapping — Which effect for which context?</h2>
+<p class="subtitle">The playgrounds define 6+ distinct background treatments. Here's a proposed mapping of effects to sections/contexts. Select which mapping feels right, or tell me to remix.</p>
+
+<div class="cards" style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin:2rem 0">
+
+  <div class="card" data-choice="mapping1" onclick="toggleSelect(this)" style="padding:0;overflow:hidden">
+    <div class="card-image" style="background:linear-gradient(135deg, rgba(244,63,108,0.3), rgba(0,243,255,0.3));height:120px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden">
+      <div style="position:absolute;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(244,63,108,0.5),transparent);filter:blur(40px);top:-40px;left:-20px"></div>
+      <div style="position:absolute;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,rgba(0,243,255,0.4),transparent);filter:blur(40px);bottom:-30px;right:-10px"></div>
+      <span style="font-family:monospace;font-size:0.7rem;letter-spacing:0.15rem;text-transform:uppercase;z-index:1;color:#fff">Aura Blobs</span>
+    </div>
+    <div class="card-body" style="padding:1.25rem">
+      <h3 style="margin:0 0 0.5rem">Homepage Hero + /listen</h3>
+      <p style="font-size:0.85rem;opacity:0.7;margin:0">Dreamy, ambient. Sets the tone on arrival. Audio hub gets the same treatment — music/podcast vibes.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="mapping2" onclick="toggleSelect(this)" style="padding:0;overflow:hidden">
+    <div class="card-image" style="background:#1a1a1c;height:120px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden">
+      <div style="position:absolute;top:50%;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,243,255,0.4),transparent)"></div>
+      <div style="position:absolute;top:50%;left:30%;width:120px;height:3px;background:rgba(0,243,255,0.6);filter:blur(3px);animation:none"></div>
+      <div style="position:absolute;top:35%;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(244,63,108,0.3),transparent)"></div>
+      <span style="font-family:monospace;font-size:0.7rem;letter-spacing:0.15rem;text-transform:uppercase;z-index:1;color:#fff">Kinetic Bars</span>
+    </div>
+    <div class="card-body" style="padding:1.25rem">
+      <h3 style="margin:0 0 0.5rem">Entity Type Listings + /explore</h3>
+      <p style="font-size:0.85rem;opacity:0.7;margin:0">Energy and motion. Sweeping glows between card rows signal live, updating data. Agents get red bars, tools get cyan.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="mapping3" onclick="toggleSelect(this)" style="padding:0;overflow:hidden">
+    <div class="card-image" style="background:#080809;height:120px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden">
+      <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);background-size:40px 40px"></div>
+      <div style="position:absolute;inset:0;background:radial-gradient(circle at 60% 40%,rgba(0,243,255,0.08),transparent 60%)"></div>
+      <span style="font-family:monospace;font-size:0.7rem;letter-spacing:0.15rem;text-transform:uppercase;z-index:1;color:#fff">Bedrock Grid</span>
+    </div>
+    <div class="card-body" style="padding:1.25rem">
+      <h3 style="margin:0 0 0.5rem">Entity Detail Pages (specs)</h3>
+      <p style="font-size:0.85rem;opacity:0.7;margin:0">Structural, technical. The grid pattern reinforces "data sheet" feel. Mouse-reactive magma glow on hover. Schema tables feel carved into the grid.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="mapping4" onclick="toggleSelect(this)" style="padding:0;overflow:hidden">
+    <div class="card-image" style="background:#1a1a1c;height:120px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden">
+      <div style="position:absolute;width:65%;height:80%;background:#2a2a2e;border:1px solid rgba(255,255,255,0.08);top:10%;left:5%;box-shadow:12px 12px 0 rgba(0,243,255,0.1)"></div>
+      <div style="position:absolute;width:40%;height:60%;background:#080809;border:1px solid rgba(0,243,255,0.2);top:25%;right:8%;border-left:2px solid rgba(0,243,255,0.4)"></div>
+      <span style="font-family:monospace;font-size:0.7rem;letter-spacing:0.15rem;text-transform:uppercase;z-index:1;color:#fff">Tectonic Plates</span>
+    </div>
+    <div class="card-body" style="padding:1.25rem">
+      <h3 style="margin:0 0 0.5rem">Channel Pages + /watch</h3>
+      <p style="font-size:0.85rem;opacity:0.7;margin:0">Overlapping plates = overlapping topics. Main plate holds featured content, side plates hold related channels. Video hub uses plates as video "stages."</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="mapping5" onclick="toggleSelect(this)" style="padding:0;overflow:hidden">
+    <div class="card-image" style="background:#080809;height:120px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden">
+      <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:0.4" viewBox="0 0 300 120">
+        <path d="M20,60 Q80,20 150,60 T280,60" stroke="rgba(0,243,255,0.5)" fill="none" stroke-width="1" stroke-dasharray="4,4"/>
+        <path d="M40,80 Q100,40 170,80 T300,50" stroke="rgba(244,63,108,0.4)" fill="none" stroke-width="1" stroke-dasharray="6,3"/>
+        <circle cx="150" cy="60" r="4" fill="rgba(0,243,255,0.8)"/>
+        <circle cx="80" cy="45" r="3" fill="rgba(244,63,108,0.6)"/>
+        <circle cx="220" cy="55" r="3" fill="rgba(0,243,255,0.6)"/>
+      </svg>
+      <span style="font-family:monospace;font-size:0.7rem;letter-spacing:0.15rem;text-transform:uppercase;z-index:1;color:#fff">Circuit SVG + Nodes</span>
+    </div>
+    <div class="card-body" style="padding:1.25rem">
+      <h3 style="margin:0 0 0.5rem">Relationship Graph + Neural Navigation</h3>
+      <p style="font-size:0.85rem;opacity:0.7;margin:0">Interactive canvas showing entity connections. Circuit paths connect nodes. Clicking a node re-centers the graph. This overlays on any background.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="mapping6" onclick="toggleSelect(this)" style="padding:0;overflow:hidden">
+    <div class="card-image" style="background:linear-gradient(180deg,#1a1a1c,#080809);height:120px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden">
+      <div style="position:absolute;bottom:0;left:0;right:0;height:40px;display:flex;align-items:center;padding:0 12px;background:rgba(0,0,0,0.4);font-family:monospace;font-size:0.55rem;color:rgba(0,243,255,0.6);letter-spacing:0.1rem;overflow:hidden;white-space:nowrap">AGENT-07 ▸ indexed pinecone ▸ 0.3s — AGENT-12 ▸ scored claude-4 ▸ 1.2s — AGENT-03 ▸ verified devin ▸ 0.8s</div>
+      <span style="font-family:monospace;font-size:0.7rem;letter-spacing:0.15rem;text-transform:uppercase;z-index:1;color:#fff">Deploy Feed + Data Tape</span>
+    </div>
+    <div class="card-body" style="padding:1.25rem">
+      <h3 style="margin:0 0 0.5rem">Live Activity Layer (global)</h3>
+      <p style="font-size:0.85rem;opacity:0.7;margin:0">Persistent bottom ticker showing real-time agent activity. Deploy feed modules on dashboard. Shows the index is alive and maintained by agents.</p>
+    </div>
+  </div>
+
+</div>
+
+<div class="section" style="margin-top:1.5rem;padding:1.25rem;border:1px solid rgba(255,255,255,0.1);border-radius:8px;background:rgba(255,255,255,0.03)">
+  <h3 style="margin-top:0">Summary of proposed mapping</h3>
+  <table style="width:100%;font-size:0.85rem;border-collapse:collapse">
+    <tr style="border-bottom:1px solid rgba(255,255,255,0.08)">
+      <td style="padding:0.5rem 0;font-family:monospace;color:rgba(0,243,255,0.8);font-size:0.75rem">AURA BLOBS</td>
+      <td style="padding:0.5rem 0">Homepage hero, /listen audio hub</td>
+    </tr>
+    <tr style="border-bottom:1px solid rgba(255,255,255,0.08)">
+      <td style="padding:0.5rem 0;font-family:monospace;color:rgba(0,243,255,0.8);font-size:0.75rem">KINETIC BARS</td>
+      <td style="padding:0.5rem 0">/explore listings, entity type pages</td>
+    </tr>
+    <tr style="border-bottom:1px solid rgba(255,255,255,0.08)">
+      <td style="padding:0.5rem 0;font-family:monospace;color:rgba(0,243,255,0.8);font-size:0.75rem">BEDROCK GRID</td>
+      <td style="padding:0.5rem 0">Entity detail pages (spec sheets)</td>
+    </tr>
+    <tr style="border-bottom:1px solid rgba(255,255,255,0.08)">
+      <td style="padding:0.5rem 0;font-family:monospace;color:rgba(0,243,255,0.8);font-size:0.75rem">TECTONIC PLATES</td>
+      <td style="padding:0.5rem 0">Channel pages, /watch video hub</td>
+    </tr>
+    <tr style="border-bottom:1px solid rgba(255,255,255,0.08)">
+      <td style="padding:0.5rem 0;font-family:monospace;color:rgba(0,243,255,0.8);font-size:0.75rem">CIRCUIT + NODES</td>
+      <td style="padding:0.5rem 0">Relationship graph overlay (any page)</td>
+    </tr>
+    <tr>
+      <td style="padding:0.5rem 0;font-family:monospace;color:rgba(0,243,255,0.8);font-size:0.75rem">DEPLOY FEED</td>
+      <td style="padding:0.5rem 0">Persistent activity ticker (global)</td>
+    </tr>
+  </table>
+</div>
+
+<p class="subtitle" style="margin-top:1.5rem">Click any cards you'd remap, or tell me in terminal if this mapping works. You can also suggest swaps.</p>

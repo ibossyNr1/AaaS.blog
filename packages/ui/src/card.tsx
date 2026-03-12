@@ -14,7 +14,7 @@ interface CardProps extends HTMLAttributes<HTMLDivElement> {
 
 const variantStyles: Record<CardVariant, string> = {
   default:
-    "bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.05)]",
+    "card-default rounded-lg",
   glass:
     "glass rounded-lg",
   bedrock:

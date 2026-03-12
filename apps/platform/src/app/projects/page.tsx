@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Button, Card, Badge, Container, Section, TerminalFeed } from "@aaas/ui";
 import { FadeUp } from "@/components/motion";
 import { CTABlock } from "@/components/cta-block";
-import { CircuitBackground } from "@/components/circuit-background";
+import { OrbitalBackground } from "@/components/orbital-background";
 import Link from "next/link";
 
 export const metadata: Metadata = {
@@ -49,9 +49,9 @@ const otherProjects = [
 export default function ProjectsPage() {
   return (
     <>
-      <CircuitBackground />
+      <OrbitalBackground minimal planetScale={20} offset={{ x: -20, y: -5 }} />
       {/* Hero — Aura */}
-      <Section className="relative pt-32 pb-16 overflow-hidden">
+      <Section className="relative pt-32 pb-16 overflow-hidden z-10">
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           <div className="absolute top-0 right-1/4 w-48 md:w-96 h-48 md:h-96 rounded-full bg-circuit/6 blur-3xl animate-aura-drift" />
           <div className="absolute bottom-0 left-1/3 w-36 md:w-72 h-36 md:h-72 rounded-full bg-accent-red/5 blur-3xl animate-aura-drift" style={{ animationDelay: "4s" }} />
@@ -73,7 +73,7 @@ export default function ProjectsPage() {
       </Section>
 
       {/* Featured: Enora-AI — Glass */}
-      <Section className="py-12" divider="red">
+      <Section className="py-12 relative z-10" divider="red">
         <Container>
           <FadeUp>
             <Card variant="glass" spotlight className="relative overflow-hidden p-0">
@@ -143,7 +143,7 @@ export default function ProjectsPage() {
       </Section>
 
       {/* Project Bento Grid */}
-      <Section variant="surface" divider>
+      <Section variant="surface" divider className="relative z-10">
         <Container>
           <FadeUp>
             <h2 className="monolith-title text-3xl font-black text-center mb-12 uppercase tracking-tight">

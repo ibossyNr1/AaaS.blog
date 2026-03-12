@@ -28,6 +28,34 @@ service cloud.firestore {
       allow write: if false;
     }
 
+    // Submissions — public write (API intake), no public read
+    match /submissions/{document=**} {
+      allow read: if false;
+      allow write: if true;
+    }
+
+    // Registered agents — public read (profiles), no public write
+    match /registered_agents/{document=**} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // Episodes — public read (podcast/content), no public write
+    match /episodes/{document=**} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // Subscriptions — internal only
+    match /subscriptions/{document=**} {
+      allow read, write: if false;
+    }
+
+    // Healing queue — internal only
+    match /healing_queue/{document=**} {
+      allow read, write: if false;
+    }
+
     // Agent logs — internal only
     match /agent_logs/{document=**} {
       allow read, write: if false;

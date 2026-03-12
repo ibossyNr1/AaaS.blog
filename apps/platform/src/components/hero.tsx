@@ -1,6 +1,3 @@
-"use client";
-
-import { useEffect, useRef } from "react";
 import { Button, Card, Container, Section, Badge } from "@aaas/ui";
 
 const BOOKING_LINK = "https://calendar.app.google/X2MjiFt1vkksn2ga8";
@@ -12,20 +9,6 @@ const statusCards = [
 ];
 
 export function Hero() {
-  const orbRef = useRef<HTMLDivElement>(null);
-  const ringRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!orbRef.current) return;
-      const x = (e.clientX - window.innerWidth / 2) / 40;
-      const y = (e.clientY - window.innerHeight / 2) / 40;
-      orbRef.current.style.transform = `translate(${x}px, ${y}px)`;
-    };
-    document.addEventListener("mousemove", handleMouseMove);
-    return () => document.removeEventListener("mousemove", handleMouseMove);
-  }, []);
-
   return (
     <Section className="relative pt-32 pb-24 overflow-hidden">
       {/* Dual accent glows */}
@@ -95,43 +78,6 @@ export function Hero() {
             </a>
           </div>
 
-          {/* Orbital Orb — Enhanced */}
-          <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[500px] h-[700px] hidden lg:flex items-center justify-center pointer-events-none">
-            {/* Background aura */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle,rgb(var(--circuit-glow)/0.1)_0%,transparent_60%)]" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_60%_40%,var(--accent-red-dim),transparent_50%)]" />
-
-            {/* Orbital rings */}
-            <div ref={ringRef} className="absolute w-[300px] h-[300px] animate-orbit" style={{ animationDuration: "25s" }}>
-              <svg className="w-full h-full" viewBox="0 0 300 300" aria-hidden="true">
-                <circle cx="150" cy="150" r="140" stroke="rgb(var(--circuit-glow) / 0.08)" fill="none" strokeDasharray="8 6" />
-              </svg>
-              {/* Orbiting dot */}
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-circuit animate-pulse-dot" />
-            </div>
-
-            <div className="absolute w-[220px] h-[220px] animate-orbit" style={{ animationDuration: "18s", animationDirection: "reverse" }}>
-              <svg className="w-full h-full" viewBox="0 0 220 220" aria-hidden="true">
-                <circle cx="110" cy="110" r="100" stroke="rgb(var(--accent-red) / 0.08)" fill="none" strokeDasharray="4 8" />
-              </svg>
-              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-1.5 h-1.5 rounded-full bg-accent-red" />
-            </div>
-
-            {/* Core orb */}
-            <div
-              ref={orbRef}
-              className="relative w-24 h-24 rounded-full bg-base border border-circuit/30 animate-orb-pulse flex items-center justify-center transition-transform duration-700 ease-liquid"
-              style={{ boxShadow: "0 0 40px var(--circuit-dim), inset 0 0 30px rgb(var(--circuit-glow) / 0.1)" }}
-            >
-              <div className="w-1.5 h-1.5 rounded-full bg-circuit" />
-              <div className="absolute w-3 h-3 rounded-full bg-accent-red/40 blur-sm top-3 right-4" />
-            </div>
-
-            {/* Static outer ring */}
-            <svg className="absolute w-full h-full" aria-hidden="true">
-              <circle cx="50%" cy="50%" r="200" stroke="var(--border)" fill="none" />
-            </svg>
-          </div>
         </div>
       </Container>
     </Section>

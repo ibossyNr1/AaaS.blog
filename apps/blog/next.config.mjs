@@ -10,6 +10,10 @@ const nextConfig = {
     ],
   },
   transpilePackages: ["@aaas/ui"],
+  eslint: {
+    ignoreDuringBuilds: false,
+  },
+  exclude: ["src/agents/**"],
 };
 
 export default nextConfig;

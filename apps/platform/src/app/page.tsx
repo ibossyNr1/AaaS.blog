@@ -1,4 +1,4 @@
-import { CircuitBackground } from "@/components/circuit-background";
+import { OrbitalBackground } from "@/components/orbital-background";
 import { Hero } from "@/components/hero";
 import { ValueStrip } from "@/components/value-strip";
 import { ThreePillars } from "@/components/three-pillars";
@@ -11,15 +11,20 @@ import { CTABlock } from "@/components/cta-block";
 export default function Home() {
   return (
     <>
-      <CircuitBackground />
+      <OrbitalBackground minimal planetScale={25} offset={{ x: 25, y: 10 }} />
+      {/* Hero has no overlay — planet visible behind it */}
       <Hero />
-      <ValueStrip />
-      <ThreePillars />
-      <ProcessStepper />
-      <UseCases />
-      <LiveFeeds />
-      <MetricsStrip />
-      <CTABlock />
+      {/* Remaining sections get parallax overlay so content is readable
+          but planet bleeds through the semi-transparent backgrounds */}
+      <div className="relative z-10 parallax-sections">
+        <ValueStrip />
+        <ThreePillars />
+        <ProcessStepper />
+        <UseCases />
+        <LiveFeeds />
+        <MetricsStrip />
+        <CTABlock />
+      </div>
     </>
   );
 }
