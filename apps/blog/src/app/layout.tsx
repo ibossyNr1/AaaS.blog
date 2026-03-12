@@ -7,6 +7,7 @@ import { PageTracker } from "@/components/page-tracker";
 import { KeyboardShortcuts } from "@/components/keyboard-shortcuts";
 import { AuthProvider } from "@/components/auth-provider";
 import { AudioQueueProvider } from "@/components/audio-queue";
+import { ExperimentProvider } from "@/components/experiment-provider";
 import "./globals.css";
 
 const geistSans = localFont({
@@ -61,12 +62,14 @@ export default function RootLayout({
       >
         <AuthProvider>
           <AudioQueueProvider>
-            <SkipToContent />
-            <IndexNavbar />
-            <main id="main-content" className="min-h-screen">{children}</main>
-            <BlogFooter />
-            <PageTracker />
-            <KeyboardShortcuts />
+            <ExperimentProvider>
+              <SkipToContent />
+              <IndexNavbar />
+              <main id="main-content" className="min-h-screen">{children}</main>
+              <BlogFooter />
+              <PageTracker />
+              <KeyboardShortcuts />
+            </ExperimentProvider>
           </AudioQueueProvider>
         </AuthProvider>
       </body>

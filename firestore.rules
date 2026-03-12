@@ -262,6 +262,41 @@ service cloud.firestore {
       allow write: if false;
     }
 
+    // Anomalies — public read (dashboard), no public write
+    match /anomalies/{document=**} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // Experiments — public read (experiment configs), no client write
+    match /experiments/{document=**} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // Experiment events — authenticated write (tracking), no read
+    match /experiment_events/{document=**} {
+      allow read: if false;
+      allow write: if request.auth != null;
+    }
+
+    // Experiment assignments — authenticated read/write own data
+    match /experiment_assignments/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // System reports — public read (dashboard), no public write
+    match /system_reports/{document=**} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // Pipeline metrics — public read (dashboard), no public write
+    match /pipeline_metrics/{document=**} {
+      allow read: if true;
+      allow write: if false;
+    }
+
     // Default deny
     match /{document=**} {
       allow read, write: if false;

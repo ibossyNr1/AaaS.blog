@@ -32,6 +32,8 @@
  *   video          — Video agent (generate video scene metadata)
  *   health         — Health agent (comprehensive system health checks)
  *   alerting       — Alerting agent (aggregate alerts and failures)
+ *   anomaly        — Anomaly agent (detect score/search/agent anomalies)
+ *   reporting      — Reporting agent (weekly system report generation)
  *   all            — Run all agents sequentially in dependency order
  *
  * Examples:
@@ -162,6 +164,14 @@ const AGENT_REGISTRY: Record<string, { label: string; load: () => Promise<{ run:
     label: "Alerting Agent",
     load: () => import("./alerting-agent"),
   },
+  anomaly: {
+    label: "Anomaly Agent",
+    load: () => import("./anomaly-agent"),
+  },
+  reporting: {
+    label: "Reporting Agent",
+    load: () => import("./reporting-agent"),
+  },
 };
 
 /**
@@ -214,6 +224,8 @@ const EXECUTION_ORDER = [
   "digest",
   "digest-email",
   "alerting",
+  "anomaly",
+  "reporting",
 ];
 
 // Track consecutive failures per agent for alerting
