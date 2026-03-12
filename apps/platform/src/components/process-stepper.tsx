@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Container, Section, cn } from "@aaas/ui";
 import { FadeUp } from "./motion";
+import { VideoPlayer } from "./video-player";
 
 const steps = [
   {
@@ -94,16 +95,32 @@ export function ProcessStepper() {
         </div>
 
         {/* Active step content */}
-        <div className="max-w-2xl mx-auto text-center">
-          <h3 className="text-2xl font-semibold text-text mb-4">
-            {steps[activeStep]!.heading}
-          </h3>
-          <p className="text-text-muted leading-relaxed mb-6">
-            {steps[activeStep]!.description}
-          </p>
-          <p className="font-mono text-xs text-circuit/60 uppercase tracking-wider">
-            {steps[activeStep]!.detail}
-          </p>
+        <div className={cn(
+          "max-w-4xl mx-auto",
+          activeStep === 0 ? "flex flex-col md:flex-row items-center gap-8 md:gap-12" : "text-center max-w-2xl"
+        )}>
+          {activeStep === 0 && (
+            <FadeUp className="shrink-0">
+              <VideoPlayer
+                storagePath="Video/Jor_Intro_S.mp4"
+                token="0d09aaac-cb46-4840-a736-96f16bf76fe3"
+                aspect="aspect-square"
+                buttonSize="sm"
+                className="w-48 h-48 md:w-64 md:h-64 shadow-xl border border-border rounded-xl"
+              />
+            </FadeUp>
+          )}
+          <div className={cn(activeStep !== 0 && "mx-auto")}>
+            <h3 className="text-2xl font-semibold text-text mb-4">
+              {steps[activeStep]!.heading}
+            </h3>
+            <p className="text-text-muted leading-relaxed mb-6">
+              {steps[activeStep]!.description}
+            </p>
+            <p className="font-mono text-xs text-circuit/60 uppercase tracking-wider">
+              {steps[activeStep]!.detail}
+            </p>
+          </div>
         </div>
       </Container>
     </Section>
