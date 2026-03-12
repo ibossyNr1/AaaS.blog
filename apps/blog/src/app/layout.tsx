@@ -6,6 +6,7 @@ import { BlogFooter } from "@/components/blog-footer";
 import { PageTracker } from "@/components/page-tracker";
 import { KeyboardShortcuts } from "@/components/keyboard-shortcuts";
 import { AuthProvider } from "@/components/auth-provider";
+import { AudioQueueProvider } from "@/components/audio-queue";
 import "./globals.css";
 
 const geistSans = localFont({
@@ -40,7 +41,10 @@ export const metadata: Metadata = {
   },
   alternates: {
     types: {
-      "application/rss+xml": "/api/feed",
+      "application/rss+xml": [
+        { url: "/api/feed", title: "AaaS Knowledge Index Feed" },
+        { url: "/api/podcast/feed", title: "AaaS Podcast Feed" },
+      ],
     },
   },
 };
@@ -56,12 +60,14 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}
       >
         <AuthProvider>
-          <SkipToContent />
-          <IndexNavbar />
-          <main id="main-content" className="min-h-screen">{children}</main>
-          <BlogFooter />
-          <PageTracker />
-          <KeyboardShortcuts />
+          <AudioQueueProvider>
+            <SkipToContent />
+            <IndexNavbar />
+            <main id="main-content" className="min-h-screen">{children}</main>
+            <BlogFooter />
+            <PageTracker />
+            <KeyboardShortcuts />
+          </AudioQueueProvider>
         </AuthProvider>
       </body>
     </html>

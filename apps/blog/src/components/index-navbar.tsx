@@ -24,6 +24,7 @@ const navLinks = [
   { label: "Changelog", href: "/changelog" },
   { label: "Comparisons", href: "/comparisons" },
   { label: "Status", href: "/status" },
+  { label: "Media", href: "/media" },
   { label: "Watchlist", href: "/watchlist" },
   { label: "Following", href: "/following" },
   { label: "Profile", href: "/profile" },

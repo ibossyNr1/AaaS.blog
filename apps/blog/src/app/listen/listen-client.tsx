@@ -1,9 +1,10 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import { Card, Badge, cn } from "@aaas/ui";
 import type { Episode, AudioFormat } from "@/lib/media-types";
 import { AUDIO_FORMATS } from "@/lib/media-types";
+import { useAudioQueue, type AudioTrack } from "@/components/audio-queue";
 
 /* -------------------------------------------------------------------------- */
 /*  Helpers                                                                   */
@@ -23,17 +24,27 @@ function formatDate(iso: string): string {
   });
 }
 
+function episodeToTrack(ep: Episode): AudioTrack {
+  return {
+    id: ep.id,
+    title: ep.title,
+    subtitle: `${FORMAT_LABELS[ep.format]} · ${formatDuration(ep.duration)}`,
+    src: ep.audioUrl,
+    duration: ep.duration,
+  };
+}
+
 /* -------------------------------------------------------------------------- */
-/*  Types                                                                     */
+/*  Constants                                                                 */
 /* -------------------------------------------------------------------------- */
 
-type FilterTab = "all" | AudioFormat;
+type ContentTab = "narrations" | "digests" | "trends";
+type SortKey = "newest" | "popular";
 
-const TABS: { key: FilterTab; label: string }[] = [
-  { key: "all", label: "All" },
-  { key: "narration", label: "Narrations" },
-  { key: "digest", label: "Digests" },
-  { key: "podcast", label: "Podcasts" },
+const CONTENT_TABS: { key: ContentTab; label: string; format: AudioFormat | null }[] = [
+  { key: "narrations", label: "Entity Narrations", format: "narration" },
+  { key: "digests", label: "Channel Digests", format: "digest" },
+  { key: "trends", label: "Weekly Trends", format: "podcast" },
 ];
 
 const FORMAT_LABELS: Record<AudioFormat, string> = {
@@ -42,6 +53,16 @@ const FORMAT_LABELS: Record<AudioFormat, string> = {
   podcast: "Podcast",
 };
 
+const ENTITY_TYPES = [
+  { key: "all", label: "All Types" },
+  { key: "tool", label: "Tools" },
+  { key: "model", label: "Models" },
+  { key: "agent", label: "Agents" },
+  { key: "skill", label: "Skills" },
+  { key: "script", label: "Scripts" },
+  { key: "benchmark", label: "Benchmarks" },
+];
+
 /* -------------------------------------------------------------------------- */
 /*  Episode Card                                                              */
 /* -------------------------------------------------------------------------- */
@@ -49,11 +70,13 @@ const FORMAT_LABELS: Record<AudioFormat, string> = {
 function EpisodeCard({
   episode,
   isPlaying,
-  onToggle,
+  onPlay,
+  onQueue,
 }: {
   episode: Episode;
   isPlaying: boolean;
-  onToggle: () => void;
+  onPlay: () => void;
+  onQueue: () => void;
 }) {
   return (
     <Card className="group flex flex-col h-full">
@@ -64,37 +87,42 @@ function EpisodeCard({
             {formatDuration(episode.duration)}
           </span>
         </div>
-        <button
-          onClick={onToggle}
-          className={cn(
-            "shrink-0 w-9 h-9 rounded-full border flex items-center justify-center transition-colors",
-            isPlaying
-              ? "border-circuit bg-circuit/10 text-circuit"
-              : "border-border text-text-muted hover:border-circuit hover:text-circuit",
-          )}
-          aria-label={isPlaying ? "Pause" : "Play"}
-        >
-          {isPlaying ? (
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 14 14"
-              fill="currentColor"
-            >
-              <rect x="2" y="1" width="4" height="12" rx="1" />
-              <rect x="8" y="1" width="4" height="12" rx="1" />
+        <div className="flex items-center gap-1.5">
+          {/* Play button */}
+          <button
+            onClick={onPlay}
+            className={cn(
+              "shrink-0 w-9 h-9 rounded-full border flex items-center justify-center transition-colors",
+              isPlaying
+                ? "border-circuit bg-circuit/10 text-circuit"
+                : "border-border text-text-muted hover:border-circuit hover:text-circuit",
+            )}
+            aria-label={isPlaying ? "Now playing" : "Play"}
+          >
+            {isPlaying ? (
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor">
+                <rect x="2" y="1" width="4" height="12" rx="1" />
+                <rect x="8" y="1" width="4" height="12" rx="1" />
+              </svg>
+            ) : (
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor">
+                <polygon points="3,1 13,7 3,13" />
+              </svg>
+            )}
+          </button>
+          {/* Queue button */}
+          <button
+            onClick={onQueue}
+            className="shrink-0 w-9 h-9 rounded-full border border-border text-text-muted hover:border-circuit/30 hover:text-circuit flex items-center justify-center transition-colors"
+            aria-label="Add to queue"
+            title="Add to queue"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
             </svg>
-          ) : (
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 14 14"
-              fill="currentColor"
-            >
-              <polygon points="3,1 13,7 3,13" />
-            </svg>
-          )}
-        </button>
+          </button>
+        </div>
       </div>
 
       <h3
@@ -176,173 +204,168 @@ function ComingSoon() {
 }
 
 /* -------------------------------------------------------------------------- */
-/*  Audio Player Bar                                                          */
-/* -------------------------------------------------------------------------- */
-
-function PlayerBar({
-  episode,
-  audioRef,
-  isPlaying,
-  onToggle,
-  onClose,
-}: {
-  episode: Episode;
-  audioRef: React.RefObject<HTMLAudioElement>;
-  isPlaying: boolean;
-  onToggle: () => void;
-  onClose: () => void;
-}) {
-  return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-surface/95 backdrop-blur-sm">
-      <div className="max-w-6xl mx-auto px-4 py-3 flex items-center gap-4">
-        {/* Play/Pause */}
-        <button
-          onClick={onToggle}
-          className="shrink-0 w-10 h-10 rounded-full border border-circuit bg-circuit/10 text-circuit flex items-center justify-center"
-          aria-label={isPlaying ? "Pause" : "Play"}
-        >
-          {isPlaying ? (
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 14 14"
-              fill="currentColor"
-            >
-              <rect x="2" y="1" width="4" height="12" rx="1" />
-              <rect x="8" y="1" width="4" height="12" rx="1" />
-            </svg>
-          ) : (
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 14 14"
-              fill="currentColor"
-            >
-              <polygon points="3,1 13,7 3,13" />
-            </svg>
-          )}
-        </button>
-
-        {/* Episode info */}
-        <div className="flex-grow min-w-0">
-          <p className="text-sm font-semibold text-text truncate">
-            {episode.title}
-          </p>
-          <p className="text-[10px] font-mono uppercase tracking-wider text-text-muted">
-            {FORMAT_LABELS[episode.format]} &middot;{" "}
-            {formatDuration(episode.duration)}
-          </p>
-        </div>
-
-        {/* Native audio controls */}
-        <audio
-          ref={audioRef}
-          src={episode.audioUrl}
-          controls
-          className="hidden sm:block flex-shrink-0 h-8 max-w-xs"
-        />
-
-        {/* Close */}
-        <button
-          onClick={onClose}
-          className="shrink-0 text-text-muted hover:text-text transition-colors text-lg leading-none"
-          aria-label="Close player"
-        >
-          &times;
-        </button>
-      </div>
-    </div>
-  );
-}
-
-/* -------------------------------------------------------------------------- */
 /*  Main Client Component                                                     */
 /* -------------------------------------------------------------------------- */
 
 export function ListenClient({ episodes }: { episodes: Episode[] }) {
-  const [activeTab, setActiveTab] = useState<FilterTab>("all");
-  const [currentId, setCurrentId] = useState<string | null>(null);
-  const [playing, setPlaying] = useState(false);
-  const audioRef = useRef<HTMLAudioElement>(null) as React.RefObject<HTMLAudioElement>;
+  const [activeTab, setActiveTab] = useState<ContentTab>("narrations");
+  const [entityFilter, setEntityFilter] = useState("all");
+  const [channelFilter, setChannelFilter] = useState("all");
+  const [sortBy, setSortBy] = useState<SortKey>("newest");
+  const audioQueue = useAudioQueue();
+
+  /* -- Derive unique channels from episodes -- */
+  const channels = useMemo(() => {
+    const set = new Set<string>();
+    episodes.forEach((e) => {
+      if (e.channel) set.add(e.channel);
+    });
+    return Array.from(set).sort();
+  }, [episodes]);
+
+  /* -- Tab config -- */
+  const currentTabConfig = CONTENT_TABS.find((t) => t.key === activeTab)!;
+
+  /* -- Filtering -- */
+  const filtered = useMemo(() => {
+    let list = episodes;
+
+    // Filter by format (tab)
+    if (currentTabConfig.format) {
+      list = list.filter((e) => e.format === currentTabConfig.format);
+    }
+
+    // Filter by entity type (narrations only)
+    if (activeTab === "narrations" && entityFilter !== "all") {
+      list = list.filter((e) => e.sourceType === entityFilter);
+    }
+
+    // Filter by channel (digests only)
+    if (activeTab === "digests" && channelFilter !== "all") {
+      list = list.filter((e) => e.channel === channelFilter);
+    }
+
+    // Sort
+    if (sortBy === "newest") {
+      list = [...list].sort(
+        (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime(),
+      );
+    } else {
+      list = [...list].sort((a, b) => b.playCount - a.playCount);
+    }
+
+    return list;
+  }, [episodes, currentTabConfig.format, activeTab, entityFilter, channelFilter, sortBy]);
 
   /* -- No episodes: show coming-soon state -- */
   if (episodes.length === 0) {
     return <ComingSoon />;
   }
 
-  /* -- Filtering -- */
-  const filtered =
-    activeTab === "all"
-      ? episodes
-      : episodes.filter((e) => e.format === activeTab);
-
-  const currentEpisode = episodes.find((e) => e.id === currentId) ?? null;
-
-  /* -- Playback controls -- */
-  function toggleEpisode(episode: Episode) {
-    if (currentId === episode.id) {
-      // Toggle play/pause on same episode
-      if (playing) {
-        audioRef.current?.pause();
-        setPlaying(false);
-      } else {
-        audioRef.current?.play();
-        setPlaying(true);
-      }
-    } else {
-      // Switch to new episode
-      setCurrentId(episode.id);
-      setPlaying(true);
-      // Track play count (fire-and-forget)
-      fetch(`/api/episodes/${episode.id}/play`, { method: "POST" }).catch(
-        () => {},
-      );
-      // Audio element will re-render with new src; play after mount
-      setTimeout(() => {
-        audioRef.current?.play();
-      }, 0);
-    }
+  /* -- Playback -- */
+  function handlePlay(episode: Episode) {
+    audioQueue.playNow(episodeToTrack(episode));
+    // Fire-and-forget play count
+    fetch(`/api/episodes/${episode.id}/play`, { method: "POST" }).catch(() => {});
   }
 
-  function togglePlayer() {
-    if (playing) {
-      audioRef.current?.pause();
-      setPlaying(false);
-    } else {
-      audioRef.current?.play();
-      setPlaying(true);
-    }
-  }
-
-  function closePlayer() {
-    audioRef.current?.pause();
-    setCurrentId(null);
-    setPlaying(false);
+  function handleQueue(episode: Episode) {
+    audioQueue.addToQueue(episodeToTrack(episode));
   }
 
   return (
-    <div className="space-y-8">
-      {/* ---- Format Filter Tabs ---- */}
-      <div className="flex flex-wrap gap-2">
-        {TABS.map(({ key, label }) => (
+    <div className="space-y-6">
+      {/* ---- Content Tabs ---- */}
+      <div className="flex flex-wrap gap-2 border-b border-border/30 pb-3">
+        {CONTENT_TABS.map(({ key, label }) => {
+          const count = episodes.filter(
+            (e) =>
+              CONTENT_TABS.find((t) => t.key === key)!.format === null ||
+              e.format === CONTENT_TABS.find((t) => t.key === key)!.format,
+          ).length;
+          return (
+            <button
+              key={key}
+              onClick={() => {
+                setActiveTab(key);
+                setEntityFilter("all");
+                setChannelFilter("all");
+              }}
+              className={cn(
+                "px-4 py-2 text-sm font-medium border-b-2 transition-colors -mb-[13px]",
+                activeTab === key
+                  ? "text-circuit border-circuit"
+                  : "text-text-muted border-transparent hover:text-text hover:border-border/50",
+              )}
+            >
+              {label}
+              <span className="ml-1.5 text-xs opacity-60">{count}</span>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* ---- Filters + Sort Row ---- */}
+      <div className="flex flex-wrap items-center gap-3">
+        {/* Entity type filter (narrations) */}
+        {activeTab === "narrations" && (
+          <select
+            value={entityFilter}
+            onChange={(e) => setEntityFilter(e.target.value)}
+            className="px-3 py-1.5 text-xs font-mono border border-border rounded bg-surface text-text-muted focus:border-circuit focus:outline-none"
+          >
+            {ENTITY_TYPES.map(({ key, label }) => (
+              <option key={key} value={key}>
+                {label}
+              </option>
+            ))}
+          </select>
+        )}
+
+        {/* Channel filter (digests) */}
+        {activeTab === "digests" && channels.length > 0 && (
+          <select
+            value={channelFilter}
+            onChange={(e) => setChannelFilter(e.target.value)}
+            className="px-3 py-1.5 text-xs font-mono border border-border rounded bg-surface text-text-muted focus:border-circuit focus:outline-none"
+          >
+            <option value="all">All Channels</option>
+            {channels.map((ch) => (
+              <option key={ch} value={ch}>
+                {ch}
+              </option>
+            ))}
+          </select>
+        )}
+
+        {/* Sort */}
+        <div className="ml-auto flex items-center gap-1.5">
+          <span className="text-[10px] font-mono uppercase tracking-wider text-text-muted">
+            Sort:
+          </span>
           <button
-            key={key}
-            onClick={() => setActiveTab(key)}
+            onClick={() => setSortBy("newest")}
             className={cn(
-              "px-3 py-1.5 text-xs font-mono uppercase tracking-wider border rounded transition-colors",
-              activeTab === key
+              "px-2 py-1 text-[10px] font-mono uppercase tracking-wider border rounded transition-colors",
+              sortBy === "newest"
                 ? "text-circuit border-circuit bg-circuit/10"
                 : "text-text-muted border-border hover:border-circuit/30",
             )}
           >
-            {label}
-            <span className="ml-1.5 opacity-60">
-              {key === "all"
-                ? episodes.length
-                : episodes.filter((e) => e.format === key).length}
-            </span>
+            Newest
           </button>
-        ))}
+          <button
+            onClick={() => setSortBy("popular")}
+            className={cn(
+              "px-2 py-1 text-[10px] font-mono uppercase tracking-wider border rounded transition-colors",
+              sortBy === "popular"
+                ? "text-circuit border-circuit bg-circuit/10"
+                : "text-text-muted border-border hover:border-circuit/30",
+            )}
+          >
+            Popular
+          </button>
+        </div>
       </div>
 
       {/* ---- Episode Grid ---- */}
@@ -352,30 +375,20 @@ export function ListenClient({ episodes }: { episodes: Episode[] }) {
             <EpisodeCard
               key={episode.id}
               episode={episode}
-              isPlaying={currentId === episode.id && playing}
-              onToggle={() => toggleEpisode(episode)}
+              isPlaying={audioQueue.currentTrack?.id === episode.id && audioQueue.playing}
+              onPlay={() => handlePlay(episode)}
+              onQueue={() => handleQueue(episode)}
             />
           ))}
         </div>
       ) : (
         <div className="text-center py-12 text-text-muted text-sm">
-          No episodes found for this format.
+          No episodes found matching your filters.
         </div>
       )}
 
-      {/* ---- Sticky Player Bar ---- */}
-      {currentEpisode && (
-        <PlayerBar
-          episode={currentEpisode}
-          audioRef={audioRef}
-          isPlaying={playing}
-          onToggle={togglePlayer}
-          onClose={closePlayer}
-        />
-      )}
-
-      {/* Bottom padding when player is visible */}
-      {currentEpisode && <div className="h-20" />}
+      {/* Bottom padding when global player is visible */}
+      {audioQueue.currentTrack && <div className="h-20" />}
     </div>
   );
 }

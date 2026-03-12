@@ -17,6 +17,7 @@ import { SimilarEntities } from "./similar-entities";
 import { EntityComments } from "./entity-comments";
 import { EntityLinkPreview } from "./entity-link-preview";
 import { EntitySummary } from "./entity-summary";
+import { EntityAudio } from "./entity-audio";
 import { EntityViewTracker } from "./entity-view-tracker";
 import { LazySection } from "./lazy-section";
 
@@ -48,6 +49,7 @@ export async function EntityPage({ type, slug }: EntityPageProps) {
       )}
       <EntitySchemaTable entity={entity} />
       <EntitySummary type={type} slug={slug} />
+      <EntityAudio type={type} slug={slug} />
       <EntityScores entity={entity} />
       <LazySection>
         <ScoreHistoryChart type={type} slug={slug} />

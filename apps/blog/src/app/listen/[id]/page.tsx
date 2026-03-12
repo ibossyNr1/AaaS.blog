@@ -14,6 +14,7 @@ import {
 import { db } from "@/lib/firebase";
 import type { Episode, AudioFormat } from "@/lib/media-types";
 import type { Metadata } from "next";
+import { PodcastSubscribe } from "@/components/podcast-subscribe";
 
 /* -------------------------------------------------------------------------- */
 /*  Data fetching                                                             */
@@ -68,6 +69,17 @@ function formatDuration(seconds: number): string {
   return `${m}:${s.toString().padStart(2, "0")}`;
 }
 
+function formatDurationISO(seconds: number): string {
+  const h = Math.floor(seconds / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
+  const s = seconds % 60;
+  let iso = "PT";
+  if (h > 0) iso += `${h}H`;
+  if (m > 0) iso += `${m}M`;
+  iso += `${s}S`;
+  return iso;
+}
+
 function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString("en-US", {
     month: "short",
@@ -102,6 +114,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       type: "music.song",
       url: `https://aaas.blog/listen/${episode.id}`,
       images: [{ url: ogImage, width: 1200, height: 630 }],
+      audio: [
+        {
+          url: episode.audioUrl,
+          type: "audio/mpeg",
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
@@ -109,6 +127,41 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description: episode.description,
       images: [ogImage],
     },
+  };
+}
+
+/* -------------------------------------------------------------------------- */
+/*  JSON-LD                                                                   */
+/* -------------------------------------------------------------------------- */
+
+function buildJsonLd(episode: Episode) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "PodcastEpisode",
+    name: episode.title,
+    description: episode.description,
+    url: `https://aaas.blog/listen/${episode.id}`,
+    datePublished: episode.publishedAt,
+    duration: formatDurationISO(episode.duration),
+    associatedMedia: {
+      "@type": "MediaObject",
+      contentUrl: episode.audioUrl,
+      encodingFormat: "audio/mpeg",
+    },
+    partOfSeries: {
+      "@type": "PodcastSeries",
+      name: "AaaS Knowledge Index",
+      url: "https://aaas.blog/listen",
+    },
+    ...(episode.sourceRef && episode.sourceType
+      ? {
+          about: {
+            "@type": "Thing",
+            name: episode.sourceRef,
+            url: `https://aaas.blog/${episode.sourceType}/${episode.sourceRef}`,
+          },
+        }
+      : {}),
   };
 }
 
@@ -122,9 +175,16 @@ export default async function EpisodeDetailPage({ params }: PageProps) {
   if (!episode) return notFound();
 
   const related = await getRelatedEpisodes(episode.format, episode.id);
+  const jsonLd = buildJsonLd(episode);
 
   return (
     <>
+      {/* JSON-LD structured data for PodcastEpisode schema — server-generated, safe content */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
       {/* ---- Header ---- */}
       <Section className="pt-28 pb-8">
         <Container className="max-w-4xl">
@@ -174,6 +234,13 @@ export default async function EpisodeDetailPage({ params }: PageProps) {
               className="w-full"
             />
           </Card>
+        </Container>
+      </Section>
+
+      {/* ---- Subscribe Bar ---- */}
+      <Section className="py-4">
+        <Container className="max-w-4xl">
+          <PodcastSubscribe />
         </Container>
       </Section>
 

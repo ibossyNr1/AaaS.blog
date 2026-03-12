@@ -173,6 +173,17 @@ service cloud.firestore {
       allow read, write: if false;
     }
 
+    // Audio episodes — public read, no public write
+    match /audio_episodes/{document=**} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // Video queue — no public access (managed via API)
+    match /video_queue/{document=**} {
+      allow read, write: if false;
+    }
+
     // Default deny
     match /{document=**} {
       allow read, write: if false;

@@ -36,6 +36,7 @@ const STATIC_PAGES = [
   { path: "/changelog", changeFrequency: "daily" as const, priority: 0.6 },
   { path: "/comparisons", changeFrequency: "weekly" as const, priority: 0.5 },
   { path: "/status", changeFrequency: "daily" as const, priority: 0.4 },
+  { path: "/media", changeFrequency: "daily" as const, priority: 0.5 },
   { path: "/search", changeFrequency: "daily" as const, priority: 0.7 },
   { path: "/following", changeFrequency: "weekly" as const, priority: 0.4 },
   { path: "/settings", changeFrequency: "monthly" as const, priority: 0.2 },
@@ -103,5 +104,27 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Episodes collection may not exist yet
   }
 
-  return [...staticEntries, ...channelEntries, ...entityEntries, ...episodeEntries];
+  // Podcast audio episode pages (audio_episodes collection)
+  const podcastEntries: MetadataRoute.Sitemap = [];
+
+  try {
+    const podQuery = query(
+      collection(db, "audio_episodes"),
+      orderBy("generatedAt", "desc"),
+      firestoreLimit(200),
+    );
+    const podSnap = await getDocs(podQuery);
+    for (const d of podSnap.docs) {
+      podcastEntries.push({
+        url: `${BASE_URL}/listen/${d.id}`,
+        lastModified: now,
+        changeFrequency: "weekly" as const,
+        priority: 0.5,
+      });
+    }
+  } catch {
+    // audio_episodes collection may not exist yet
+  }
+
+  return [...staticEntries, ...channelEntries, ...entityEntries, ...episodeEntries, ...podcastEntries];
 }

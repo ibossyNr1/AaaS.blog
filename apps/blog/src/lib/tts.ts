@@ -273,3 +273,124 @@ export function getTTSProvider(): TTSProvider {
 export function setTTSProvider(provider: TTSProvider): void {
   _provider = provider;
 }
+
+// ─── TTSConfig Type ──────────────────────────────────────────────────
+
+export interface TTSConfig {
+  /** Provider name: "google" | "elevenlabs" | "supertonic" | "edge" | "stub" */
+  provider: string;
+  /** Voice identifier (provider-specific) */
+  voice?: string;
+  /** Speaking rate multiplier (1.0 = normal) */
+  speed?: number;
+  /** Pitch adjustment (-20.0 to 20.0, 0.0 = default) */
+  pitch?: number;
+}
+
+// ─── SuperTonic Provider (placeholder) ───────────────────────────────
+
+/**
+ * SuperTonicProvider — generates silent placeholder audio.
+ * Used for development and testing when no real TTS service is configured.
+ */
+export class SuperTonicProvider implements TTSProvider {
+  name = "supertonic";
+
+  async synthesize(text: string, options?: TTSOptions): Promise<TTSResult> {
+    const wordCount = text.split(/\s+/).length;
+    const speed = options?.speed || 1.0;
+    const duration = Math.round((wordCount / 150) * 60 / speed);
+
+    return {
+      audioUrl: "https://storage.googleapis.com/aaas-platform.appspot.com/audio/placeholder-supertonic.mp3",
+      duration,
+      provider: "supertonic",
+    };
+  }
+
+  async listVoices() {
+    return [
+      { id: "st-narrator", name: "SuperTonic Narrator", language: "en-US" },
+      { id: "st-host", name: "SuperTonic Host", language: "en-US" },
+      { id: "st-analyst", name: "SuperTonic Analyst", language: "en-US" },
+    ];
+  }
+}
+
+// ─── Edge TTS Provider (placeholder) ─────────────────────────────────
+
+/**
+ * EdgeTTSProvider — placeholder using the edge-tts API pattern.
+ * In production, this would call Microsoft Edge's free TTS service.
+ */
+export class EdgeTTSProvider implements TTSProvider {
+  name = "edge-tts";
+  private storageBucket: string;
+
+  constructor(storageBucket = "aaas-platform.appspot.com") {
+    this.storageBucket = storageBucket;
+  }
+
+  async synthesize(text: string, options?: TTSOptions): Promise<TTSResult> {
+    const voice = options?.voice || "en-US-AriaNeural";
+    const speed = options?.speed || 1.0;
+
+    // In production, this would spawn edge-tts CLI or call the API:
+    //   edge-tts --voice <voice> --rate <rate> --text <text> --write-media <output>
+    // For now, return a placeholder result
+    const wordCount = text.split(/\s+/).length;
+    const duration = Math.round((wordCount / 150) * 60 / speed);
+
+    console.log(`[edge-tts] Would synthesize ${wordCount} words with voice "${voice}" at ${speed}x speed`);
+
+    return {
+      audioUrl: `https://storage.googleapis.com/${this.storageBucket}/audio/placeholder-edge.mp3`,
+      duration,
+      provider: "edge-tts",
+    };
+  }
+
+  async listVoices() {
+    // Edge TTS supports 300+ voices; these are common English ones
+    return [
+      { id: "en-US-AriaNeural", name: "Aria (Female)", language: "en-US" },
+      { id: "en-US-GuyNeural", name: "Guy (Male)", language: "en-US" },
+      { id: "en-US-JennyNeural", name: "Jenny (Female)", language: "en-US" },
+      { id: "en-US-DavisNeural", name: "Davis (Male)", language: "en-US" },
+      { id: "en-GB-SoniaNeural", name: "Sonia (Female)", language: "en-GB" },
+      { id: "en-GB-RyanNeural", name: "Ryan (Male)", language: "en-GB" },
+    ];
+  }
+}
+
+// ─── High-Level Generation Functions ─────────────────────────────────
+
+import { entityNarrationScript, channelDigestScript } from "./narration-templates";
+
+/**
+ * Generate a narration audio episode for a single entity.
+ * Converts entity data to a natural script, then synthesizes via TTS.
+ */
+export async function generateEntityNarration(
+  entity: Record<string, unknown>,
+  options?: TTSOptions,
+): Promise<TTSResult & { script: string }> {
+  const script = entityNarrationScript(entity);
+  const provider = getTTSProvider();
+  const result = await provider.synthesize(script, options);
+  return { ...result, script };
+}
+
+/**
+ * Generate a channel digest audio episode summarizing multiple entities.
+ */
+export async function generateChannelDigest(
+  channel: string,
+  entities: Array<Record<string, unknown>>,
+  options?: TTSOptions,
+): Promise<TTSResult & { script: string }> {
+  const script = channelDigestScript(channel, entities);
+  const provider = getTTSProvider();
+  const result = await provider.synthesize(script, options);
+  return { ...result, script };
+}

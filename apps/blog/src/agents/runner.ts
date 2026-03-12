@@ -24,6 +24,8 @@
  *   trending       — Trending agent (detect significant score changes)
  *   summary        — Summary agent (generate structured entity summaries)
  *   comparison     — Comparison agent (generate popular entity comparisons)
+ *   audio          — Audio agent (TTS narration episodes)
+ *   video          — Video agent (generate video scene metadata)
  *   all            — Run all agents sequentially in dependency order
  *
  * Examples:
@@ -122,6 +124,14 @@ const AGENT_REGISTRY: Record<string, { label: string; load: () => Promise<{ run:
     label: "Search Analytics Agent",
     load: () => import("./search-analytics-agent"),
   },
+  audio: {
+    label: "Audio Agent",
+    load: () => import("./audio-agent"),
+  },
+  video: {
+    label: "Video Agent",
+    load: () => import("./video-agent"),
+  },
 };
 
 /**
@@ -159,6 +169,8 @@ const EXECUTION_ORDER = [
   "comparison",
   "validate-links",
   "media",
+  "audio",
+  "video",
   "metadata",
   "ingest",
   "auto-review",
