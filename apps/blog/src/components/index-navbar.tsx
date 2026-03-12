@@ -36,6 +36,8 @@ const navLinks = [
   { label: "Profile", href: "/profile" },
   { label: "Events", href: "/events" },
   { label: "Webhooks", href: "/webhooks" },
+  { label: "Integrations", href: "/integrations" },
+  { label: "Achievements", href: "/achievements" },
   { label: "Vault", href: "/vault" },
   { label: "API Docs", href: "/api-docs" },
   { label: "Discover", href: "/discover" },

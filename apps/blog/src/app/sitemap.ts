@@ -51,6 +51,11 @@ const STATIC_PAGES = [
   { path: "/workspaces", changeFrequency: "daily" as const, priority: 0.6 },
   { path: "/collections", changeFrequency: "daily" as const, priority: 0.6 },
   { path: "/bookmarks", changeFrequency: "weekly" as const, priority: 0.4 },
+  { path: "/integrations", changeFrequency: "weekly" as const, priority: 0.6 },
+  { path: "/notifications", changeFrequency: "daily" as const, priority: 0.4 },
+  { path: "/achievements", changeFrequency: "weekly" as const, priority: 0.5 },
+  { path: "/developer/playground", changeFrequency: "monthly" as const, priority: 0.5 },
+  { path: "/developer/sdks", changeFrequency: "monthly" as const, priority: 0.5 },
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

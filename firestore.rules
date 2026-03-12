@@ -342,6 +342,62 @@ service cloud.firestore {
       allow read, write: if false;
     }
 
+    // Plugins — public read (marketplace), no client write
+    match /plugins/{document=**} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // Plugin installations — authenticated read/write (own workspace)
+    match /plugin_installations/{document=**} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null;
+    }
+
+    // Plugin events — internal only
+    match /plugin_events/{document=**} {
+      allow read, write: if false;
+    }
+
+    // Notifications — authenticated read/write own data
+    match /notifications/{userId}/{document=**} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Notification preferences — authenticated read/write own data
+    match /notification_preferences/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Webhooks v2 — authenticated read/write (own workspace)
+    match /webhooks_v2/{document=**} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null;
+    }
+
+    // Webhook deliveries — internal only
+    match /webhook_deliveries/{document=**} {
+      allow read, write: if false;
+    }
+
+    // Achievements — public read (definitions), no client write
+    match /achievements/{document=**} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // User achievements — authenticated read own, no client write
+    match /user_achievements/{userId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow write: if false;
+    }
+
+    // Achievement leaderboard — public read, no client write
+    match /achievement_leaderboard/{document=**} {
+      allow read: if true;
+      allow write: if false;
+    }
+
     // Default deny
     match /{document=**} {
       allow read, write: if false;

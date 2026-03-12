@@ -11,6 +11,7 @@ import { ExperimentProvider } from "@/components/experiment-provider";
 import { OfflineBanner } from "@/components/offline-banner";
 import { LocaleProvider } from "@/components/locale-provider";
 import { AriaLiveRegion } from "@/components/aria-live-region";
+import { AchievementToast } from "@/components/achievement-toast";
 import "./globals.css";
 
 const geistSans = localFont({
@@ -77,6 +78,7 @@ export default function RootLayout({
                 <PageTracker />
                 <KeyboardShortcuts />
                 <AriaLiveRegion />
+                <AchievementToast />
               </ExperimentProvider>
             </AudioQueueProvider>
           </AuthProvider>
