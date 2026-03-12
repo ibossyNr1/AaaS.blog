@@ -19,9 +19,11 @@
  *   auto-review    — Auto review agent (approve high-confidence submissions)
  *   webhook        — Webhook delivery agent (dispatch queued notifications)
  *   changelog      — Changelog agent (detect entity changes)
+ *   digest         — Digest agent (compose weekly summary digests)
  *   digest-email   — Digest email agent (weekly subscriber digest)
  *   trending       — Trending agent (detect significant score changes)
  *   summary        — Summary agent (generate structured entity summaries)
+ *   comparison     — Comparison agent (generate popular entity comparisons)
  *   all            — Run all agents sequentially in dependency order
  *
  * Examples:
@@ -88,6 +90,10 @@ const AGENT_REGISTRY: Record<string, { label: string; load: () => Promise<{ run:
     label: "Changelog Agent",
     load: () => import("./changelog-agent"),
   },
+  digest: {
+    label: "Digest Agent",
+    load: () => import("./digest-agent"),
+  },
   "digest-email": {
     label: "Digest Email Agent",
     load: () => import("./digest-email-agent"),
@@ -108,6 +114,10 @@ const AGENT_REGISTRY: Record<string, { label: string; load: () => Promise<{ run:
     label: "Summary Agent",
     load: () => import("./summary-agent"),
   },
+  comparison: {
+    label: "Comparison Agent",
+    load: () => import("./comparison-agent"),
+  },
 };
 
 /**
@@ -127,7 +137,8 @@ const AGENT_REGISTRY: Record<string, { label: string; load: () => Promise<{ run:
  * 10. ingest -> discovers new entities (runs last to avoid processing incomplete data)
  * 11. auto-review -> auto-approves high-confidence submissions from ingest
  * 12. webhook -> delivers queued notifications (runs after all data changes)
- * 13. digest-email -> sends weekly subscriber digest (runs last, after all agents)
+ * 13. digest -> composes weekly summary digest (before email)
+ * 14. digest-email -> sends weekly subscriber digest (runs last, after all agents)
  */
 const EXECUTION_ORDER = [
   "audit",
@@ -141,12 +152,14 @@ const EXECUTION_ORDER = [
   "trending",
   "categorize",
   "similarity",
+  "comparison",
   "validate-links",
   "media",
   "metadata",
   "ingest",
   "auto-review",
   "webhook",
+  "digest",
   "digest-email",
 ];
 

@@ -1,1 +1,45 @@
 @import "@aaas/ui/globals.css";
+
+@media print {
+  /* Hide non-essential elements */
+  header, footer, nav,
+  .print\:hidden,
+  [data-print-hide] {
+    display: none !important;
+  }
+
+  /* Reset backgrounds for printing */
+  body, main, section {
+    background: white !important;
+    color: black !important;
+  }
+
+  /* Ensure text is readable */
+  * {
+    color: #1a1a1a !important;
+    border-color: #e5e5e5 !important;
+  }
+
+  /* Links show URL */
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.75em;
+    color: #666 !important;
+  }
+
+  /* Page margins */
+  @page {
+    margin: 1.5cm;
+  }
+
+  /* Prevent page breaks inside cards */
+  .card, article {
+    break-inside: avoid;
+  }
+
+  /* Entity page specific */
+  main {
+    padding: 0 !important;
+    min-height: auto !important;
+  }
+}

@@ -5,6 +5,7 @@ import { getChannelName } from "@/lib/channels";
 import { computeDetailedGrades } from "@/lib/grades";
 import { GradeBadge } from "@/components/grade-badge";
 import { WatchButton } from "./watch-button";
+import { PrintButton } from "./print-button";
 import { EntitySparkline } from "@/components/entity-sparkline";
 
 export function EntityHeader({ entity }: { entity: Entity }) {
@@ -23,6 +24,7 @@ export function EntityHeader({ entity }: { entity: Entity }) {
             v{entity.version}
           </span>
           <WatchButton type={entity.type} slug={entity.slug} name={entity.name} />
+          <PrintButton />
           <a
             href={`/api/entity/${entity.type}/${entity.slug}/feed`}
             target="_blank"

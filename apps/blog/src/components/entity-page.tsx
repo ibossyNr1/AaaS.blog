@@ -54,7 +54,7 @@ export async function EntityPage({ type, slug }: EntityPageProps) {
         <EntityRelations entity={entity} />
       </LazySection>
       <LazySection>
-        <Section className="py-8">
+        <Section className="py-8" data-print-hide>
           <Container className="max-w-4xl">
             <RelationshipEditor entity={entity} />
           </Container>
@@ -70,9 +70,11 @@ export async function EntityPage({ type, slug }: EntityPageProps) {
         <SimilarEntities type={type} slug={slug} />
       </LazySection>
       <LazySection>
-        <EntityComments type={type} slug={slug} />
+        <div data-print-hide>
+          <EntityComments type={type} slug={slug} />
+        </div>
       </LazySection>
-      <Section variant="surface" className="py-12">
+      <Section variant="surface" className="py-12" data-print-hide>
         <Container className="max-w-4xl text-center">
           <p className="text-text-muted mb-4">
             Explore the full AI ecosystem on Agents as a Service

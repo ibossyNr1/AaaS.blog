@@ -129,6 +129,18 @@ service cloud.firestore {
       allow write: if false;
     }
 
+    // Digests — public read (weekly digests), no public write
+    match /digests/{document=**} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // Comparisons — public read (auto comparisons), no public write
+    match /comparisons/{document=**} {
+      allow read: if true;
+      allow write: if false;
+    }
+
     // API keys — no public access (managed via admin API)
     match /api_keys/{document=**} {
       allow read, write: if false;
