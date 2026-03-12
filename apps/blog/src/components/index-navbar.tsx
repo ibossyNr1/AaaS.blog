@@ -3,6 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import { cn } from "@aaas/ui";
+import { CommandPalette } from "./command-palette";
+import { CommandPaletteTrigger } from "./command-palette-trigger";
 
 const navLinks = [
   { label: "Explore", href: "/explore" },
@@ -18,6 +20,7 @@ const navLinks = [
   { label: "Activity", href: "/activity" },
   { label: "Watchlist", href: "/watchlist" },
   { label: "API Docs", href: "/api-docs" },
+  { label: "Embed", href: "/embed" },
 ];
 
 const channelLinks = [
@@ -42,6 +45,7 @@ export function IndexNavbar() {
             {navLinks.map((link) => (
               <Link key={link.href} href={link.href} className="text-sm text-text-muted hover:text-text transition-colors">{link.label}</Link>
             ))}
+            <CommandPaletteTrigger />
             <div className="w-px h-4 bg-border" />
             {channelLinks.map((link) => (
               <Link key={link.href} href={link.href} className="text-xs font-mono text-text-muted hover:text-circuit transition-colors">{link.label}</Link>
@@ -72,6 +76,7 @@ export function IndexNavbar() {
           </nav>
         </div>
       )}
+      <CommandPalette />
     </>
   );
 }

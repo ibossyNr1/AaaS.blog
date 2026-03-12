@@ -5,6 +5,7 @@ import { getChannelName } from "@/lib/channels";
 import { computeDetailedGrades } from "@/lib/grades";
 import { GradeBadge } from "@/components/grade-badge";
 import { WatchButton } from "./watch-button";
+import { EntitySparkline } from "@/components/entity-sparkline";
 
 export function EntityHeader({ entity }: { entity: Entity }) {
   const typeInfo = ENTITY_TYPES[entity.type];
@@ -52,6 +53,13 @@ export function EntityHeader({ entity }: { entity: Entity }) {
               <span className="text-text-muted mx-2">—</span>
               <span className="text-text">{overall.label}</span>
             </div>
+            <EntitySparkline
+              type={entity.type}
+              slug={entity.slug}
+              width={120}
+              height={32}
+              className="ml-2"
+            />
           </div>
           <div className="flex flex-wrap gap-2">
             {dimensions.map((d) => (

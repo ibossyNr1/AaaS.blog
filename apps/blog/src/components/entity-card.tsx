@@ -4,6 +4,7 @@ import type { Entity } from "@/lib/types";
 import { ENTITY_TYPES } from "@/lib/types";
 import { getChannelName } from "@/lib/channels";
 import { GradeBadge } from "@/components/grade-badge";
+import { EntitySparkline } from "@/components/entity-sparkline";
 
 interface EntityCardProps {
   entity: Entity;
@@ -44,6 +45,12 @@ export function EntityCard({ entity }: EntityCardProps) {
             ))}
           </div>
           <div className="flex items-center gap-2">
+            <EntitySparkline
+              type={entity.type}
+              slug={entity.slug}
+              width={60}
+              height={20}
+            />
             <span className="text-xs font-mono text-circuit">
               {entity.scores.composite}
             </span>

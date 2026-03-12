@@ -19,7 +19,11 @@ export type WebhookEvent =
   | "entity_updated"
   | "new_episode"
   | "agent_alert"
-  | "agent_run_complete";
+  | "agent_run_complete"
+  | "entity.score.up"
+  | "entity.score.down"
+  | "entity.score.change"
+  | "entity.*";
 
 export const VALID_WEBHOOK_EVENTS: WebhookEvent[] = [
   "new_entity",
@@ -27,6 +31,10 @@ export const VALID_WEBHOOK_EVENTS: WebhookEvent[] = [
   "new_episode",
   "agent_alert",
   "agent_run_complete",
+  "entity.score.up",
+  "entity.score.down",
+  "entity.score.change",
+  "entity.*",
 ];
 
 export interface WebhookPayload {

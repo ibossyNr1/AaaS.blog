@@ -20,10 +20,16 @@ export async function GET(req: NextRequest) {
     );
   }
 
+  const statusFilter = req.nextUrl.searchParams.get("status") ?? "pending";
+
   try {
-    const snap = await db
-      .collection("categorization_suggestions")
-      .where("status", "==", "pending")
+    let q: FirebaseFirestore.Query = db.collection("categorization_suggestions");
+
+    if (statusFilter !== "all") {
+      q = q.where("status", "==", statusFilter);
+    }
+
+    const snap = await q
       .orderBy("createdAt", "desc")
       .limit(50)
       .get();
