@@ -6,6 +6,7 @@ import {
   orderBy,
   where,
   limit as firestoreLimit,
+  type QueryConstraint,
 } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 
@@ -32,7 +33,10 @@ export async function GET(req: NextRequest) {
   const limit = Math.min(Number(searchParams.get("limit") || 50), 100);
 
   try {
-    const constraints = [orderBy("publishedAt", "desc"), firestoreLimit(limit)];
+    const constraints: QueryConstraint[] = [
+      orderBy("publishedAt", "desc"),
+      firestoreLimit(limit),
+    ];
 
     if (format && VALID_FORMATS.has(format)) {
       constraints.unshift(where("format", "==", format));

@@ -18,13 +18,17 @@ export const metadata: Metadata = {
 };
 
 async function getEpisodes(max = 50): Promise<Episode[]> {
-  const q = query(
-    collection(db, "episodes"),
-    orderBy("publishedAt", "desc"),
-    firestoreLimit(max),
-  );
-  const snap = await getDocs(q);
-  return snap.docs.map((d) => ({ id: d.id, ...d.data() }) as Episode);
+  try {
+    const q = query(
+      collection(db, "episodes"),
+      orderBy("publishedAt", "desc"),
+      firestoreLimit(max),
+    );
+    const snap = await getDocs(q);
+    return snap.docs.map((d) => ({ id: d.id, ...d.data() }) as Episode);
+  } catch {
+    return [];
+  }
 }
 
 export default async function ListenPage() {
