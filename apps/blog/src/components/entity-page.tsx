@@ -6,6 +6,7 @@ import { EntityHeader } from "./entity-header";
 import { EntitySchemaTable } from "./entity-schema-table";
 import { EntityScores } from "./entity-scores";
 import { EntityRelations } from "./entity-relations";
+import { RelationshipEditor } from "./relationship-editor";
 import { EntityJsonLd } from "./entity-json-ld";
 import { ScoreHistoryChart } from "./score-history-chart";
 import { EntityChangelog } from "./entity-changelog";
@@ -29,6 +30,11 @@ export async function EntityPage({ type, slug }: EntityPageProps) {
       <EntityScores entity={entity} />
       <ScoreHistoryChart type={type} slug={slug} />
       <EntityRelations entity={entity} />
+      <Section className="py-8">
+        <Container className="max-w-4xl">
+          <RelationshipEditor entity={entity} />
+        </Container>
+      </Section>
       <EntityChangelog type={type} slug={slug} />
       <EntityDiffViewer type={type} slug={slug} />
       <SimilarEntities type={type} slug={slug} />

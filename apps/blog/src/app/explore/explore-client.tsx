@@ -1,51 +1,39 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { cn } from "@aaas/ui";
-import type { Entity, EntityType } from "@/lib/types";
+import type { Entity } from "@/lib/types";
 import { CHANNELS } from "@/lib/channels";
 import { EntityCard } from "@/components/entity-card";
 import { SearchAutocomplete } from "@/components/search-autocomplete";
-
-/* -------------------------------------------------------------------------- */
-/*  Constants                                                                 */
-/* -------------------------------------------------------------------------- */
-
-type TabKey = "all" | EntityType;
-
-const TABS: { key: TabKey; label: string }[] = [
-  { key: "all", label: "All" },
-  { key: "tool", label: "Tools" },
-  { key: "model", label: "Models" },
-  { key: "agent", label: "Agents" },
-  { key: "skill", label: "Skills" },
-  { key: "script", label: "Scripts" },
-  { key: "benchmark", label: "Benchmarks" },
-];
-
-type SortKey = "trending" | "newest" | "alphabetical";
-
-const SORT_OPTIONS: { key: SortKey; label: string }[] = [
-  { key: "trending", label: "Trending" },
-  { key: "newest", label: "Newest" },
-  { key: "alphabetical", label: "A-Z" },
-];
+import { SearchFilters, type FilterState } from "@/components/search-filters";
 
 /* -------------------------------------------------------------------------- */
 /*  Component                                                                 */
 /* -------------------------------------------------------------------------- */
 
 export function ExploreClient({ entities }: { entities: Entity[] }) {
-  const [activeTab, setActiveTab] = useState<TabKey>("all");
   const [channel, setChannel] = useState<string>("all");
-  const [sort, setSort] = useState<SortKey>("trending");
+  const [filters, setFilters] = useState<FilterState>({
+    types: [],
+    scoreMin: 0,
+    scoreMax: 100,
+    provider: "",
+    tags: [],
+    addedAfter: "",
+    sort: "composite",
+  });
+
+  const handleFilterChange = useCallback((next: FilterState) => {
+    setFilters(next);
+  }, []);
 
   const results = useMemo(() => {
     let filtered = entities;
 
-    // Type filter
-    if (activeTab !== "all") {
-      filtered = filtered.filter((e) => e.type === activeTab);
+    // Type filter (multi-select)
+    if (filters.types.length > 0) {
+      filtered = filtered.filter((e) => filters.types.includes(e.type));
     }
 
     // Channel filter
@@ -53,10 +41,42 @@ export function ExploreClient({ entities }: { entities: Entity[] }) {
       filtered = filtered.filter((e) => e.category === channel);
     }
 
+    // Score range
+    if (filters.scoreMin > 0 || filters.scoreMax < 100) {
+      filtered = filtered.filter(
+        (e) =>
+          e.scores.composite >= filters.scoreMin &&
+          e.scores.composite <= filters.scoreMax,
+      );
+    }
+
+    // Provider filter
+    if (filters.provider) {
+      const q = filters.provider.toLowerCase();
+      filtered = filtered.filter((e) =>
+        e.provider.toLowerCase().includes(q),
+      );
+    }
+
+    // Tags filter (AND logic)
+    if (filters.tags.length > 0) {
+      filtered = filtered.filter((e) =>
+        filters.tags.every((tag) => e.tags?.includes(tag)),
+      );
+    }
+
+    // Date range
+    if (filters.addedAfter) {
+      const afterDate = new Date(filters.addedAfter).getTime();
+      filtered = filtered.filter(
+        (e) => new Date(e.addedDate).getTime() >= afterDate,
+      );
+    }
+
     // Sort
     const sorted = [...filtered];
-    switch (sort) {
-      case "trending":
+    switch (filters.sort) {
+      case "composite":
         sorted.sort((a, b) => b.scores.composite - a.scores.composite);
         break;
       case "newest":
@@ -65,13 +85,23 @@ export function ExploreClient({ entities }: { entities: Entity[] }) {
             new Date(b.addedDate).getTime() - new Date(a.addedDate).getTime(),
         );
         break;
-      case "alphabetical":
+      case "name":
         sorted.sort((a, b) => a.name.localeCompare(b.name));
         break;
     }
 
     return sorted;
-  }, [entities, activeTab, channel, sort]);
+  }, [entities, filters, channel]);
+
+  const hasActiveFilters =
+    filters.types.length > 0 ||
+    filters.scoreMin > 0 ||
+    filters.scoreMax < 100 ||
+    filters.provider !== "" ||
+    filters.tags.length > 0 ||
+    filters.addedAfter !== "" ||
+    filters.sort !== "composite" ||
+    channel !== "all";
 
   return (
     <div className="space-y-6">
@@ -80,91 +110,68 @@ export function ExploreClient({ entities }: { entities: Entity[] }) {
         placeholder="Search by name, description, provider, or tag..."
       />
 
-      {/* ---- Filters Row ---- */}
-      <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-        {/* Entity Type Tabs */}
-        <div className="flex flex-wrap gap-2 flex-grow">
-          {TABS.map(({ key, label }) => {
-            const count =
-              key === "all"
-                ? entities.length
-                : entities.filter((e) => e.type === key).length;
+      {/* ---- Advanced Filters ---- */}
+      <SearchFilters
+        entities={entities}
+        onChange={handleFilterChange}
+      />
 
-            return (
-              <button
-                key={key}
-                onClick={() => setActiveTab(key)}
-                className={cn(
-                  "px-3 py-1.5 text-xs font-mono uppercase tracking-wider border rounded transition-colors",
-                  activeTab === key
-                    ? "text-circuit border-circuit bg-circuit/10"
-                    : "text-text-muted border-border hover:border-circuit/30",
-                )}
-              >
-                {label}
-                <span className="ml-1.5 opacity-60">{count}</span>
-              </button>
-            );
-          })}
-        </div>
+      {/* ---- Channel Selector ---- */}
+      <div className="flex items-center gap-3">
+        <select
+          value={channel}
+          onChange={(e) => setChannel(e.target.value)}
+          className="bg-surface border border-border rounded px-3 py-1.5 text-xs font-mono uppercase tracking-wider text-text-muted focus:outline-none focus:border-circuit/50 transition-colors appearance-none pr-7 cursor-pointer"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")`,
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "right 8px center",
+          }}
+        >
+          <option value="all">All Channels</option>
+          {CHANNELS.map((ch) => (
+            <option key={ch.slug} value={ch.slug}>
+              {ch.name}
+            </option>
+          ))}
+        </select>
 
-        {/* Channel + Sort Controls */}
-        <div className="flex items-center gap-3 shrink-0">
-          {/* Channel Dropdown */}
-          <select
-            value={channel}
-            onChange={(e) => setChannel(e.target.value)}
-            className="bg-surface border border-border rounded px-3 py-1.5 text-xs font-mono uppercase tracking-wider text-text-muted focus:outline-none focus:border-circuit/50 transition-colors appearance-none pr-7 cursor-pointer"
-            style={{
-              backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")`,
-              backgroundRepeat: "no-repeat",
-              backgroundPosition: "right 8px center",
-            }}
+        {channel !== "all" && (
+          <button
+            onClick={() => setChannel("all")}
+            className="text-xs font-mono uppercase tracking-wider text-circuit hover:underline transition-colors"
           >
-            <option value="all">All Channels</option>
-            {CHANNELS.map((ch) => (
-              <option key={ch.slug} value={ch.slug}>
-                {ch.name}
-              </option>
-            ))}
-          </select>
-
-          {/* Sort Toggle */}
-          <div className="flex border border-border rounded overflow-hidden">
-            {SORT_OPTIONS.map(({ key, label }) => (
-              <button
-                key={key}
-                onClick={() => setSort(key)}
-                className={cn(
-                  "px-3 py-1.5 text-xs font-mono uppercase tracking-wider transition-colors",
-                  sort === key
-                    ? "text-circuit bg-circuit/10"
-                    : "text-text-muted hover:text-text hover:bg-surface/50",
-                  key !== "trending" && "border-l border-border",
-                )}
-              >
-                {label}
-              </button>
-            ))}
-          </div>
-        </div>
+            Clear channel
+          </button>
+        )}
       </div>
 
       {/* ---- Result Count ---- */}
       <div className="flex items-center justify-between">
         <p className="text-xs font-mono uppercase tracking-wider text-text-muted">
-          {results.length} {results.length === 1 ? "result" : "results"}
+          Showing{" "}
+          <span className={cn("font-bold", results.length > 0 && "text-circuit")}>
+            {results.length}
+          </span>{" "}
+          of {entities.length} {entities.length === 1 ? "entity" : "entities"}
         </p>
-        {(activeTab !== "all" || channel !== "all") && (
+        {hasActiveFilters && (
           <button
             onClick={() => {
-              setActiveTab("all");
               setChannel("all");
-              setSort("trending");
+              handleFilterChange({
+                types: [],
+                scoreMin: 0,
+                scoreMax: 100,
+                provider: "",
+                tags: [],
+                addedAfter: "",
+                sort: "composite",
+              });
             }}
             className="text-xs font-mono uppercase tracking-wider text-circuit hover:underline transition-colors"
           >
-            Clear filters
+            Reset all
           </button>
         )}
       </div>

@@ -23,6 +23,23 @@ export function EntityHeader({ entity }: { entity: Entity }) {
             v{entity.version}
           </span>
           <WatchButton type={entity.type} slug={entity.slug} name={entity.name} />
+          <a
+            href={`/api/entity/${entity.type}/${entity.slug}/feed`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center w-7 h-7 rounded-full border border-border text-text-muted hover:text-circuit hover:border-circuit transition-colors"
+            title="Changelog RSS Feed"
+          >
+            <svg
+              className="w-3.5 h-3.5"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <circle cx="6.18" cy="17.82" r="2.18" />
+              <path d="M4 4.44v2.83c7.03 0 12.73 5.7 12.73 12.73h2.83c0-8.59-6.97-15.56-15.56-15.56zm0 5.66v2.83c3.9 0 7.07 3.17 7.07 7.07h2.83c0-5.47-4.43-9.9-9.9-9.9z" />
+            </svg>
+          </a>
         </div>
         <h1 className="text-3xl md:text-4xl font-bold text-text mb-2">
           {entity.name}

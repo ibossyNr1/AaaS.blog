@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import { IndexNavbar } from "@/components/index-navbar";
 import { BlogFooter } from "@/components/blog-footer";
 import { PageTracker } from "@/components/page-tracker";
+import { KeyboardShortcuts } from "@/components/keyboard-shortcuts";
 import "./globals.css";
 
 const geistSans = localFont({
@@ -55,6 +56,7 @@ export default function RootLayout({
         <main className="min-h-screen">{children}</main>
         <BlogFooter />
         <PageTracker />
+        <KeyboardShortcuts />
       </body>
     </html>
   );

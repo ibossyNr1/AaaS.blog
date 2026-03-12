@@ -5,6 +5,7 @@ import Link from "next/link";
 import { cn } from "@aaas/ui";
 import { CommandPalette } from "./command-palette";
 import { CommandPaletteTrigger } from "./command-palette-trigger";
+import { NotificationBell } from "./notification-bell";
 
 const navLinks = [
   { label: "Explore", href: "/explore" },
@@ -45,6 +46,7 @@ export function IndexNavbar() {
             {navLinks.map((link) => (
               <Link key={link.href} href={link.href} className="text-sm text-text-muted hover:text-text transition-colors">{link.label}</Link>
             ))}
+            <NotificationBell />
             <CommandPaletteTrigger />
             <div className="w-px h-4 bg-border" />
             {channelLinks.map((link) => (
