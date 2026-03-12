@@ -36,6 +36,9 @@ const STATIC_PAGES = [
   { path: "/changelog", changeFrequency: "daily" as const, priority: 0.6 },
   { path: "/comparisons", changeFrequency: "weekly" as const, priority: 0.5 },
   { path: "/status", changeFrequency: "daily" as const, priority: 0.4 },
+  { path: "/search", changeFrequency: "daily" as const, priority: 0.7 },
+  { path: "/following", changeFrequency: "weekly" as const, priority: 0.4 },
+  { path: "/settings", changeFrequency: "monthly" as const, priority: 0.2 },
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

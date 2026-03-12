@@ -2,6 +2,8 @@ import { Container, Section, Card } from "@aaas/ui";
 import { getTrendingEntities, getRecentEntities } from "@/lib/entities";
 import { CHANNELS } from "@/lib/channels";
 import { EntityCard } from "@/components/entity-card";
+import { PersonaBanner } from "@/components/persona-banner";
+import { PersonalizedFeed } from "@/components/personalized-feed";
 import Link from "next/link";
 
 export const revalidate = 120;
@@ -12,6 +14,9 @@ export default async function IndexHome() {
 
   return (
     <>
+      {/* Persona Banner — visible for logged-in users */}
+      <PersonaBanner />
+
       {/* Hero */}
       <Section className="pt-28 pb-12">
         <Container className="max-w-5xl">
@@ -49,6 +54,9 @@ export default async function IndexHome() {
           </Container>
         </Section>
       )}
+
+      {/* Personalized Feed — visible for logged-in users with a persona */}
+      <PersonalizedFeed />
 
       {/* Channels */}
       <Section variant="surface" className="py-12">

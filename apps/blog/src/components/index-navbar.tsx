@@ -6,6 +6,7 @@ import { cn } from "@aaas/ui";
 import { CommandPalette } from "./command-palette";
 import { CommandPaletteTrigger } from "./command-palette-trigger";
 import { NotificationBell } from "./notification-bell";
+import { AuthButton } from "./auth-button";
 
 const navLinks = [
   { label: "Explore", href: "/explore" },
@@ -24,6 +25,7 @@ const navLinks = [
   { label: "Comparisons", href: "/comparisons" },
   { label: "Status", href: "/status" },
   { label: "Watchlist", href: "/watchlist" },
+  { label: "Following", href: "/following" },
   { label: "Profile", href: "/profile" },
   { label: "API Docs", href: "/api-docs" },
   { label: "Embed", href: "/embed" },
@@ -53,6 +55,7 @@ export function IndexNavbar() {
             ))}
             <NotificationBell />
             <CommandPaletteTrigger />
+            <AuthButton />
             <div className="w-px h-4 bg-border" />
             {channelLinks.map((link) => (
               <Link key={link.href} href={link.href} className="text-xs font-mono text-text-muted hover:text-circuit transition-colors">{link.label}</Link>

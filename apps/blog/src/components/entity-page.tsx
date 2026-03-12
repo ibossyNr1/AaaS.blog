@@ -17,6 +17,7 @@ import { SimilarEntities } from "./similar-entities";
 import { EntityComments } from "./entity-comments";
 import { EntityLinkPreview } from "./entity-link-preview";
 import { EntitySummary } from "./entity-summary";
+import { EntityViewTracker } from "./entity-view-tracker";
 import { LazySection } from "./lazy-section";
 
 interface EntityPageProps {
@@ -32,6 +33,7 @@ export async function EntityPage({ type, slug }: EntityPageProps) {
 
   return (
     <>
+      <EntityViewTracker type={type} slug={slug} />
       <EntityJsonLd entity={entity} />
       <Breadcrumbs
         items={[

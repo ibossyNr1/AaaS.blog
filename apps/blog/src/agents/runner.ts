@@ -118,6 +118,10 @@ const AGENT_REGISTRY: Record<string, { label: string; load: () => Promise<{ run:
     label: "Comparison Agent",
     load: () => import("./comparison-agent"),
   },
+  "search-analytics": {
+    label: "Search Analytics Agent",
+    load: () => import("./search-analytics-agent"),
+  },
 };
 
 /**
@@ -159,6 +163,7 @@ const EXECUTION_ORDER = [
   "ingest",
   "auto-review",
   "webhook",
+  "search-analytics",
   "digest",
   "digest-email",
 ];

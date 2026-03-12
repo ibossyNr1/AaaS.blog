@@ -5,6 +5,7 @@ import { SkipToContent } from "@/components/skip-to-content";
 import { BlogFooter } from "@/components/blog-footer";
 import { PageTracker } from "@/components/page-tracker";
 import { KeyboardShortcuts } from "@/components/keyboard-shortcuts";
+import { AuthProvider } from "@/components/auth-provider";
 import "./globals.css";
 
 const geistSans = localFont({
@@ -54,12 +55,14 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}
       >
-        <SkipToContent />
-        <IndexNavbar />
-        <main id="main-content" className="min-h-screen">{children}</main>
-        <BlogFooter />
-        <PageTracker />
-        <KeyboardShortcuts />
+        <AuthProvider>
+          <SkipToContent />
+          <IndexNavbar />
+          <main id="main-content" className="min-h-screen">{children}</main>
+          <BlogFooter />
+          <PageTracker />
+          <KeyboardShortcuts />
+        </AuthProvider>
       </body>
     </html>
   );

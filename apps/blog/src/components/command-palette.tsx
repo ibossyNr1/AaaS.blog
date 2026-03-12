@@ -110,7 +110,7 @@ export function CommandPalette() {
     setLoading(true);
     debounceRef.current = setTimeout(async () => {
       try {
-        const res = await fetch(`/api/search?q=${encodeURIComponent(query)}&limit=10`);
+        const res = await fetch(`/api/search/suggestions?q=${encodeURIComponent(query)}`);
         if (res.ok) {
           const json = await res.json();
           setEntities(json.data ?? []);
@@ -169,9 +169,15 @@ export function CommandPalette() {
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
       setActiveIndex((i) => Math.max(i - 1, 0));
-    } else if (e.key === "Enter" && results[activeIndex]) {
+    } else if (e.key === "Enter") {
       e.preventDefault();
-      navigate(results[activeIndex]);
+      if (results[activeIndex]) {
+        navigate(results[activeIndex]);
+      } else if (query.trim().length >= 2) {
+        // No matching result selected — go to full search page
+        setOpen(false);
+        router.push(`/search?q=${encodeURIComponent(query.trim())}`);
+      }
     } else if (e.key === "Escape") {
       setOpen(false);
     }
@@ -294,6 +300,22 @@ export function CommandPalette() {
                 );
               })}
             </>
+          )}
+
+          {/* View all results link */}
+          {query.length >= 2 && entityResults.length > 0 && (
+            <button
+              onClick={() => {
+                setOpen(false);
+                router.push(`/search?q=${encodeURIComponent(query.trim())}`);
+              }}
+              className="w-full flex items-center justify-center gap-2 px-4 py-2.5 text-xs font-medium text-circuit hover:bg-circuit/10 transition-colors border-t border-border mt-1"
+            >
+              View all results
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </button>
           )}
 
           {/* Page results */}
