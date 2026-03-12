@@ -7,6 +7,7 @@ const LABELED_RINGS = [
   { name: "context",  size: 620, r: 290, duration: 38, reverse: true,  color: "red",   dotSize: 7, fontSize: 10 },
   { name: "industry", size: 440, r: 200, duration: 28, reverse: false, color: "cyan",  dotSize: 5, fontSize: 9 },
   { name: "strategy", size: 290, r: 130, duration: 20, reverse: true,  color: "red",   dotSize: 4, fontSize: 8 },
+  { name: "AaaS",     size: 170, r: 70,  duration: 14, reverse: false, color: "white", dotSize: 6, fontSize: 7 },
 ];
 
 const GHOST_RINGS = [
@@ -277,23 +278,41 @@ export function OrbitalBackground({ planetScale = 1, minimal = false, offset }: 
                 <span
                   className="font-mono uppercase whitespace-nowrap mb-2"
                   style={{
-                    fontSize: ring.fontSize,
-                    letterSpacing: ring.name === "AaaS" ? "0.4em" : "0.3em",
-                    color: labelColor(ring.color),
+                    fontSize: ring.name === "AaaS" ? 9 : ring.fontSize,
+                    letterSpacing: ring.name === "AaaS" ? "0.5em" : "0.3em",
+                    color: ring.name === "AaaS" ? "rgb(var(--circuit-glow) / 0.8)" : labelColor(ring.color),
+                    textShadow: ring.name === "AaaS" ? "0 0 8px rgb(var(--circuit-glow) / 0.4), 0 0 20px rgb(var(--circuit-glow) / 0.2)" : undefined,
                   }}
                 >
                   {ring.name}
                 </span>
-                <div
-                  className="rounded-full shrink-0 animate-[blink-star_ease-in-out_infinite]"
-                  style={{
-                    width: ring.dotSize,
-                    height: ring.dotSize,
-                    background: dotColor(ring.color),
-                    boxShadow: dotGlow(ring.color),
-                    animationDuration: ring.color === "white" ? "1.2s" : `${1.5 + Math.random() * 0.5}s`,
-                  }}
-                />
+                {/* AaaS gets beacon star + signal rings; others get regular blink */}
+                <div className="relative flex items-center justify-center">
+                  {ring.name === "AaaS" && [0, 1, 2].map((i) => (
+                    <div
+                      key={`sig-${i}`}
+                      className="absolute rounded-full animate-[signal-ring_4s_ease-out_infinite]"
+                      style={{
+                        width: ring.dotSize * 2,
+                        height: ring.dotSize * 2,
+                        border: "1px solid rgb(var(--circuit-glow) / 0.3)",
+                        animationDelay: `${i * 1.33}s`,
+                      }}
+                    />
+                  ))}
+                  <div
+                    className={`rounded-full shrink-0 ${ring.name === "AaaS" ? "animate-[beacon-star_2s_ease-in-out_infinite]" : "animate-[blink-star_ease-in-out_infinite]"}`}
+                    style={{
+                      width: ring.dotSize,
+                      height: ring.dotSize,
+                      background: dotColor(ring.color),
+                      boxShadow: ring.name === "AaaS"
+                        ? "0 0 6px rgb(var(--circuit-glow)), 0 0 15px rgb(var(--circuit-glow) / 0.6), 0 0 30px rgb(var(--circuit-glow) / 0.3)"
+                        : dotGlow(ring.color),
+                      animationDuration: ring.name === "AaaS" ? "2s" : ring.color === "white" ? "1.2s" : `${1.5 + Math.random() * 0.5}s`,
+                    }}
+                  />
+                </div>
               </div>
 
               {/* Secondary dot */}
@@ -319,17 +338,6 @@ export function OrbitalBackground({ planetScale = 1, minimal = false, offset }: 
             className="relative w-24 h-24 rounded-full z-10 flex items-center justify-center animate-orb-pulse"
             style={{ transform: `scale(${planetScale})`, transition: "transform 0.8s cubic-bezier(0.23, 1, 0.32, 1)" }}
           >
-            {/* Signal rings — expanding radar pulses from center */}
-            {[0, 1, 2].map((i) => (
-              <div
-                key={`signal-${i}`}
-                className="absolute inset-0 rounded-full animate-[signal-ring_4s_ease-out_infinite]"
-                style={{
-                  border: "1px solid rgb(var(--circuit-glow) / 0.25)",
-                  animationDelay: `${i * 1.33}s`,
-                }}
-              />
-            ))}
             {/* Halo */}
             <div
               className="absolute -inset-[35px] rounded-full pointer-events-none animate-[halo-pulse_5s_ease-in-out_infinite]"
@@ -383,29 +391,8 @@ export function OrbitalBackground({ planetScale = 1, minimal = false, offset }: 
                 style={{ background: "linear-gradient(90deg, transparent, rgb(var(--circuit-glow) / 0.04), rgb(var(--text) / 0.02), transparent)" }}
               />
             </div>
-            {/* Core beacon — bright blinking star */}
-            <div
-              className="w-[5px] h-[5px] rounded-full z-[2] animate-[beacon-star_2s_ease-in-out_infinite]"
-              style={{
-                background: "rgb(var(--circuit-glow))",
-                boxShadow: "0 0 6px rgb(var(--circuit-glow)), 0 0 15px rgb(var(--circuit-glow) / 0.6), 0 0 30px rgb(var(--circuit-glow) / 0.3)",
-              }}
-            />
-            {/* AaaS label — anchored above planet, counter-rotates to stay readable */}
-            <div
-              className="absolute -top-8 left-1/2 -translate-x-1/2 flex flex-col items-center animate-[beacon-star_3s_ease-in-out_infinite]"
-              style={{ animationDelay: "-1s" }}
-            >
-              <span
-                className="font-mono uppercase whitespace-nowrap text-[9px] tracking-[0.5em]"
-                style={{
-                  color: "rgb(var(--circuit-glow) / 0.8)",
-                  textShadow: "0 0 8px rgb(var(--circuit-glow) / 0.4), 0 0 20px rgb(var(--circuit-glow) / 0.2)",
-                }}
-              >
-                AaaS
-              </span>
-            </div>
+            {/* Core dot */}
+            <div className="w-[3px] h-[3px] rounded-full bg-circuit z-[2]" style={{ boxShadow: "0 0 8px rgb(var(--circuit-glow) / 0.5)" }} />
           </div>
         </div>
       </div>
