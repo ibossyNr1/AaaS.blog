@@ -12,6 +12,7 @@
  *   freshness      — Freshness agent (detect stale entities)
  *   rank           — Ranking agent (recalculate leaderboard scores)
  *   categorize     — Categorization agent (verify/suggest channel assignments)
+ *   similarity     — Similarity agent (compute entity similarity scores)
  *   media          — Media agent (generate narration episodes)
  *   ingest         — Ingestion agent (discover new entities)
  *   auto-review    — Auto review agent (approve high-confidence submissions)
@@ -93,6 +94,10 @@ const AGENT_REGISTRY: Record<string, { label: string; load: () => Promise<{ run:
     label: "Trending Agent",
     load: () => import("./trending-agent"),
   },
+  similarity: {
+    label: "Similarity Agent",
+    load: () => import("./similarity-agent"),
+  },
 };
 
 /**
@@ -124,6 +129,7 @@ const EXECUTION_ORDER = [
   "views",
   "trending",
   "categorize",
+  "similarity",
   "validate-links",
   "media",
   "ingest",

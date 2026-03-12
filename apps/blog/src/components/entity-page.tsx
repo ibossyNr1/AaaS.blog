@@ -9,6 +9,8 @@ import { EntityRelations } from "./entity-relations";
 import { EntityJsonLd } from "./entity-json-ld";
 import { ScoreHistoryChart } from "./score-history-chart";
 import { EntityChangelog } from "./entity-changelog";
+import { EntityDiffViewer } from "./entity-diff-viewer";
+import { SimilarEntities } from "./similar-entities";
 
 interface EntityPageProps {
   type: EntityType;
@@ -28,6 +30,8 @@ export async function EntityPage({ type, slug }: EntityPageProps) {
       <ScoreHistoryChart type={type} slug={slug} />
       <EntityRelations entity={entity} />
       <EntityChangelog type={type} slug={slug} />
+      <EntityDiffViewer type={type} slug={slug} />
+      <SimilarEntities type={type} slug={slug} />
       <Section variant="surface" className="py-12">
         <Container className="max-w-4xl text-center">
           <p className="text-text-muted mb-4">

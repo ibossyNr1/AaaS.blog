@@ -68,7 +68,7 @@ jobs:
             echo "targets=validate-links,media,ingest,auto-review,webhook,digest-email" >> "${GITHUB_OUTPUT}"
             echo "label=weekly-supplemental (Wednesday)" >> "${GITHUB_OUTPUT}"
           else
-            echo "targets=audit,heal,enrich,changelog,freshness,rank,views,trending,categorize,auto-review" >> "${GITHUB_OUTPUT}"
+            echo "targets=audit,heal,enrich,changelog,freshness,rank,views,trending,categorize,similarity,auto-review" >> "${GITHUB_OUTPUT}"
             echo "label=daily-core" >> "${GITHUB_OUTPUT}"
           fi
 

@@ -11,8 +11,10 @@ const navLinks = [
   { label: "Compare", href: "/compare" },
   { label: "Graph", href: "/graph" },
   { label: "Submit", href: "/submit" },
+  { label: "Developers", href: "/developer" },
   { label: "Dashboard", href: "/me" },
   { label: "System", href: "/dashboard" },
+  { label: "Activity", href: "/activity" },
 ];
 
 const channelLinks = [

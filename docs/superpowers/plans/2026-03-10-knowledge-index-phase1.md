@@ -1,6 +1,6 @@
 # AaaS Knowledge Index — Implementation Plan
 
-> **Status: ALL 8 PHASES COMPLETE**
+> **Status: ALL 9 PHASES COMPLETE**
 > Last updated: 2026-03-12
 
 **Goal:** Transform the static blog (aaas-blog.web.app) into the most extensive, autonomously functioning agentic knowledge index with 15 self-healing agents, real-time entity discovery, auto-approval pipeline, page view analytics, entity comparison, and full CI/CD automation.
@@ -155,12 +155,30 @@
 
 ---
 
+## Phase 9: Intelligence & Developer Experience Layer (COMPLETE)
+
+- [x] **Task 1:** Similarity agent (`agents/similarity-agent.ts`) — computes pairwise entity similarity using shared tags, capabilities, integrations, category, type, and related entities. Writes top 5 per entity to `entity_similarities` collection
+- [x] **Task 2:** Similar entities API (`/api/entity/[type]/[slug]/similar`) — serves pre-computed similarity data
+- [x] **Task 3:** SimilarEntities component — grid of similar entity cards with type badges and similarity score bars on every entity page
+- [x] **Task 4:** Search autocomplete (`components/search-autocomplete.tsx`) — debounced 300ms search, keyboard navigation, type-colored badges, integrated into explore page replacing static input
+- [x] **Task 5:** Developer portal (`/developer`) — API key registration form, key lookup by email, key revocation, API documentation quick reference
+- [x] **Task 6:** API key CRUD (`/api/keys`) — POST to register (SHA-256 hashed storage, `aaas_` prefixed keys), GET to list by email, DELETE `/api/keys/[id]` to revoke
+- [x] **Task 7:** Entity diff viewer (`components/entity-diff-viewer.tsx`) — collapsible field-level diff display, array diffs with added/removed pills, scalar diffs with strikethrough/green, grouped by changelog timestamp
+- [x] **Task 8:** Entity versions API (`/api/entity/[type]/[slug]/versions`) — current entity + snapshot comparison
+- [x] **Task 9:** Unified activity feed (`/activity`) — merges agent_logs, trending_alerts, submissions into timeline with auto-refresh (30s), type filters, relative timestamps, icon-coded entries
+- [x] **Task 10:** Activity feed API (`/api/activity`) — aggregates 3 collections, normalizes to unified format, returns top 50 sorted by timestamp
+- [x] **Task 11:** Updated runner with 17 agents (added similarity) in dependency order
+- [x] **Task 12:** Navbar updated with Developers and Activity links
+- [x] **Task 13:** Search autocomplete replaces static input on explore page
+
+---
+
 ## Architecture Summary
 
 ```
 apps/blog/
 ├── src/
-│   ├── app/                          # 55+ routes
+│   ├── app/                          # 65+ routes
 │   │   ├── page.tsx                  # Homepage (trending, channels, latest, CTAs)
 │   │   ├── explore/                  # Search + filter (client-side)
 │   │   ├── compare/                  # Side-by-side entity comparison
@@ -200,9 +218,9 @@ apps/blog/
 │   │   ├── sitemap.ts
 │   │   ├── robots.ts
 │   │   └── not-found.tsx
-│   ├── components/                   # 17 components
+│   ├── components/                   # 20 components
 │   ├── lib/                          # 11 modules (types, entities, channels, firebase, schemas, media, tts, diff, webhooks, email-templates)
-│   ├── agents/                       # 16 self-healing agent scripts + runner
+│   ├── agents/                       # 17 self-healing agent scripts + runner
 │   └── seed/                         # Seed data + runner
 ├── .eslintrc.json                    # Excludes agents/
 ├── tsconfig.json                     # target es2017, excludes agents/

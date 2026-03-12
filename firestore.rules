@@ -105,6 +105,17 @@ service cloud.firestore {
       allow write: if false;
     }
 
+    // Entity similarities — public read (entity pages), no public write
+    match /entity_similarities/{document=**} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // API keys — no public access (managed via admin API)
+    match /api_keys/{document=**} {
+      allow read, write: if false;
+    }
+
     // Default deny
     match /{document=**} {
       allow read, write: if false;

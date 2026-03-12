@@ -5,6 +5,7 @@ import { cn } from "@aaas/ui";
 import type { Entity, EntityType } from "@/lib/types";
 import { CHANNELS } from "@/lib/channels";
 import { EntityCard } from "@/components/entity-card";
+import { SearchAutocomplete } from "@/components/search-autocomplete";
 
 /* -------------------------------------------------------------------------- */
 /*  Constants                                                                 */
@@ -35,7 +36,6 @@ const SORT_OPTIONS: { key: SortKey; label: string }[] = [
 /* -------------------------------------------------------------------------- */
 
 export function ExploreClient({ entities }: { entities: Entity[] }) {
-  const [search, setSearch] = useState("");
   const [activeTab, setActiveTab] = useState<TabKey>("all");
   const [channel, setChannel] = useState<string>("all");
   const [sort, setSort] = useState<SortKey>("trending");
@@ -51,18 +51,6 @@ export function ExploreClient({ entities }: { entities: Entity[] }) {
     // Channel filter
     if (channel !== "all") {
       filtered = filtered.filter((e) => e.category === channel);
-    }
-
-    // Search filter
-    if (search.trim()) {
-      const q = search.trim().toLowerCase();
-      filtered = filtered.filter(
-        (e) =>
-          e.name.toLowerCase().includes(q) ||
-          e.description.toLowerCase().includes(q) ||
-          e.provider.toLowerCase().includes(q) ||
-          e.tags.some((t) => t.toLowerCase().includes(q)),
-      );
     }
 
     // Sort
@@ -83,45 +71,14 @@ export function ExploreClient({ entities }: { entities: Entity[] }) {
     }
 
     return sorted;
-  }, [entities, activeTab, channel, search, sort]);
+  }, [entities, activeTab, channel, sort]);
 
   return (
     <div className="space-y-6">
-      {/* ---- Search Bar ---- */}
-      <div className="relative">
-        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-          <svg
-            className="w-4 h-4 text-text-muted"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            />
-          </svg>
-        </div>
-        <input
-          type="text"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search by name, description, provider, or tag..."
-          className="w-full bg-surface border border-border rounded-lg py-2.5 pl-11 pr-4 text-sm text-text placeholder:text-text-muted/60 focus:outline-none focus:border-circuit/50 focus:ring-1 focus:ring-circuit/20 transition-colors"
-        />
-        {search && (
-          <button
-            onClick={() => setSearch("")}
-            className="absolute inset-y-0 right-0 pr-4 flex items-center text-text-muted hover:text-text transition-colors"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        )}
-      </div>
+      {/* ---- Search Autocomplete ---- */}
+      <SearchAutocomplete
+        placeholder="Search by name, description, provider, or tag..."
+      />
 
       {/* ---- Filters Row ---- */}
       <div className="flex flex-col sm:flex-row sm:items-center gap-4">
@@ -197,17 +154,10 @@ export function ExploreClient({ entities }: { entities: Entity[] }) {
       <div className="flex items-center justify-between">
         <p className="text-xs font-mono uppercase tracking-wider text-text-muted">
           {results.length} {results.length === 1 ? "result" : "results"}
-          {search && (
-            <span>
-              {" "}
-              for &ldquo;{search}&rdquo;
-            </span>
-          )}
         </p>
-        {(search || activeTab !== "all" || channel !== "all") && (
+        {(activeTab !== "all" || channel !== "all") && (
           <button
             onClick={() => {
-              setSearch("");
               setActiveTab("all");
               setChannel("all");
               setSort("trending");

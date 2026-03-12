@@ -22,6 +22,7 @@
     "agent:digest-email": "npx tsx src/agents/digest-email-agent.ts",
     "agent:views": "npx tsx src/agents/views-agent.ts",
     "agent:trending": "npx tsx src/agents/trending-agent.ts",
+    "agent:similarity": "npx tsx src/agents/similarity-agent.ts",
     "agent:run-all": "npx tsx src/agents/runner.ts all",
     "agent:run": "npx tsx src/agents/runner.ts",
     "seed:episodes": "npx tsx src/seed/seed-episodes.ts"
