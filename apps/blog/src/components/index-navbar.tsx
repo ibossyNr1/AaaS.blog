@@ -7,6 +7,7 @@ import { CommandPalette } from "./command-palette";
 import { CommandPaletteTrigger } from "./command-palette-trigger";
 import { NotificationBell } from "./notification-bell";
 import { AuthButton } from "./auth-button";
+import { LocaleSwitcher } from "./locale-switcher";
 
 const navLinks = [
   { label: "Explore", href: "/explore" },
@@ -67,6 +68,7 @@ export function IndexNavbar() {
             <NotificationBell />
             <CommandPaletteTrigger />
             <AuthButton />
+            <LocaleSwitcher />
             <div className="w-px h-4 bg-border" />
             {channelLinks.map((link) => (
               <Link key={link.href} href={link.href} className="text-xs font-mono text-text-muted hover:text-circuit transition-colors">{link.label}</Link>
@@ -94,6 +96,8 @@ export function IndexNavbar() {
             ))}
             <div className="border-t border-border my-2" />
             <a href="https://agents-as-a-service.com" target="_blank" rel="noopener noreferrer" className="text-xl font-medium text-circuit">Platform →</a>
+            <div className="border-t border-border my-2" />
+            <LocaleSwitcher />
           </nav>
         </div>
       )}

@@ -1,5 +1,12 @@
 @import "@aaas/ui/globals.css";
 
+/* Shimmer animation for loading skeletons */
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
 @media print {
   /* Hide non-essential elements */
   header, footer, nav,

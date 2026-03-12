@@ -8,6 +8,9 @@ import { KeyboardShortcuts } from "@/components/keyboard-shortcuts";
 import { AuthProvider } from "@/components/auth-provider";
 import { AudioQueueProvider } from "@/components/audio-queue";
 import { ExperimentProvider } from "@/components/experiment-provider";
+import { OfflineBanner } from "@/components/offline-banner";
+import { LocaleProvider } from "@/components/locale-provider";
+import { AriaLiveRegion } from "@/components/aria-live-region";
 import "./globals.css";
 
 const geistSans = localFont({
@@ -60,18 +63,24 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}
       >
-        <AuthProvider>
-          <AudioQueueProvider>
-            <ExperimentProvider>
-              <SkipToContent />
-              <IndexNavbar />
-              <main id="main-content" className="min-h-screen">{children}</main>
-              <BlogFooter />
-              <PageTracker />
-              <KeyboardShortcuts />
-            </ExperimentProvider>
-          </AudioQueueProvider>
-        </AuthProvider>
+        <LocaleProvider>
+          <AuthProvider>
+            <AudioQueueProvider>
+              <ExperimentProvider>
+                <SkipToContent />
+                <IndexNavbar />
+                <OfflineBanner />
+                <main id="main-content" className="min-h-screen">
+                  {children}
+                </main>
+                <BlogFooter />
+                <PageTracker />
+                <KeyboardShortcuts />
+                <AriaLiveRegion />
+              </ExperimentProvider>
+            </AudioQueueProvider>
+          </AuthProvider>
+        </LocaleProvider>
       </body>
     </html>
   );
