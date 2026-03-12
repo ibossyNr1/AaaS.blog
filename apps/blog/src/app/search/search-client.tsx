@@ -13,7 +13,14 @@ import Link from "next/link";
 /*  Types                                                              */
 /* ------------------------------------------------------------------ */
 
+type SearchMode = "keyword" | "semantic" | "hybrid";
 type SortOption = "relevance" | "composite" | "name" | "newest";
+
+const SEARCH_MODES: { value: SearchMode; label: string; description: string }[] = [
+  { value: "keyword", label: "Keyword", description: "Traditional text matching" },
+  { value: "semantic", label: "Semantic", description: "AI-powered meaning search" },
+  { value: "hybrid", label: "Hybrid", description: "Combined keyword + semantic" },
+];
 
 const SORT_OPTIONS: { value: SortOption; label: string }[] = [
   { value: "relevance", label: "Relevance" },
@@ -63,31 +70,66 @@ export function SearchClient() {
   const initialQuery = searchParams.get("q") || "";
   const initialSort = (searchParams.get("sort") as SortOption) || "relevance";
   const initialType = searchParams.get("type") || "";
+  const initialMode = (searchParams.get("mode") as SearchMode) || "keyword";
 
   const [query, setQuery] = useState(initialQuery);
   const [sort, setSort] = useState<SortOption>(initialSort);
   const [typeFilter, setTypeFilter] = useState(initialType);
+  const [searchMode, setSearchMode] = useState<SearchMode>(initialMode);
   const [results, setResults] = useState<Entity[]>([]);
   const [loading, setLoading] = useState(false);
   const [totalScanned, setTotalScanned] = useState(0);
+  const [activeMode, setActiveMode] = useState<string>("");
 
   /* --- Fetch results ------------------------------------------------ */
-  const fetchResults = useCallback(async (q: string, s: SortOption, t: string) => {
+  const fetchResults = useCallback(async (q: string, s: SortOption, t: string, mode: SearchMode = "keyword") => {
     if (!q.trim()) {
       setResults([]);
+      setActiveMode("");
       return;
     }
 
     setLoading(true);
     try {
-      const params = new URLSearchParams({ q: q.trim(), sort: s, limit: "50" });
+      let endpoint: string;
+      const params = new URLSearchParams({ q: q.trim(), limit: "50" });
       if (t) params.set("type", t);
 
-      const res = await fetch(`/api/search?${params}`);
+      if (mode === "semantic") {
+        endpoint = "/api/search/semantic";
+      } else if (mode === "hybrid") {
+        endpoint = "/api/search/hybrid";
+      } else {
+        endpoint = "/api/search";
+        params.set("sort", s);
+      }
+
+      const res = await fetch(`${endpoint}?${params}`);
       if (res.ok) {
         const json = await res.json();
-        setResults(json.data ?? []);
-        setTotalScanned(json.total ?? 0);
+
+        // Semantic/hybrid endpoints return { slug, type, name, score, metadata }
+        // Normalize to Entity-like objects for rendering
+        if (mode === "semantic" || mode === "hybrid") {
+          const normalized = (json.data ?? []).map((r: { slug: string; type: string; name: string; score: number; metadata: Record<string, unknown> }) => ({
+            slug: r.slug,
+            type: r.type || (r.metadata?.type as string) || "tool",
+            name: r.name || (r.metadata?.name as string) || r.slug,
+            description: (r.metadata?.description as string) || "",
+            provider: (r.metadata?.provider as string) || "",
+            tags: (r.metadata?.tags as string[]) || [],
+            category: (r.metadata?.category as string) || "",
+            scores: { composite: (r.metadata?.composite as number) || 0, adoption: 0, quality: 0, freshness: 0, citations: 0, engagement: 0 },
+            _semanticScore: r.score,
+          }));
+          setResults(normalized);
+          setTotalScanned(json.count ?? normalized.length);
+        } else {
+          setResults(json.data ?? []);
+          setTotalScanned(json.total ?? 0);
+        }
+
+        setActiveMode(json.mode || mode);
       }
     } catch {
       /* swallow */
@@ -98,16 +140,17 @@ export function SearchClient() {
 
   /* --- Search on mount and param changes ----------------------------- */
   useEffect(() => {
-    fetchResults(initialQuery, initialSort, initialType);
-  }, [initialQuery, initialSort, initialType, fetchResults]);
+    fetchResults(initialQuery, initialSort, initialType, initialMode);
+  }, [initialQuery, initialSort, initialType, initialMode, fetchResults]);
 
   /* --- Update URL params --------------------------------------------- */
   const updateParams = useCallback(
-    (q: string, s: SortOption, t: string) => {
+    (q: string, s: SortOption, t: string, mode: SearchMode = "keyword") => {
       const params = new URLSearchParams();
       if (q) params.set("q", q);
       if (s !== "relevance") params.set("sort", s);
       if (t) params.set("type", t);
+      if (mode !== "keyword") params.set("mode", mode);
       router.replace(`/search?${params.toString()}`);
     },
     [router],
@@ -116,26 +159,34 @@ export function SearchClient() {
   /* --- Handlers ------------------------------------------------------ */
   function handleSearch(e: React.FormEvent) {
     e.preventDefault();
-    updateParams(query, sort, typeFilter);
-    fetchResults(query, sort, typeFilter);
+    updateParams(query, sort, typeFilter, searchMode);
+    fetchResults(query, sort, typeFilter, searchMode);
   }
 
   function handleSortChange(s: SortOption) {
     setSort(s);
-    updateParams(query, s, typeFilter);
-    fetchResults(query, s, typeFilter);
+    updateParams(query, s, typeFilter, searchMode);
+    fetchResults(query, s, typeFilter, searchMode);
   }
 
   function handleTypeChange(t: string) {
     setTypeFilter(t);
-    updateParams(query, sort, t);
-    fetchResults(query, sort, t);
+    updateParams(query, sort, t, searchMode);
+    fetchResults(query, sort, t, searchMode);
+  }
+
+  function handleModeChange(mode: SearchMode) {
+    setSearchMode(mode);
+    updateParams(query, sort, typeFilter, mode);
+    if (query.trim()) {
+      fetchResults(query, sort, typeFilter, mode);
+    }
   }
 
   function handleSuggestion(suggestion: string) {
     setQuery(suggestion);
-    updateParams(suggestion, sort, typeFilter);
-    fetchResults(suggestion, sort, typeFilter);
+    updateParams(suggestion, sort, typeFilter, searchMode);
+    fetchResults(suggestion, sort, typeFilter, searchMode);
   }
 
   /* --- Group results by type ----------------------------------------- */
@@ -183,10 +234,37 @@ export function SearchClient() {
         </button>
       </form>
 
+      {/* Search mode toggle */}
+      <div className="flex items-center gap-2">
+        <span className="text-xs font-mono text-text-muted uppercase tracking-wider">Mode</span>
+        <div className="flex gap-1 p-0.5 rounded-lg bg-surface border border-border">
+          {SEARCH_MODES.map((mode) => (
+            <button
+              key={mode.value}
+              onClick={() => handleModeChange(mode.value)}
+              title={mode.description}
+              className={cn(
+                "px-3 py-1.5 rounded-md text-xs font-medium transition-all",
+                searchMode === mode.value
+                  ? "bg-circuit/20 text-circuit shadow-sm"
+                  : "text-text-muted hover:text-text",
+              )}
+            >
+              {mode.label}
+            </button>
+          ))}
+        </div>
+        {activeMode && activeMode !== searchMode && (
+          <span className="text-[10px] font-mono text-text-muted bg-surface px-2 py-0.5 rounded border border-border">
+            fallback: {activeMode}
+          </span>
+        )}
+      </div>
+
       {/* Filters row */}
       <div className="flex flex-wrap items-center gap-4">
-        {/* Sort */}
-        <div className="flex items-center gap-2">
+        {/* Sort (only for keyword mode) */}
+        <div className={cn("flex items-center gap-2", searchMode !== "keyword" && "opacity-50 pointer-events-none")}>
           <span className="text-xs font-mono text-text-muted uppercase tracking-wider">Sort</span>
           <div className="flex gap-1">
             {SORT_OPTIONS.map((opt) => (

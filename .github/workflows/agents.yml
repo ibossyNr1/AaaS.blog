@@ -65,10 +65,10 @@ jobs:
             echo "targets=all" >> "${GITHUB_OUTPUT}"
             echo "label=weekly-full (Sunday)" >> "${GITHUB_OUTPUT}"
           elif [[ "${EVENT_SCHEDULE}" == "0 4 * * 3" ]]; then
-            echo "targets=validate-links,media,audio,video,metadata,ingest,auto-review,webhook,subscription,digest,comparison,digest-email" >> "${GITHUB_OUTPUT}"
+            echo "targets=validate-links,media,audio,video,metadata,ingest,auto-review,webhook,subscription,digest,comparison,clustering,discovery,digest-email" >> "${GITHUB_OUTPUT}"
             echo "label=weekly-supplemental (Wednesday)" >> "${GITHUB_OUTPUT}"
           else
-            echo "targets=audit,health,heal,enrich,summary,changelog,freshness,rank,views,trending,categorize,similarity,search-analytics,auto-review,alerting" >> "${GITHUB_OUTPUT}"
+            echo "targets=audit,health,heal,enrich,summary,changelog,freshness,rank,views,trending,categorize,similarity,embedding,search-analytics,auto-review,alerting" >> "${GITHUB_OUTPUT}"
             echo "label=daily-core" >> "${GITHUB_OUTPUT}"
           fi
 

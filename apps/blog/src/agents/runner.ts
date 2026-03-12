@@ -13,6 +13,9 @@
  *   rank           — Ranking agent (recalculate leaderboard scores)
  *   categorize     — Categorization agent (verify/suggest channel assignments)
  *   similarity     — Similarity agent (compute entity similarity scores)
+ *   embedding      — Embedding agent (sync vector embeddings to Pinecone)
+ *   clustering     — Clustering agent (group entities into topic clusters)
+ *   discovery      — Discovery agent (personalized discovery suggestions)
  *   media          — Media agent (generate narration episodes)
  *   metadata       — Metadata agent (fetch URL metadata for link previews)
  *   ingest         — Ingestion agent (discover new entities)
@@ -115,6 +118,18 @@ const AGENT_REGISTRY: Record<string, { label: string; load: () => Promise<{ run:
     label: "Similarity Agent",
     load: () => import("./similarity-agent"),
   },
+  embedding: {
+    label: "Embedding Agent",
+    load: () => import("./embedding-agent"),
+  },
+  clustering: {
+    label: "Clustering Agent",
+    load: () => import("./clustering-agent"),
+  },
+  discovery: {
+    label: "Discovery Agent",
+    load: () => import("./discovery-agent"),
+  },
   summary: {
     label: "Summary Agent",
     load: () => import("./summary-agent"),
@@ -182,6 +197,9 @@ const EXECUTION_ORDER = [
   "trending",
   "categorize",
   "similarity",
+  "embedding",
+  "clustering",
+  "discovery",
   "comparison",
   "validate-links",
   "media",

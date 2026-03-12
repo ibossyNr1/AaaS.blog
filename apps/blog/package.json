@@ -30,6 +30,7 @@
   "dependencies": {
     "@aaas/ui": "*",
     "@google-cloud/text-to-speech": "^6.4.0",
+    "@pinecone-database/pinecone": "^4.1.0",
     "firebase": "^12.10.0",
     "next": "14.2.35",
     "react": "^18",

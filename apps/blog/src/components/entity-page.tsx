@@ -14,6 +14,7 @@ import { ScoreHistoryChart } from "./score-history-chart";
 import { EntityChangelog } from "./entity-changelog";
 import { EntityDiffViewer } from "./entity-diff-viewer";
 import { SimilarEntities } from "./similar-entities";
+import { CollaborativeRecommendations } from "./collaborative-recommendations";
 import { EntityComments } from "./entity-comments";
 import { EntityLinkPreview } from "./entity-link-preview";
 import { EntitySummary } from "./entity-summary";
@@ -72,6 +73,11 @@ export async function EntityPage({ type, slug }: EntityPageProps) {
       </LazySection>
       <LazySection>
         <SimilarEntities type={type} slug={slug} />
+      </LazySection>
+      <LazySection>
+        <div data-print-hide>
+          <CollaborativeRecommendations />
+        </div>
       </LazySection>
       <LazySection>
         <div data-print-hide>

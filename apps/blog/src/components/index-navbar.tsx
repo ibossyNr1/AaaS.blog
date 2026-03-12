@@ -32,6 +32,8 @@ const navLinks = [
   { label: "Webhooks", href: "/webhooks" },
   { label: "Vault", href: "/vault" },
   { label: "API Docs", href: "/api-docs" },
+  { label: "Discover", href: "/discover" },
+  { label: "Ask", href: "/ask" },
   { label: "Embed", href: "/embed" },
 ];
 

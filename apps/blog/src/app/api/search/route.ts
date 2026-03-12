@@ -13,6 +13,8 @@ import {
 } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { checkRateLimit, rateLimitHeaders } from "@/lib/rate-limit";
+import { semanticSearch } from "@/lib/pinecone";
+import type { SemanticSearchResult } from "@/lib/pinecone";
 import type { Entity } from "@/lib/types";
 
 const COLLECTION_MAP: Record<string, string> = {
@@ -118,6 +120,7 @@ export async function GET(req: NextRequest) {
   const channel = searchParams.get("channel") || "";
   const sort = searchParams.get("sort") || "relevance";
   const limit = Math.min(Number(searchParams.get("limit") || 50), 200);
+  const useSemanticBoost = searchParams.get("semantic") === "true";
 
   if (sort && !VALID_SORT.has(sort)) {
     return NextResponse.json(
@@ -165,6 +168,38 @@ export async function GET(req: NextRequest) {
       const searchScore = computeSearchScore(entity, q);
       if (searchScore > 0) {
         scored.push({ ...entity, _searchScore: searchScore });
+      }
+    }
+
+    // Semantic boost — blend Pinecone similarity into keyword scores
+    if (useSemanticBoost && scored.length > 0) {
+      try {
+        const pineconeFilter: Record<string, unknown> = {};
+        if (type) pineconeFilter.type = { $eq: type };
+        if (channel) pineconeFilter.category = { $eq: channel };
+
+        const semanticResults: SemanticSearchResult[] = await semanticSearch(q, {
+          topK: limit,
+          filter: Object.keys(pineconeFilter).length > 0 ? pineconeFilter : undefined,
+        });
+
+        if (semanticResults.length > 0) {
+          const semanticMap = new Map<string, number>();
+          for (const sr of semanticResults) {
+            semanticMap.set(`${sr.type}::${sr.slug}`, sr.score);
+          }
+
+          const maxKeyword = Math.max(1, ...scored.map((s) => s._searchScore));
+          for (const entity of scored) {
+            const semScore = semanticMap.get(`${entity.type}::${entity.slug}`) ?? 0;
+            // Blend: 60% keyword (normalized) + 40% semantic
+            entity._searchScore =
+              (entity._searchScore / maxKeyword) * 0.6 * maxKeyword +
+              semScore * 0.4 * maxKeyword;
+          }
+        }
+      } catch {
+        // Semantic boost failed — continue with keyword-only scores
       }
     }
 
