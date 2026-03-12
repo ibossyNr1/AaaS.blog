@@ -1,6 +1,6 @@
 # AaaS Knowledge Index — Implementation Plan
 
-> **Status: ALL 11 PHASES COMPLETE**
+> **Status: ALL 12 PHASES COMPLETE**
 > Last updated: 2026-03-12
 
 **Goal:** Transform the static blog (aaas-blog.web.app) into the most extensive, autonomously functioning agentic knowledge index with 15 self-healing agents, real-time entity discovery, auto-approval pipeline, page view analytics, entity comparison, and full CI/CD automation.
@@ -199,6 +199,17 @@
 
 ---
 
+## Phase 12: Intelligence & Real-time Engagement Layer (COMPLETE)
+
+- [x] **Task 1:** Notification center (`components/notification-bell.tsx`, `/api/notifications`) — bell icon with red unread badge in navbar, dropdown panel with watchlist-filtered trending alerts (7 days), agent failure logs (24h), submission updates (7 days). 60s auto-refresh, localStorage read state persistence, click-outside dismiss
+- [x] **Task 2:** Entity relationship editor (`components/relationship-editor.tsx`, `/api/entity/[type]/[slug]/relations`) — visual relationship manager showing grouped relation chips, "Suggest Relationship" form with type dropdown (8 relation types) and autocomplete entity search, writes suggestions to submissions collection
+- [x] **Task 3:** Advanced search filters (`components/search-filters.tsx`) — collapsible filter panel replacing explore page type tabs. Multi-select type checkboxes, dual range slider (score 0-100), provider autocomplete, multi-tag input with AND logic, date picker, sort controls, active filter pills, "Showing X of Y" result count
+- [x] **Task 4:** Entity changelog RSS — per-entity feed at `/api/entity/[type]/[slug]/feed` (queries changelog subcollection, 50 items, 10min cache) and global changes feed at `/api/changes` (collectionGroup query, 100 items). RSS icons on entity headers and activity page
+- [x] **Task 5:** Keyboard shortcuts (`components/keyboard-shortcuts.tsx`, `components/shortcuts-help.tsx`) — vim-style `g` prefix navigation (11 routes with 1s timeout + toast indicator), `?` help overlay, `/` to open command palette, input-aware (skips in form fields), categorized help modal at z-[55]. Mounted in root layout
+- [x] **Task 6:** Build verification — all routes compile cleanly
+
+---
+
 ## Architecture Summary
 
 ```
@@ -251,7 +262,7 @@ apps/blog/
 │   │   ├── sitemap.ts
 │   │   ├── robots.ts
 │   │   └── not-found.tsx
-│   ├── components/                   # 30+ components
+│   ├── components/                   # 35+ components
 │   ├── lib/                          # 14 modules (types, entities, channels, firebase, schemas, media, tts, diff, webhooks, email-templates, grades, rate-limit, use-watchlist)
 │   ├── agents/                       # 17 self-healing agent scripts + runner
 │   └── seed/                         # Seed data + runner
