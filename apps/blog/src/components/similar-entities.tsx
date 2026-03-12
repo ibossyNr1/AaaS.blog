@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Card } from "@aaas/ui";
+import { EntityLink } from "./entity-link";
 
 interface SimilarEntity {
   type: string;
@@ -69,9 +70,10 @@ export function SimilarEntities({ type, slug }: SimilarEntitiesProps) {
         <h3 className="text-lg font-semibold text-text mb-4">Similar Entities</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {entities.map((entity) => (
-            <a
+            <EntityLink
               key={`${entity.type}-${entity.slug}`}
-              href={`/${entity.type}/${entity.slug}`}
+              type={entity.type}
+              slug={entity.slug}
               className="block no-underline"
             >
               <Card className="p-4 hover:border-circuit transition-colors h-full">
@@ -96,7 +98,7 @@ export function SimilarEntities({ type, slug }: SimilarEntitiesProps) {
                   </div>
                 </div>
               </Card>
-            </a>
+            </EntityLink>
           ))}
         </div>
       </div>

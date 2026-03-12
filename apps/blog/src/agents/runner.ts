@@ -14,6 +14,7 @@
  *   categorize     — Categorization agent (verify/suggest channel assignments)
  *   similarity     — Similarity agent (compute entity similarity scores)
  *   media          — Media agent (generate narration episodes)
+ *   metadata       — Metadata agent (fetch URL metadata for link previews)
  *   ingest         — Ingestion agent (discover new entities)
  *   auto-review    — Auto review agent (approve high-confidence submissions)
  *   webhook        — Webhook delivery agent (dispatch queued notifications)
@@ -65,6 +66,10 @@ const AGENT_REGISTRY: Record<string, { label: string; load: () => Promise<{ run:
   media: {
     label: "Media Agent",
     load: () => import("./media-agent"),
+  },
+  metadata: {
+    label: "Metadata Agent",
+    load: () => import("./metadata-agent"),
   },
   ingest: {
     label: "Ingestion Agent",
@@ -132,6 +137,7 @@ const EXECUTION_ORDER = [
   "similarity",
   "validate-links",
   "media",
+  "metadata",
   "ingest",
   "auto-review",
   "webhook",

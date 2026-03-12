@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Card, cn } from "@aaas/ui";
 import type { Entity, EntityType } from "@/lib/types";
 import { ENTITY_TYPES } from "@/lib/types";
+import { ComparisonExport } from "@/components/comparison-export";
 
 /* -------------------------------------------------------------------------- */
 /*  Constants                                                                  */
@@ -269,8 +270,31 @@ export function CompareClient({ entities }: { entities: Entity[] }) {
     return map;
   }, [entities]);
 
-  const [keyA, setKeyA] = useState<string>(searchParams.get("a") ?? "");
-  const [keyB, setKeyB] = useState<string>(searchParams.get("b") ?? "");
+  /* Parse ?e= param for shareable links (e.g., ?e=tool:langchain,model:gpt-5) */
+  const eParam = searchParams.get("e");
+  const parsedFromE = useMemo(() => {
+    if (!eParam) return null;
+    const parts = eParam.split(",").map((p) => {
+      const [type, slug] = p.split(":");
+      return slug ? `${type}/${slug}` : "";
+    }).filter(Boolean);
+    return parts.length >= 2 ? { a: parts[0], b: parts[1] } : null;
+  }, [eParam]);
+
+  const [keyA, setKeyA] = useState<string>(
+    parsedFromE?.a ?? searchParams.get("a") ?? "",
+  );
+  const [keyB, setKeyB] = useState<string>(
+    parsedFromE?.b ?? searchParams.get("b") ?? "",
+  );
+
+  /* Sync from ?e= param on mount / param change */
+  useEffect(() => {
+    if (parsedFromE) {
+      if (entityMap.has(parsedFromE.a)) setKeyA(parsedFromE.a);
+      if (entityMap.has(parsedFromE.b)) setKeyB(parsedFromE.b);
+    }
+  }, [parsedFromE, entityMap]);
 
   const entityA = keyA ? entityMap.get(keyA) ?? null : null;
   const entityB = keyB ? entityMap.get(keyB) ?? null : null;
@@ -442,6 +466,9 @@ export function CompareClient({ entities }: { entities: Entity[] }) {
               />
             </div>
           </Card>
+
+          {/* ---- Export Panel ---- */}
+          <ComparisonExport entities={[entityA, entityB]} />
         </>
       )}
 

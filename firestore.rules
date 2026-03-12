@@ -111,6 +111,18 @@ service cloud.firestore {
       allow write: if false;
     }
 
+    // Comments — public read and write (community discussions)
+    match /comments/{document=**} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    // Entity metadata — public read (link previews), no public write
+    match /entity_metadata/{document=**} {
+      allow read: if true;
+      allow write: if false;
+    }
+
     // API keys — no public access (managed via admin API)
     match /api_keys/{document=**} {
       allow read, write: if false;

@@ -1,6 +1,8 @@
-import Link from "next/link";
+"use client";
+
 import { Card, Container, Section, Badge } from "@aaas/ui";
 import type { Entity } from "@/lib/types";
+import { EntityLink } from "./entity-link";
 
 function RelationGroup({ label, slugs, type }: { label: string; slugs: string[]; type: string }) {
   if (slugs.length === 0) return null;
@@ -9,11 +11,11 @@ function RelationGroup({ label, slugs, type }: { label: string; slugs: string[];
       <h3 className="text-xs font-mono uppercase tracking-wider text-text-muted mb-2">{label}</h3>
       <div className="flex flex-wrap gap-2">
         {slugs.map((slug) => (
-          <Link key={slug} href={`/${type}/${slug}`}>
+          <EntityLink key={slug} type={type} slug={slug}>
             <Badge variant="circuit" className="cursor-pointer hover:bg-circuit/10 transition-colors">
               {slug}
             </Badge>
-          </Link>
+          </EntityLink>
         ))}
       </div>
     </div>

@@ -20,6 +20,7 @@ const navLinks = [
   { label: "Stats", href: "/stats" },
   { label: "Activity", href: "/activity" },
   { label: "Watchlist", href: "/watchlist" },
+  { label: "Profile", href: "/profile" },
   { label: "API Docs", href: "/api-docs" },
   { label: "Embed", href: "/embed" },
 ];

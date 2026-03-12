@@ -12,6 +12,8 @@ import { ScoreHistoryChart } from "./score-history-chart";
 import { EntityChangelog } from "./entity-changelog";
 import { EntityDiffViewer } from "./entity-diff-viewer";
 import { SimilarEntities } from "./similar-entities";
+import { EntityComments } from "./entity-comments";
+import { EntityLinkPreview } from "./entity-link-preview";
 
 interface EntityPageProps {
   type: EntityType;
@@ -26,6 +28,9 @@ export async function EntityPage({ type, slug }: EntityPageProps) {
     <>
       <EntityJsonLd entity={entity} />
       <EntityHeader entity={entity} />
+      {entity.url && entity.url !== "[unverified]" && (
+        <EntityLinkPreview type={type} slug={slug} />
+      )}
       <EntitySchemaTable entity={entity} />
       <EntityScores entity={entity} />
       <ScoreHistoryChart type={type} slug={slug} />
@@ -38,6 +43,7 @@ export async function EntityPage({ type, slug }: EntityPageProps) {
       <EntityChangelog type={type} slug={slug} />
       <EntityDiffViewer type={type} slug={slug} />
       <SimilarEntities type={type} slug={slug} />
+      <EntityComments type={type} slug={slug} />
       <Section variant="surface" className="py-12">
         <Container className="max-w-4xl text-center">
           <p className="text-text-muted mb-4">
