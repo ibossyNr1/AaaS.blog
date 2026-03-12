@@ -56,6 +56,8 @@ const STATIC_PAGES = [
   { path: "/achievements", changeFrequency: "weekly" as const, priority: 0.5 },
   { path: "/developer/playground", changeFrequency: "monthly" as const, priority: 0.5 },
   { path: "/developer/sdks", changeFrequency: "monthly" as const, priority: 0.5 },
+  { path: "/docs", changeFrequency: "weekly" as const, priority: 0.6 },
+  { path: "/docs/architecture", changeFrequency: "monthly" as const, priority: 0.5 },
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

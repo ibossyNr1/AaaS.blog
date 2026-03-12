@@ -43,6 +43,7 @@ const navLinks = [
   { label: "Discover", href: "/discover" },
   { label: "Ask", href: "/ask" },
   { label: "Embed", href: "/embed" },
+  { label: "Docs", href: "/docs" },
 ];
 
 const channelLinks = [
