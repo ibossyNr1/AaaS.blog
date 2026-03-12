@@ -7,7 +7,6 @@ const LABELED_RINGS = [
   { name: "context",  size: 620, r: 290, duration: 38, reverse: true,  color: "red",   dotSize: 7, fontSize: 10 },
   { name: "industry", size: 440, r: 200, duration: 28, reverse: false, color: "cyan",  dotSize: 5, fontSize: 9 },
   { name: "strategy", size: 290, r: 130, duration: 20, reverse: true,  color: "red",   dotSize: 4, fontSize: 8 },
-  { name: "AaaS",     size: 170, r: 70,  duration: 14, reverse: false, color: "white", dotSize: 6, fontSize: 7 },
 ];
 
 const GHOST_RINGS = [
@@ -79,36 +78,40 @@ export function OrbitalBackground({ planetScale = 1, minimal = false, offset }: 
 
       const mx = e.clientX;
       const my = e.clientY;
-      const centerX = vw / 2;
-      const centerY = vh / 2;
-      const dx = mx - centerX;
-      const dy = my - centerY;
+      // Planet center accounts for offset prop
+      const planetX = vw / 2 + (offset ? (offset.x / 100) * 900 : 0);
+      const planetY = vh / 2 + (offset ? (offset.y / 100) * 900 : 0);
+      const dx = mx - planetX;
+      const dy = my - planetY;
 
-      // Core: 30% from center toward mouse
-      const coreX = centerX + dx * 0.3;
-      const coreY = centerY + dy * 0.3;
+      // Core: 30% from planet toward mouse
+      const coreX = planetX + dx * 0.3;
+      const coreY = planetY + dy * 0.3;
       core.style.left = `${coreX}px`;
       core.style.top = `${coreY}px`;
       starburst!.style.left = `${coreX}px`;
       starburst!.style.top = `${coreY}px`;
 
       // Streak at midpoint
-      streak!.style.left = `${centerX + dx * 0.5}px`;
-      streak!.style.top = `${centerY + dy * 0.5}px`;
+      streak!.style.left = `${planetX + dx * 0.5}px`;
+      streak!.style.top = `${planetY + dy * 0.5}px`;
 
       // Far flare beyond mouse (1.3x)
-      far!.style.left = `${centerX + dx * 1.3}px`;
-      far!.style.top = `${centerY + dy * 1.3}px`;
+      far!.style.left = `${planetX + dx * 1.3}px`;
+      far!.style.top = `${planetY + dy * 1.3}px`;
 
-      // Ring mirrored through center
-      ring!.style.left = `${centerX - dx * 0.35}px`;
-      ring!.style.top = `${centerY - dy * 0.35}px`;
+      // Ring mirrored through planet center
+      ring!.style.left = `${planetX - dx * 0.35}px`;
+      ring!.style.top = `${planetY - dy * 0.35}px`;
 
       // Ghost further mirrored
-      ghost!.style.left = `${centerX - dx * 0.6}px`;
-      ghost!.style.top = `${centerY - dy * 0.6}px`;
+      ghost!.style.left = `${planetX - dx * 0.6}px`;
+      ghost!.style.top = `${planetY - dy * 0.6}px`;
 
-      const dist = Math.min(Math.sqrt(cx * cx + cy * cy) * 1.2, 1);
+      // Intensity based on distance from planet center (normalized)
+      const normDx = (mx - planetX) / (vw / 2);
+      const normDy = (my - planetY) / (vh / 2);
+      const dist = Math.min(Math.sqrt(normDx * normDx + normDy * normDy) * 1.2, 1);
       core.style.opacity = `${dist * 0.7}`;
       starburst!.style.opacity = `${dist * 0.5}`;
       streak!.style.opacity = `${dist * 0.5}`;
@@ -122,7 +125,7 @@ export function OrbitalBackground({ planetScale = 1, minimal = false, offset }: 
 
     document.addEventListener("mousemove", handleMouseMove);
     return () => document.removeEventListener("mousemove", handleMouseMove);
-  }, []);
+  }, [offset]);
 
   const dotColor = (c: string) =>
     c === "cyan" ? "rgb(var(--circuit-glow))" : c === "red" ? "rgb(var(--accent-red))" : "rgb(var(--text))";
@@ -316,6 +319,17 @@ export function OrbitalBackground({ planetScale = 1, minimal = false, offset }: 
             className="relative w-24 h-24 rounded-full z-10 flex items-center justify-center animate-orb-pulse"
             style={{ transform: `scale(${planetScale})`, transition: "transform 0.8s cubic-bezier(0.23, 1, 0.32, 1)" }}
           >
+            {/* Signal rings — expanding radar pulses from center */}
+            {[0, 1, 2].map((i) => (
+              <div
+                key={`signal-${i}`}
+                className="absolute inset-0 rounded-full animate-[signal-ring_4s_ease-out_infinite]"
+                style={{
+                  border: "1px solid rgb(var(--circuit-glow) / 0.25)",
+                  animationDelay: `${i * 1.33}s`,
+                }}
+              />
+            ))}
             {/* Halo */}
             <div
               className="absolute -inset-[35px] rounded-full pointer-events-none animate-[halo-pulse_5s_ease-in-out_infinite]"
@@ -369,8 +383,29 @@ export function OrbitalBackground({ planetScale = 1, minimal = false, offset }: 
                 style={{ background: "linear-gradient(90deg, transparent, rgb(var(--circuit-glow) / 0.04), rgb(var(--text) / 0.02), transparent)" }}
               />
             </div>
-            {/* Core dot */}
-            <div className="w-[3px] h-[3px] rounded-full bg-circuit z-[2]" style={{ boxShadow: "0 0 8px rgb(var(--circuit-glow) / 0.5)" }} />
+            {/* Core beacon — bright blinking star */}
+            <div
+              className="w-[5px] h-[5px] rounded-full z-[2] animate-[beacon-star_2s_ease-in-out_infinite]"
+              style={{
+                background: "rgb(var(--circuit-glow))",
+                boxShadow: "0 0 6px rgb(var(--circuit-glow)), 0 0 15px rgb(var(--circuit-glow) / 0.6), 0 0 30px rgb(var(--circuit-glow) / 0.3)",
+              }}
+            />
+            {/* AaaS label — anchored above planet, counter-rotates to stay readable */}
+            <div
+              className="absolute -top-8 left-1/2 -translate-x-1/2 flex flex-col items-center animate-[beacon-star_3s_ease-in-out_infinite]"
+              style={{ animationDelay: "-1s" }}
+            >
+              <span
+                className="font-mono uppercase whitespace-nowrap text-[9px] tracking-[0.5em]"
+                style={{
+                  color: "rgb(var(--circuit-glow) / 0.8)",
+                  textShadow: "0 0 8px rgb(var(--circuit-glow) / 0.4), 0 0 20px rgb(var(--circuit-glow) / 0.2)",
+                }}
+              >
+                AaaS
+              </span>
+            </div>
           </div>
         </div>
       </div>
