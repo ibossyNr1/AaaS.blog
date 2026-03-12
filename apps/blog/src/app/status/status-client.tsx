@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { Card, cn } from "@aaas/ui";
+import { AgentStatusDot } from "@/components/agent-status-dot";
 
 /* -------------------------------------------------------------------------- */
 /*  Types                                                                      */
@@ -61,11 +62,13 @@ const HEALTH_CONFIG = {
   },
 };
 
-const STATUS_DOT = {
-  success: "bg-emerald-500",
-  failure: "bg-red-500",
-  unknown: "bg-zinc-500",
-};
+function mapAgentDotStatus(lastStatus: "success" | "failure" | "unknown"): "ok" | "warning" | "error" | "stale" {
+  switch (lastStatus) {
+    case "success": return "ok";
+    case "failure": return "error";
+    case "unknown": return "stale";
+  }
+}
 
 /* -------------------------------------------------------------------------- */
 /*  Helpers                                                                    */
@@ -277,11 +280,9 @@ export function StatusClient() {
                   {/* Top row: name + badges */}
                   <div className="mb-3 flex items-start justify-between">
                     <div className="flex items-center gap-2">
-                      <div
-                        className={cn(
-                          "mt-0.5 h-2.5 w-2.5 shrink-0 rounded-full",
-                          STATUS_DOT[agent.lastStatus],
-                        )}
+                      <AgentStatusDot
+                        status={mapAgentDotStatus(agent.lastStatus)}
+                        className="mt-0.5"
                       />
                       <div>
                         <p className="text-sm font-medium text-text">

@@ -1,6 +1,7 @@
 import { Container, Section } from "@aaas/ui";
 import { getTrendingEntities } from "@/lib/entities";
 import { LeaderboardClient } from "./leaderboard-client";
+import { CollaborativeRecommendations } from "@/components/collaborative-recommendations";
 import type { Metadata } from "next";
 
 export const revalidate = 300;
@@ -32,6 +33,7 @@ export default async function LeaderboardPage() {
           <LeaderboardClient entities={entities} />
         </Container>
       </Section>
+      <CollaborativeRecommendations />
     </>
   );
 }

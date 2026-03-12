@@ -3,6 +3,8 @@
 import { useEffect, useState, useMemo } from "react";
 import { Card, cn } from "@aaas/ui";
 import type { Achievement, AchievementCategory, AchievementTier } from "@/lib/achievements";
+import { Breadcrumbs } from "@/components/breadcrumbs";
+import { LoadingSkeleton } from "@/components/loading-skeleton";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -103,10 +105,16 @@ export function AchievementsClient() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <span className="text-text-muted font-mono text-sm animate-pulse">
-          Loading achievements...
-        </span>
+      <div className="min-h-screen bg-surface py-16 px-4 sm:px-6">
+        <div className="max-w-6xl mx-auto space-y-8">
+          <Breadcrumbs
+            items={[
+              { label: "Home", href: "/" },
+              { label: "Achievements" },
+            ]}
+          />
+          <LoadingSkeleton variant="card" count={6} className="grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" />
+        </div>
       </div>
     );
   }
@@ -114,6 +122,13 @@ export function AchievementsClient() {
   return (
     <section className="min-h-screen bg-surface py-16 px-4 sm:px-6">
       <div className="max-w-6xl mx-auto space-y-10">
+        <Breadcrumbs
+          items={[
+            { label: "Home", href: "/" },
+            { label: "Achievements" },
+          ]}
+        />
+
         {/* Header */}
         <div className="text-center space-y-3">
           <h1 className="text-3xl sm:text-4xl font-bold text-text tracking-tight">

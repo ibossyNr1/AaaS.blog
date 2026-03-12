@@ -5,6 +5,7 @@ import { Card, Badge, cn } from "@aaas/ui";
 import type { Episode, AudioFormat } from "@/lib/media-types";
 import { AUDIO_FORMATS } from "@/lib/media-types";
 import { useAudioQueue, type AudioTrack } from "@/components/audio-queue";
+import { PodcastSubscribe } from "@/components/podcast-subscribe";
 
 /* -------------------------------------------------------------------------- */
 /*  Helpers                                                                   */
@@ -275,6 +276,9 @@ export function ListenClient({ episodes }: { episodes: Episode[] }) {
 
   return (
     <div className="space-y-6">
+      {/* ---- Subscribe Widget ---- */}
+      <PodcastSubscribe className="mb-2" />
+
       {/* ---- Content Tabs ---- */}
       <div className="flex flex-wrap gap-2 border-b border-border/30 pb-3">
         {CONTENT_TABS.map(({ key, label }) => {

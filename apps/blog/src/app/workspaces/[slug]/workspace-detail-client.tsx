@@ -7,15 +7,15 @@ import type {
   Workspace,
   WorkspaceMember,
 } from "@/lib/workspaces";
+import type { Role } from "@/lib/rbac";
+import { ThemeEditor } from "@/components/theme-editor";
+import { ThemeInjector } from "@/components/theme-injector";
+import { PermissionGate } from "@/components/permission-gate";
+import { RoleBadge } from "@/components/role-badge";
+import { RoleSelector } from "@/components/role-selector";
+import { BUILT_IN_THEMES, type ThemeConfig } from "@/lib/theming";
 
 type Tab = "overview" | "members" | "settings" | "collections";
-
-const ROLE_COLORS: Record<string, string> = {
-  owner: "bg-circuit/20 text-circuit",
-  admin: "bg-accent-red/20 text-accent-red",
-  editor: "bg-yellow-500/20 text-yellow-400",
-  viewer: "bg-surface text-text-muted",
-};
 
 const PLAN_COLORS: Record<string, string> = {
   free: "bg-surface text-text-muted border border-border",
@@ -113,8 +113,29 @@ export function WorkspaceDetailClient({ slug }: Props) {
     { key: "collections", label: "Collections" },
   ];
 
+  // Build a ThemeConfig from workspace theme (if set), for ThemeInjector
+  const workspaceThemeConfig: ThemeConfig | undefined = workspace.theme
+    ? {
+        id: `workspace-${workspace.id}`,
+        name: `${workspace.name} Theme`,
+        isDark: true,
+        colors: {
+          primary: workspace.theme.primaryColor,
+          accent: workspace.theme.accentColor,
+          background: workspace.theme.backgroundColor,
+          surface: workspace.theme.backgroundColor,
+          text: "#ffffff",
+          textMuted: "#a0a0a0",
+          border: "#2a2a2a",
+        },
+      }
+    : undefined;
+
   return (
     <div className="pb-16">
+      {/* Inject workspace custom theme CSS vars */}
+      <ThemeInjector theme={workspaceThemeConfig} />
+
       {/* Header */}
       <div className="mb-8">
         <Link
@@ -145,11 +166,7 @@ export function WorkspaceDetailClient({ slug }: Props) {
           </div>
           <div className="flex items-center gap-2">
             {userRole && (
-              <span
-                className={`text-[10px] font-mono px-2 py-0.5 rounded-full ${ROLE_COLORS[userRole]}`}
-              >
-                {userRole}
-              </span>
+              <RoleBadge role={userRole as Role} size="sm" />
             )}
             <span
               className={`text-[10px] font-mono px-2 py-0.5 rounded-full ${PLAN_COLORS[workspace.plan]}`}
@@ -195,16 +212,29 @@ export function WorkspaceDetailClient({ slug }: Props) {
           members={members}
           canEdit={canEdit}
           userId={userId}
+          userRole={userRole as Role | null}
           onRefresh={fetchMembers}
         />
       )}
       {activeTab === "settings" && canEdit && (
-        <SettingsTab
-          workspace={workspace}
-          isOwner={isOwner}
-          userId={userId}
-          onRefresh={fetchWorkspace}
-        />
+        <PermissionGate
+          permission="manage_settings"
+          workspaceId={workspace.id}
+          fallback={
+            <Card className="text-center py-12">
+              <p className="text-text-muted text-sm">
+                You do not have permission to manage settings.
+              </p>
+            </Card>
+          }
+        >
+          <SettingsTab
+            workspace={workspace}
+            isOwner={isOwner}
+            userId={userId}
+            onRefresh={fetchWorkspace}
+          />
+        </PermissionGate>
       )}
       {activeTab === "collections" && <CollectionsTab />}
     </div>
@@ -306,11 +336,7 @@ function OverviewTab({
                   {m.displayName || m.email || m.userId}
                 </span>
               </div>
-              <span
-                className={`text-[10px] font-mono px-2 py-0.5 rounded-full ${ROLE_COLORS[m.role]}`}
-              >
-                {m.role}
-              </span>
+              <RoleBadge role={m.role as Role} size="sm" />
             </div>
           ))}
         </div>
@@ -326,12 +352,14 @@ function MembersTab({
   members,
   canEdit,
   userId,
+  userRole,
   onRefresh,
 }: {
   workspace: Workspace;
   members: WorkspaceMember[];
   canEdit: boolean;
   userId: string;
+  userRole: Role | null;
   onRefresh: () => void;
 }) {
   const [showInvite, setShowInvite] = useState(false);
@@ -404,7 +432,10 @@ function MembersTab({
 
   return (
     <div className="space-y-4">
-      {canEdit && (
+      <PermissionGate
+        permission="manage_members"
+        workspaceId={workspace.id}
+      >
         <div className="flex justify-end mb-2">
           <Button
             variant="primary"
@@ -413,7 +444,7 @@ function MembersTab({
             {showInvite ? "Cancel" : "+ Add Member"}
           </Button>
         </div>
-      )}
+      </PermissionGate>
 
       {showInvite && (
         <Card variant="glass" className="p-5 mb-4">
@@ -435,19 +466,11 @@ function MembersTab({
                 placeholder="Email (optional)"
                 className="px-3 py-2 bg-surface border border-border rounded-lg text-text text-sm focus:outline-none focus:border-circuit"
               />
-              <select
-                value={inviteRole}
-                onChange={(e) =>
-                  setInviteRole(
-                    e.target.value as "admin" | "editor" | "viewer"
-                  )
-                }
-                className="px-3 py-2 bg-surface border border-border rounded-lg text-text text-sm focus:outline-none focus:border-circuit"
-              >
-                <option value="viewer">Viewer</option>
-                <option value="editor">Editor</option>
-                <option value="admin">Admin</option>
-              </select>
+              <RoleSelector
+                currentRole={inviteRole as Role}
+                onChange={(role) => setInviteRole(role as "admin" | "editor" | "viewer")}
+                maxRole={userRole ?? "viewer"}
+              />
             </div>
             {actionError && (
               <p className="text-sm text-accent-red font-mono">{actionError}</p>
@@ -482,11 +505,7 @@ function MembersTab({
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <span
-                  className={`text-[10px] font-mono px-2 py-0.5 rounded-full ${ROLE_COLORS[m.role]}`}
-                >
-                  {m.role}
-                </span>
+                <RoleBadge role={m.role as Role} size="sm" />
                 {canEdit &&
                   m.role !== "owner" &&
                   m.userId !== userId && (
@@ -643,6 +662,59 @@ function SettingsTab({
           </div>
         </form>
       </Card>
+
+      {/* Theme customization */}
+      <PermissionGate
+        permission="manage_theme"
+        workspaceId={workspace.id}
+      >
+        <Card variant="glass" className="p-5">
+          <h3 className="text-sm font-mono text-text-muted mb-4 uppercase tracking-wider">
+            Workspace Theme
+          </h3>
+          <ThemeEditor
+            initialTheme={
+              workspace.theme
+                ? {
+                    id: `workspace-${workspace.id}`,
+                    name: `${workspace.name} Theme`,
+                    isDark: true,
+                    colors: {
+                      primary: workspace.theme.primaryColor,
+                      accent: workspace.theme.accentColor,
+                      background: workspace.theme.backgroundColor,
+                      surface: workspace.theme.backgroundColor,
+                      text: "#ffffff",
+                      textMuted: "#a0a0a0",
+                      border: "#2a2a2a",
+                    },
+                  }
+                : BUILT_IN_THEMES[0]
+            }
+            onSave={async (theme) => {
+              try {
+                await fetch(`/api/workspaces/${workspace.id}`, {
+                  method: "PUT",
+                  headers: {
+                    "Content-Type": "application/json",
+                    "x-user-id": userId,
+                  },
+                  body: JSON.stringify({
+                    theme: {
+                      primaryColor: theme.colors.primary,
+                      accentColor: theme.colors.accent,
+                      backgroundColor: theme.colors.background,
+                    },
+                  }),
+                });
+                onRefresh();
+              } catch {
+                // silent
+              }
+            }}
+          />
+        </Card>
+      </PermissionGate>
 
       {/* Danger zone */}
       {isOwner && (

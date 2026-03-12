@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Card, Badge, cn } from "@aaas/ui";
 import { GradeBadge } from "@/components/grade-badge";
+import { EntityHoverCard } from "@/components/entity-hover-card";
 import type { Entity, EntityType } from "@/lib/types";
 import { ENTITY_TYPES } from "@/lib/types";
 import { getChannelName } from "@/lib/channels";
@@ -350,9 +351,11 @@ export function SearchClient() {
                           {/* Main content */}
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 mb-1">
-                              <h3 className="text-sm font-semibold text-text group-hover:text-circuit transition-colors truncate">
-                                {entity.name}
-                              </h3>
+                              <EntityHoverCard type={entity.type} slug={entity.slug}>
+                                <span className="text-sm font-semibold text-text group-hover:text-circuit transition-colors truncate">
+                                  {entity.name}
+                                </span>
+                              </EntityHoverCard>
                               <span className="text-xs text-text-muted font-mono">
                                 by {entity.provider}
                               </span>

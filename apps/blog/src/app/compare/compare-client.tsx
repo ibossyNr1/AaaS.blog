@@ -6,6 +6,7 @@ import { Card, cn } from "@aaas/ui";
 import type { Entity, EntityType } from "@/lib/types";
 import { ENTITY_TYPES } from "@/lib/types";
 import { ComparisonExport } from "@/components/comparison-export";
+import { PrintButton } from "@/components/print-button";
 
 /* -------------------------------------------------------------------------- */
 /*  Constants                                                                  */
@@ -467,8 +468,13 @@ export function CompareClient({ entities }: { entities: Entity[] }) {
             </div>
           </Card>
 
-          {/* ---- Export Panel ---- */}
-          <ComparisonExport entities={[entityA, entityB]} />
+          {/* ---- Export & Print ---- */}
+          <div className="flex items-center gap-3">
+            <div className="flex-1">
+              <ComparisonExport entities={[entityA, entityB]} />
+            </div>
+            <PrintButton />
+          </div>
         </>
       )}
 

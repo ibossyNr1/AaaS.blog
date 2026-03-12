@@ -1,5 +1,6 @@
 import { Container, Section } from "@aaas/ui";
 import { DiscoverClient } from "./discover-client";
+import { DiscoverySuggestions } from "@/components/discovery-suggestions";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -19,6 +20,11 @@ export default function DiscoverPage() {
           <p className="text-text-muted text-sm">
             Explore clusters, topics, and guided paths through the AI ecosystem.
           </p>
+        </Container>
+      </Section>
+      <Section className="py-4">
+        <Container className="max-w-6xl">
+          <DiscoverySuggestions />
         </Container>
       </Section>
       <Section className="py-8">

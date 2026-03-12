@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import { Card, Badge, cn } from "@aaas/ui";
 import { AgentStatusDot } from "@/components/agent-status-dot";
 import { FreshnessIndicator } from "@/components/freshness-indicator";
+import { AnomalyFeed } from "@/components/anomaly-feed";
 import type {
   PipelineHealth,
   AgentStatus,
@@ -565,6 +566,14 @@ export function PipelineClient() {
         <Card variant="glass">
           <ExecutionTimeline executions={executions} />
         </Card>
+      </div>
+
+      {/* Agent-related Anomalies */}
+      <div>
+        <h2 className="text-sm font-mono uppercase tracking-wider text-circuit mb-4">
+          Pipeline Anomalies
+        </h2>
+        <AnomalyFeed compact maxItems={8} />
       </div>
 
       {/* Last refreshed */}

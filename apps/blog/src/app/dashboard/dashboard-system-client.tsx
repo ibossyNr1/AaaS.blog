@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { Card, cn } from "@aaas/ui";
+import { AnomalyAlertBanner } from "@/components/anomaly-alert-banner";
 
 /* -------------------------------------------------------------------------- */
 /*  Types                                                                      */
@@ -203,6 +204,9 @@ export function DashboardSystemClient() {
 
   return (
     <div className="space-y-10">
+      {/* Urgent anomaly banner */}
+      <AnomalyAlertBanner />
+
       {/* ---- Agent Status ---- */}
       <div>
         <h2 className="text-sm font-mono uppercase tracking-wider text-circuit mb-4">

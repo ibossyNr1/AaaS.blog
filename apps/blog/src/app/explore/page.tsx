@@ -1,6 +1,9 @@
 import { Container, Section } from "@aaas/ui";
 import { getTrendingEntities } from "@/lib/entities";
 import { ExploreClient } from "./explore-client";
+import { RecommendedEntities } from "@/components/recommended-entities";
+import { CollaborativeRecommendations } from "@/components/collaborative-recommendations";
+import { RecentlyViewed } from "@/components/recently-viewed";
 import type { Metadata } from "next";
 
 export const revalidate = 60;
@@ -25,11 +28,14 @@ export default async function ExplorePage() {
           </p>
         </Container>
       </Section>
+      <RecommendedEntities />
       <Section className="py-8">
         <Container className="max-w-6xl">
           <ExploreClient entities={entities} />
         </Container>
       </Section>
+      <CollaborativeRecommendations />
+      <RecentlyViewed />
     </>
   );
 }

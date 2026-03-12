@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Card, cn } from "@aaas/ui";
 import { API_ENDPOINTS, AGENTS, FIRESTORE_COLLECTIONS } from "@/lib/doc-data";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 
 /* -------------------------------------------------------------------------- */
 /*  Types                                                                      */
@@ -459,6 +460,13 @@ export function DocsClient() {
   return (
     <div className="min-h-screen bg-base">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:py-16">
+        <Breadcrumbs
+          items={[
+            { label: "Home", href: "/" },
+            { label: "Docs" },
+          ]}
+        />
+
         {/* Header */}
         <div className="mb-10">
           <h1 className="mb-1 text-3xl font-bold tracking-tight text-text">

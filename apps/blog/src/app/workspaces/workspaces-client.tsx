@@ -4,6 +4,10 @@ import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { Card, Button } from "@aaas/ui";
 import type { Workspace, WorkspaceMember } from "@/lib/workspaces";
+import type { Role } from "@/lib/rbac";
+import { Breadcrumbs } from "@/components/breadcrumbs";
+import { LoadingSkeleton } from "@/components/loading-skeleton";
+import { RoleBadge } from "@/components/role-badge";
 
 type WorkspaceWithRole = Workspace & { role: WorkspaceMember["role"] };
 
@@ -11,13 +15,6 @@ const PLAN_COLORS: Record<string, string> = {
   free: "bg-surface text-text-muted border border-border",
   team: "bg-circuit/10 text-circuit border border-circuit/30",
   enterprise: "bg-accent-red/10 text-accent-red border border-accent-red/30",
-};
-
-const ROLE_COLORS: Record<string, string> = {
-  owner: "bg-circuit/20 text-circuit",
-  admin: "bg-accent-red/20 text-accent-red",
-  editor: "bg-yellow-500/20 text-yellow-400",
-  viewer: "bg-surface text-text-muted",
 };
 
 function slugify(text: string): string {
@@ -114,16 +111,27 @@ export function WorkspacesClient() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-20">
-        <span className="text-text-muted font-mono text-sm animate-pulse">
-          Loading workspaces...
-        </span>
+      <div className="py-8">
+        <Breadcrumbs
+          items={[
+            { label: "Home", href: "/" },
+            { label: "Workspaces" },
+          ]}
+        />
+        <LoadingSkeleton variant="card" count={4} className="grid-cols-1 md:grid-cols-2" />
       </div>
     );
   }
 
   return (
     <div>
+      <Breadcrumbs
+        items={[
+          { label: "Home", href: "/" },
+          { label: "Workspaces" },
+        ]}
+      />
+
       {/* Actions bar */}
       <div className="flex items-center justify-between mb-8">
         <p className="text-sm text-text-muted font-mono">
@@ -278,11 +286,7 @@ export function WorkspacesClient() {
                       {ws.name}
                     </h3>
                   </div>
-                  <span
-                    className={`text-[10px] font-mono px-2 py-0.5 rounded-full ${ROLE_COLORS[ws.role]}`}
-                  >
-                    {ws.role}
-                  </span>
+                  <RoleBadge role={ws.role as Role} size="sm" />
                 </div>
 
                 {ws.description && (

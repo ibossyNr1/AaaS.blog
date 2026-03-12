@@ -5,6 +5,8 @@ import Link from "next/link";
 import { Card, Badge, cn } from "@aaas/ui";
 import type { Entity, EntityType } from "@/lib/types";
 import { ENTITY_TYPES } from "@/lib/types";
+import { EntityHoverCard } from "@/components/entity-hover-card";
+import { EntitySparkline } from "@/components/entity-sparkline";
 
 /* -------------------------------------------------------------------------- */
 /*  Types                                                                     */
@@ -73,9 +75,11 @@ function TrendingCard({
             {entity.scores.composite}
           </span>
         </div>
-        <h3 className="text-base font-semibold text-text mb-1 group-hover:text-circuit transition-colors">
-          {entity.name}
-        </h3>
+        <EntityHoverCard type={entity.type} slug={entity.slug}>
+          <span className="text-base font-semibold text-text mb-1 group-hover:text-circuit transition-colors">
+            {entity.name}
+          </span>
+        </EntityHoverCard>
         <p className="text-xs text-text-muted mb-3">{entity.provider}</p>
         <div className="mt-auto space-y-1.5">
           {SCORE_KEYS.map(({ key, label }) => (
@@ -119,13 +123,15 @@ function LeaderboardRow({
         {/* Entity info */}
         <div className="flex-grow min-w-0">
           <div className="flex items-center gap-2 mb-0.5">
-            <Link
-              href={`/${entity.type}/${entity.slug}`}
-              onClick={(e) => e.stopPropagation()}
-              className="text-sm font-semibold text-text hover:text-circuit transition-colors truncate"
-            >
-              {entity.name}
-            </Link>
+            <EntityHoverCard type={entity.type} slug={entity.slug}>
+              <Link
+                href={`/${entity.type}/${entity.slug}`}
+                onClick={(e) => e.stopPropagation()}
+                className="text-sm font-semibold text-text hover:text-circuit transition-colors truncate"
+              >
+                {entity.name}
+              </Link>
+            </EntityHoverCard>
             <Badge variant="circuit" className="shrink-0 text-[10px] px-2 py-0.5">
               {typeInfo.label}
             </Badge>
@@ -133,9 +139,16 @@ function LeaderboardRow({
           <p className="text-xs text-text-muted truncate">{entity.provider}</p>
         </div>
 
-        {/* Composite score + bar */}
-        <div className="flex items-center gap-3 shrink-0 w-48">
+        {/* Composite score + bar + sparkline */}
+        <div className="flex items-center gap-3 shrink-0 w-64">
           <ScoreBar value={entity.scores.composite} />
+          <EntitySparkline
+            type={entity.type}
+            slug={entity.slug}
+            width={48}
+            height={16}
+            className="shrink-0"
+          />
           <span className="w-8 text-sm font-mono font-bold text-circuit text-right">
             {entity.scores.composite}
           </span>
@@ -258,7 +271,7 @@ export function LeaderboardClient({ entities }: { entities: Entity[] }) {
             <span className="flex-grow text-[10px] font-mono uppercase tracking-wider text-text-muted">
               Entity
             </span>
-            <span className="w-48 text-[10px] font-mono uppercase tracking-wider text-text-muted text-right pr-10">
+            <span className="w-64 text-[10px] font-mono uppercase tracking-wider text-text-muted text-right pr-10">
               Score
             </span>
             <span className="w-4" />

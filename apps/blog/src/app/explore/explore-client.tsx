@@ -7,6 +7,7 @@ import { CHANNELS } from "@/lib/channels";
 import { EntityCard } from "@/components/entity-card";
 import { SearchAutocomplete } from "@/components/search-autocomplete";
 import { SearchFilters, type FilterState } from "@/components/search-filters";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 
 /* -------------------------------------------------------------------------- */
 /*  Component                                                                 */
@@ -105,6 +106,13 @@ export function ExploreClient({ entities }: { entities: Entity[] }) {
 
   return (
     <div className="space-y-6">
+      <Breadcrumbs
+        items={[
+          { label: "Home", href: "/" },
+          { label: "Explore" },
+        ]}
+      />
+
       {/* ---- Search Autocomplete ---- */}
       <SearchAutocomplete
         placeholder="Search by name, description, provider, or tag..."

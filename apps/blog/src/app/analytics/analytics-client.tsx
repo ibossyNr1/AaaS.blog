@@ -4,6 +4,9 @@ import { useEffect, useState, useCallback } from "react";
 import { Card, Badge, cn } from "@aaas/ui";
 import { MetricCard } from "@/components/metric-card";
 import { AnalyticsSparkline } from "@/components/analytics-sparkline";
+import { AnomalyAlertBanner } from "@/components/anomaly-alert-banner";
+import { AnomalyFeed } from "@/components/anomaly-feed";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 import type { AnalyticsSnapshot, EntityDelta } from "@/lib/analytics";
 
 /* -------------------------------------------------------------------------- */
@@ -349,6 +352,16 @@ export function AnalyticsClient() {
 
   return (
     <div className="space-y-8">
+      {/* Critical anomaly banner */}
+      <AnomalyAlertBanner />
+
+      <Breadcrumbs
+        items={[
+          { label: "Home", href: "/" },
+          { label: "Analytics" },
+        ]}
+      />
+
       {/* Controls row */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <PeriodSelector value={period} onChange={setPeriod} />
@@ -484,6 +497,9 @@ export function AnalyticsClient() {
           </Card>
         </div>
       )}
+
+      {/* Anomaly Feed */}
+      <AnomalyFeed maxItems={10} />
     </div>
   );
 }
