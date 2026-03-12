@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import { useState, useRef, useCallback, useMemo } from "react";
 import { Card, cn } from "@aaas/ui";
 import Link from "next/link";
 import type { Entity, EntityType } from "@/lib/types";

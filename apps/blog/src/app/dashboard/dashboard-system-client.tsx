@@ -56,6 +56,7 @@ const AGENT_LABELS: Record<string, string> = {
   webhook: "Webhook Delivery",
   "digest-email": "Digest Email Agent",
   views: "Views Agent",
+  trending: "Trending Agent",
   runner: "Agent Runner",
 };
 

@@ -1,6 +1,6 @@
 # AaaS Knowledge Index — Implementation Plan
 
-> **Status: ALL 7 PHASES COMPLETE**
+> **Status: ALL 8 PHASES COMPLETE**
 > Last updated: 2026-03-12
 
 **Goal:** Transform the static blog (aaas-blog.web.app) into the most extensive, autonomously functioning agentic knowledge index with 15 self-healing agents, real-time entity discovery, auto-approval pipeline, page view analytics, entity comparison, and full CI/CD automation.
@@ -137,15 +137,35 @@
 
 ---
 
+## Phase 8: Intelligence & Discoverability Layer (COMPLETE)
+
+- [x] **Task 1:** Score history tracking — ranking agent writes `score_history` subcollection, `/api/entity/[type]/[slug]/history` API, `ScoreHistoryChart` component with SVG sparklines on entity pages
+- [x] **Task 2:** Entity health badge API (`/api/badge/[type]/[slug]`) — SVG shields.io-style badges, color-coded by score (green ≥70, yellow ≥40, red <40), metric selection via query param
+- [x] **Task 3:** Bulk export API (`/api/export`) — JSON and CSV download, type filtering, proper Content-Disposition headers
+- [x] **Task 4:** Admin review queue (`/admin/review`) — API-key-gated admin page, submission approve/reject, categorization suggestion accept/dismiss, PATCH APIs for status updates
+- [x] **Task 5:** Trending detection agent (`agents/trending-agent.ts`) — compares current scores against entity snapshots, flags ≥15 point changes, dedup within 7 days, writes to `trending_alerts` collection
+- [x] **Task 6:** `/api/trending` endpoint — serves recent trending alerts
+- [x] **Task 7:** Entity relationship graph (`/graph`) — pure SVG force-directed visualization, spring-based physics simulation, type-colored nodes, pan/zoom, type filter, clickable nodes linking to entity pages
+- [x] **Task 8:** Updated runner with 16 agents (added trending) in dependency order
+- [x] **Task 9:** Dashboard agent labels updated for all 16 agents including trending
+- [x] **Task 10:** GitHub Actions workflow updated — trending added to daily core agents
+- [x] **Task 11:** Navbar updated with Graph link
+- [x] **Task 12:** Firestore rules for trending_alerts collection (public read)
+- [x] **Task 13:** Admin API routes — `/api/admin/submissions`, `/api/admin/suggestions`, `/api/admin/suggestions/[id]`, `/api/submit/[id]` (GET + PATCH)
+
+---
+
 ## Architecture Summary
 
 ```
 apps/blog/
 ├── src/
-│   ├── app/                          # 45+ routes
+│   ├── app/                          # 55+ routes
 │   │   ├── page.tsx                  # Homepage (trending, channels, latest, CTAs)
 │   │   ├── explore/                  # Search + filter (client-side)
 │   │   ├── compare/                  # Side-by-side entity comparison
+│   │   ├── graph/                    # Force-directed relationship graph
+│   │   ├── admin/review/             # Admin review queue (submissions + suggestions)
 │   │   ├── leaderboard/              # Category tabs, score breakdowns
 │   │   ├── listen/                   # Audio hub with player
 │   │   ├── listen/[id]/              # Episode detail page
@@ -159,7 +179,13 @@ apps/blog/
 │   │   ├── og/                       # Dynamic OG images (edge)
 │   │   ├── api/
 │   │   │   ├── entities/             # List/filter entities
-│   │   │   ├── entity/[type]/[slug]/ # Single entity + changelog
+│   │   │   ├── entity/[type]/[slug]/ # Single entity + changelog + history
+│   │   │   ├── badge/[type]/[slug]/  # SVG health badges
+│   │   │   ├── export/               # Bulk JSON/CSV export
+│   │   │   ├── trending/             # Trending alerts
+│   │   │   ├── admin/submissions/    # Admin submission list
+│   │   │   ├── admin/suggestions/    # Admin categorization suggestions
+│   │   │   ├── submit/[id]/          # Single submission GET + PATCH
 │   │   │   ├── leaderboard/[cat]/    # Leaderboard
 │   │   │   ├── search/               # Full-text search
 │   │   │   ├── episodes/             # Audio episodes + play count
@@ -174,9 +200,9 @@ apps/blog/
 │   │   ├── sitemap.ts
 │   │   ├── robots.ts
 │   │   └── not-found.tsx
-│   ├── components/                   # 15 components
+│   ├── components/                   # 17 components
 │   ├── lib/                          # 11 modules (types, entities, channels, firebase, schemas, media, tts, diff, webhooks, email-templates)
-│   ├── agents/                       # 15 self-healing agent scripts + runner
+│   ├── agents/                       # 16 self-healing agent scripts + runner
 │   └── seed/                         # Seed data + runner
 ├── .eslintrc.json                    # Excludes agents/
 ├── tsconfig.json                     # target es2017, excludes agents/
@@ -187,8 +213,8 @@ apps/blog/
 ├── agents.yml                        # Scheduled agent runs (daily/weekly/supplemental)
 └── deploy-blog.yml                   # Auto-deploy on push
 
-firestore.rules                       # Security rules (14 collections)
-firestore.indexes.json                # 35+ composite indexes
+firestore.rules                       # Security rules (15 collections)
+firestore.indexes.json                # 36+ composite indexes
 ```
 
 ## Required GitHub Secrets
