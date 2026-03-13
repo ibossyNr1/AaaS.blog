@@ -23,6 +23,21 @@
       "target": "design",
       "public": "design",
       "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
+    },
+    {
+      "target": "blog",
+      "public": "apps/blog/hosting-proxy",
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "cleanUrls": true,
+      "rewrites": [
+        {
+          "source": "**",
+          "run": {
+            "serviceId": "blog",
+            "region": "us-central1"
+          }
+        }
+      ]
     }
   ]
 }

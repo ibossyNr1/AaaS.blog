@@ -8,6 +8,9 @@
         "platform": [
           "aaas-platform-web"
         ],
+        "blog": [
+          "aaas-blog"
+        ],
         "design": [
           "superforge-design"
         ]
