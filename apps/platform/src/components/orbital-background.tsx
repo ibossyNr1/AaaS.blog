@@ -70,9 +70,11 @@ export function OrbitalBackground({ planetScale = 1, minimal = false, offset }: 
       const cx = (e.clientX / vw - 0.5) * 2;
       const cy = (e.clientY / vh - 0.5) * 2;
 
-      if (containerRef.current) containerRef.current.style.transform = `translate(${cx * -30}px, ${cy * -30}px)`;
-      if (nebulaRef.current) nebulaRef.current.style.transform = `translate(${cx * -16}px, ${cy * -16}px)`;
-      if (starRef.current) starRef.current.style.transform = `translate(${cx * -6}px, ${cy * -6}px)`;
+      // Zoom: mouse at top = zoom out (0.68), center = 1.0, bottom = zoom in (1.32)
+      const zoom = 1 + cy * 0.32;
+      if (containerRef.current) containerRef.current.style.transform = `translate(${cx * -60}px, ${cy * -60}px) scale(${zoom})`;
+      if (nebulaRef.current) nebulaRef.current.style.transform = `translate(${cx * -35}px, ${cy * -35}px) scale(${1 + cy * 0.16})`;
+      if (starRef.current) starRef.current.style.transform = `translate(${cx * -12}px, ${cy * -12}px)`;
 
       const { core, streak, starburst, ring, ghost, far } = flareRef.current;
       if (!core) return;
@@ -150,10 +152,10 @@ export function OrbitalBackground({ planetScale = 1, minimal = false, offset }: 
   return (
     <>
       {/* Star field */}
-      <div ref={starRef} className="orbital-star-field fixed inset-0 z-0 pointer-events-none transition-transform duration-200 ease-out" />
+      <div ref={starRef} className="orbital-star-field fixed z-0 pointer-events-none transition-transform duration-200 ease-out" style={{ inset: "-15%" }} />
 
       {/* Nebula */}
-      <div ref={nebulaRef} className="orbital-nebula fixed inset-0 z-[1] pointer-events-none overflow-hidden transition-transform duration-[180ms] ease-out">
+      <div ref={nebulaRef} className="orbital-nebula fixed z-[1] pointer-events-none overflow-hidden transition-transform duration-[180ms] ease-out" style={{ inset: "-15%" }}>
         <div className="absolute w-[65vw] h-[65vw] top-[5%] left-[-15%] rounded-full blur-[80px] opacity-70 animate-aura-drift" style={{ background: "radial-gradient(circle, rgb(var(--circuit-glow) / 0.18), transparent 70%)" }} />
         <div className="absolute w-[55vw] h-[55vw] bottom-[-10%] right-[-15%] rounded-full blur-[80px] opacity-60 animate-aura-drift" style={{ background: "radial-gradient(circle, rgb(var(--accent-red) / 0.14), transparent 65%)", animationDelay: "-8s", animationDuration: "30s" }} />
         <div className="absolute w-[40vw] h-[40vw] top-[25%] right-[5%] rounded-full blur-[80px] opacity-[0.55] animate-aura-drift" style={{ background: "radial-gradient(circle, rgb(var(--circuit-glow) / 0.12), transparent 60%)", animationDelay: "-14s", animationDuration: "22s" }} />
@@ -174,7 +176,7 @@ export function OrbitalBackground({ planetScale = 1, minimal = false, offset }: 
       </div>
 
       {/* Orbital system */}
-      <div ref={containerRef} className="fixed inset-0 z-[2] flex items-center justify-center transition-transform duration-150 ease-out pointer-events-none">
+      <div ref={containerRef} className="fixed z-[2] flex items-center justify-center transition-transform duration-150 ease-out pointer-events-none" style={{ inset: "-15%" }}>
         <div
           className="relative w-[900px] h-[900px] flex items-center justify-center"
           style={offset ? { transform: `translate(${offset.x}%, ${offset.y}%)` } : undefined}

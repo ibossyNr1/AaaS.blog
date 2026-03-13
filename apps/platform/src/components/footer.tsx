@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import { KineticBar } from "@aaas/ui";
 
 const footerLinks = {
@@ -31,21 +30,17 @@ export function Footer() {
   return (
     <>
       <KineticBar />
-      <footer className="bedrock py-16 px-6">
+      <footer className="glass py-16 px-6 relative z-40">
         <div className="max-w-[1600px] mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-5 gap-8">
             {/* Logo column */}
             <div className="col-span-2 md:col-span-1">
-              <Link href="/" className="flex items-center gap-2 mb-4 group">
-                <Image
-                  src="https://firebasestorage.googleapis.com/v0/b/studio-1743338608-800f1.firebasestorage.app/o/Logos%2FAaaS.Points.png?alt=media"
-                  alt="AaaS"
-                  width={24}
-                  height={24}
-                  className="rounded"
-                />
-                <span className="font-mono text-xs uppercase tracking-widest text-text group-hover:text-circuit transition-colors">
-                  AaaS
+              <Link href="/" className="flex items-center gap-3 mb-4 group">
+                <span className="border-l-2 border-circuit pl-3 flex items-center gap-2.5">
+                  <span className="w-2 h-2 rounded-full animate-logo-pulse shrink-0" />
+                  <span className="font-mono text-xs tracking-[0.3rem] uppercase text-text group-hover:text-circuit transition-colors duration-300">
+                    Agents as a Service
+                  </span>
                 </span>
               </Link>
               <p className="font-mono text-xs text-text-muted uppercase tracking-wider mb-4">

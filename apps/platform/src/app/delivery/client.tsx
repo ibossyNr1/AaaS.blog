@@ -19,7 +19,7 @@ interface Persona {
 const PERSONAS: Persona[] = [
   {
     id: "general",
-    noun: "Curious",
+    noun: "Wanderer",
     audio: "/audio/aaas-pitch-kokoro.mp3",
     duration: 137,
     pitch: [
@@ -364,8 +364,11 @@ export function DeliveryClient() {
         </div>
       )}
 
-      {/* === Scrolling content — starts centered in viewport === */}
-      <div className="relative z-10 min-h-screen flex items-center justify-center overflow-hidden">
+      {/* === Scrolling content — hidden until pitch starts === */}
+      <div
+        className="relative z-10 min-h-screen flex items-center justify-center overflow-hidden transition-opacity duration-700"
+        style={{ opacity: scrolling ? 1 : 0, pointerEvents: scrolling ? "auto" : "none" }}
+      >
         <div
           ref={scrollRef}
           className="max-w-2xl mx-auto px-6 pt-[50vh] pb-[60vh] text-center"
