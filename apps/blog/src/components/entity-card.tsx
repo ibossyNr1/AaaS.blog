@@ -10,13 +10,25 @@ interface EntityCardProps {
   entity: Entity;
 }
 
+const TYPE_DOT_COLORS: Record<string, string> = {
+  model: "bg-red",
+  benchmark: "bg-red",
+  agent: "bg-circuit",
+  tool: "bg-accent-teal",
+  skill: "bg-pastel-lavender",
+  script: "bg-pastel-gold",
+};
+
 export function EntityCard({ entity }: EntityCardProps) {
   const typeInfo = ENTITY_TYPES[entity.type];
+  const accentColor = ["model", "benchmark"].includes(entity.type) ? "red" : "circuit";
+  const dotColor = TYPE_DOT_COLORS[entity.type] || "bg-circuit";
 
   return (
     <Link href={`/${entity.type}/${entity.slug}`}>
-      <Card className="h-full flex flex-col group cursor-pointer">
+      <Card variant="glass" spotlight accentColor={accentColor} className="h-full flex flex-col group cursor-pointer">
         <div className="flex items-center gap-2 mb-3">
+          <span className={`inline-block w-1.5 h-1.5 rounded-full ${dotColor}`} />
           <Badge variant="circuit">
             {typeInfo.label}
           </Badge>
@@ -38,7 +50,7 @@ export function EntityCard({ entity }: EntityCardProps) {
             {entity.tags.slice(0, 3).map((tag) => (
               <span
                 key={tag}
-                className="text-[10px] font-mono text-text-muted bg-surface px-2 py-0.5 rounded"
+                className="text-[10px] font-mono text-text-muted bg-surface/50 backdrop-blur-sm px-2 py-0.5 rounded border border-border"
               >
                 {tag}
               </span>

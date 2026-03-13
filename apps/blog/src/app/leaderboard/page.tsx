@@ -1,4 +1,4 @@
-import { Container, Section } from "@aaas/ui";
+import { Container, Section, KineticBar } from "@aaas/ui";
 import { getTrendingEntities } from "@/lib/entities";
 import { LeaderboardClient } from "./leaderboard-client";
 import { CollaborativeRecommendations } from "@/components/collaborative-recommendations";
@@ -17,17 +17,19 @@ export default async function LeaderboardPage() {
 
   return (
     <>
-      <Section className="pt-28 pb-8">
+      <Section className="pt-28 pb-8 hero-glow">
         <Container className="max-w-6xl">
-          <h1 className="text-3xl md:text-4xl font-bold text-text mb-2">
+          <div className="section-topic"><span>Rankings</span></div>
+          <h1 className="monolith-title text-4xl md:text-5xl lg:text-6xl mb-4">
             Leaderboard
           </h1>
-          <p className="text-text-muted">
-            {entities.length} entities ranked by composite score across the AI
-            ecosystem.
+          <p className="text-text-muted max-w-2xl">
+            {entities.length} entities ranked by composite score across the AI ecosystem.
           </p>
+          <span className="status-badge mt-4 inline-flex">Live Rankings — Auto-Updated</span>
         </Container>
       </Section>
+      <KineticBar />
       <Section className="py-8">
         <Container className="max-w-6xl">
           <LeaderboardClient entities={entities} />

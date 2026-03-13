@@ -1,4 +1,4 @@
-import { Container, Section } from "@aaas/ui";
+import { Container, Section, KineticBar } from "@aaas/ui";
 import {
   collection,
   getDocs,
@@ -36,18 +36,20 @@ export default async function ListenPage() {
 
   return (
     <>
-      <Section className="pt-28 pb-8">
+      <Section className="pt-28 pb-8 hero-glow">
         <Container className="max-w-6xl">
-          <h1 className="text-3xl md:text-4xl font-bold text-text mb-2">
+          <div className="section-topic"><span>Media</span></div>
+          <h1 className="monolith-title text-4xl md:text-5xl lg:text-6xl mb-4">
             Audio Hub
           </h1>
-          <p className="text-text-muted">
+          <p className="text-text-muted max-w-2xl">
             {episodes.length > 0
               ? `${episodes.length} episodes — narrations, digests, and podcasts from the AI ecosystem.`
               : "Audio narrations, daily digests, and interactive podcasts from the AI ecosystem."}
           </p>
         </Container>
       </Section>
+      <KineticBar />
       <Section className="py-8">
         <Container className="max-w-6xl">
           <ListenClient episodes={episodes} />

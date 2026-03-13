@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import { Inter, JetBrains_Mono } from "next/font/google";
+import { AuraBlobs } from "@aaas/ui";
 import { IndexNavbar } from "@/components/index-navbar";
 import { SkipToContent } from "@/components/skip-to-content";
 import { BlogFooter } from "@/components/blog-footer";
@@ -15,15 +16,15 @@ import { AchievementToast } from "@/components/achievement-toast";
 import { PerformanceMonitor } from "@/components/performance-monitor";
 import "./globals.css";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
 });
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-jetbrains",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -61,9 +62,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className="dark" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('aaas-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}})()`,
+          }}
+        />
+      </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}
+        className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased`}
       >
         <LocaleProvider>
           <AuthProvider>
@@ -72,7 +80,10 @@ export default function RootLayout({
                 <SkipToContent />
                 <IndexNavbar />
                 <OfflineBanner />
-                <main id="main-content" className="min-h-screen">
+                <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+                  <AuraBlobs />
+                </div>
+                <main id="main-content" className="relative z-10 min-h-screen">
                   {children}
                 </main>
                 <BlogFooter />

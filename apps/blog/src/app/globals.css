@@ -7,6 +7,166 @@
   }
 }
 
+/* ─── Blog-specific design utilities ─── */
+
+/* Monolith title — gradient-filled display heading */
+.monolith-title {
+  background: linear-gradient(180deg, white 0%, #444 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+}
+[data-theme="light"] .monolith-title {
+  background: linear-gradient(180deg, black 0%, rgba(0,0,0,0.55) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+/* Section topic label — monospace red dashed prefix */
+.section-topic {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+.section-topic::before {
+  content: "───";
+  color: rgb(var(--accent-red));
+  font-family: var(--font-jetbrains, monospace);
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+}
+.section-topic span {
+  font-family: var(--font-jetbrains, monospace);
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  color: rgb(var(--accent-red));
+}
+
+/* Outline text — hollow stroked heading */
+.outline-text {
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.3);
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+[data-theme="light"] .outline-text {
+  -webkit-text-stroke: 1px rgba(0, 0, 0, 0.25);
+}
+
+/* Page-specific background contexts */
+.bg-aura {
+  position: relative;
+}
+.bg-aura::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(60vw 60vw at 20% 20%, rgba(var(--accent-red), 0.08) 0%, transparent 70%),
+    radial-gradient(50vw 50vw at 80% 80%, rgba(var(--circuit-glow), 0.06) 0%, transparent 70%),
+    radial-gradient(35vw 35vw at 30% 60%, rgba(147, 154, 255, 0.04) 0%, transparent 70%),
+    radial-gradient(30vw 30vw at 70% 30%, rgba(105, 212, 166, 0.03) 0%, transparent 70%);
+  mix-blend-mode: var(--aura-blend, screen);
+}
+
+/* Subtle parallax content overlay */
+.section-parallax {
+  position: relative;
+  z-index: 1;
+  background: rgba(var(--basalt-deep), 0.48);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.section-parallax-strong {
+  position: relative;
+  z-index: 1;
+  background: rgba(var(--basalt-deep), 0.72);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+[data-theme="light"] .section-parallax {
+  background: rgba(var(--basalt-deep), 0.32);
+  backdrop-filter: blur(16px);
+}
+[data-theme="light"] .section-parallax-strong {
+  background: rgba(var(--basalt-deep), 0.55);
+  backdrop-filter: blur(20px);
+}
+
+/* Hero glow accent — subtle gradient behind hero text */
+.hero-glow {
+  position: relative;
+}
+.hero-glow::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120%;
+  height: 150%;
+  background: radial-gradient(ellipse at center, rgba(var(--circuit-glow), 0.04) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Status badge — system online indicator */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-jetbrains, monospace);
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: rgb(var(--circuit-glow));
+  border: 1px solid rgba(var(--circuit-glow), 0.2);
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+}
+.status-badge::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgb(var(--circuit-glow));
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+/* Scrolling data tape container */
+.data-tape-wrapper {
+  border-top: 1px solid rgba(var(--circuit-glow), 0.1);
+  border-bottom: 1px solid rgba(var(--circuit-glow), 0.1);
+}
+
+/* Entity card glass upgrade */
+.entity-card-glass {
+  background: rgba(var(--basalt-surface), 0.45);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 500ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.entity-card-glass:hover {
+  border-color: rgba(var(--circuit-glow), 0.25);
+  box-shadow: 0 0 20px var(--circuit-dim), 0 8px 32px rgba(0,0,0,0.3);
+  transform: translateY(-2px);
+}
+[data-theme="light"] .entity-card-glass {
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+[data-theme="light"] .entity-card-glass:hover {
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
 @media print {
   /* Hide non-essential elements */
   header, footer, nav,

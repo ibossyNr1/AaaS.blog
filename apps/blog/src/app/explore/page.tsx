@@ -1,4 +1,4 @@
-import { Container, Section } from "@aaas/ui";
+import { Container, Section, KineticBar } from "@aaas/ui";
 import { getTrendingEntities } from "@/lib/entities";
 import { ExploreClient } from "./explore-client";
 import { RecommendedEntities } from "@/components/recommended-entities";
@@ -18,16 +18,19 @@ export default async function ExplorePage() {
 
   return (
     <>
-      <Section className="pt-28 pb-8">
+      <Section className="pt-28 pb-8 hero-glow">
         <Container className="max-w-6xl">
-          <h1 className="text-3xl md:text-4xl font-bold text-text mb-2">
-            Explore the Index
+          <div className="section-topic"><span>Discovery</span></div>
+          <h1 className="monolith-title text-4xl md:text-5xl lg:text-6xl mb-4">
+            Explore
           </h1>
-          <p className="text-text-muted text-sm">
+          <p className="text-text-muted text-sm max-w-xl">
             Search, filter, and sort across the complete AI ecosystem database.
           </p>
+          <span className="status-badge mt-4 inline-flex">Full Index — Real-Time Search</span>
         </Container>
       </Section>
+      <KineticBar />
       <RecommendedEntities />
       <Section className="py-8">
         <Container className="max-w-6xl">

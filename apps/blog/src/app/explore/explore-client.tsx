@@ -129,11 +129,11 @@ export function ExploreClient({ entities }: { entities: Entity[] }) {
         <select
           value={channel}
           onChange={(e) => setChannel(e.target.value)}
-          className="bg-surface border border-border rounded px-3 py-1.5 text-xs font-mono uppercase tracking-wider text-text-muted focus:outline-none focus:border-circuit/50 transition-colors appearance-none pr-7 cursor-pointer"
+          className="bg-surface/60 backdrop-blur-sm border border-border/60 rounded-lg px-4 py-2 text-xs font-mono uppercase tracking-wider text-text-muted focus:outline-none focus:border-circuit/50 focus:ring-1 focus:ring-circuit/20 transition-all appearance-none pr-8 cursor-pointer shadow-sm hover:border-circuit/30"
           style={{
             backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")`,
             backgroundRepeat: "no-repeat",
-            backgroundPosition: "right 8px center",
+            backgroundPosition: "right 10px center",
           }}
         >
           <option value="all">All Channels</option>
@@ -158,7 +158,7 @@ export function ExploreClient({ entities }: { entities: Entity[] }) {
       <div className="flex items-center justify-between">
         <p className="text-xs font-mono uppercase tracking-wider text-text-muted">
           Showing{" "}
-          <span className={cn("font-bold", results.length > 0 && "text-circuit")}>
+          <span className={cn("font-bold text-lg -my-1 inline-block", results.length > 0 ? "text-circuit drop-shadow-[0_0_6px_rgba(0,243,255,0.4)]" : "text-text-muted")}>
             {results.length}
           </span>{" "}
           of {entities.length} {entities.length === 1 ? "entity" : "entities"}
@@ -192,8 +192,11 @@ export function ExploreClient({ entities }: { entities: Entity[] }) {
           ))}
         </div>
       ) : (
-        <div className="border border-border rounded-lg py-16 text-center">
-          <p className="text-text-muted text-sm mb-2">
+        <div className="border border-border/50 rounded-lg py-20 text-center bg-surface/30 backdrop-blur-sm">
+          <p className="outline-text text-2xl md:text-3xl font-black uppercase tracking-tight mb-3">
+            No Results
+          </p>
+          <p className="text-text-muted text-sm mb-1">
             No entities match the current filters.
           </p>
           <p className="text-text-muted/60 text-xs">
